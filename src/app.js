@@ -1368,16 +1368,18 @@ function renderRelicDeployCard(slotDef) {
     return card;
   }
 
-  const select = el('select', { class: 'equip-select' }, [
-    el('option', { value: '' }, '— None —'),
-    ...ownedOptions.map(r => el('option', { value: r.n, selected: r.n === currentName ? 'true' : null }, r.n)),
-  ]);
-  select.addEventListener('change', (e) => {
-    state.relicSlots[slotDef.key] = e.target.value || null;
-    saveState();
-    render();
+  const combo = renderSearchCombo({
+    value: currentName || '',
+    options: ownedOptions.map(r => r.n),
+    placeholder: `Search ${slotDef.label.toLowerCase()}…`,
+    getImage: (name) => {
+      const r = ownedOptions.find(x => x.n === name);
+      return r ? itemImagePath('relics', r) : null;
+    },
+    onSelect: (name) => { state.relicSlots[slotDef.key] = name; saveState(); render(); },
+    onClear: () => { state.relicSlots[slotDef.key] = null; saveState(); render(); },
   });
-  card.appendChild(select);
+  card.appendChild(combo);
 
   if (!relic) return card;
 
