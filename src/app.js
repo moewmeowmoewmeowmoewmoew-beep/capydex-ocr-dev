@@ -1535,7 +1535,12 @@ function renderSearchCombo({ value, options, placeholder, onSelect, onClear, get
     dropdown.classList.remove('hidden');
   }
 
-  input.addEventListener('focus', () => openDropdown(input.value));
+  // Opening a combo that already has a value shouldn't immediately filter
+  // the list down to just that one matching option — the whole point of
+  // clicking a filled field is usually to browse and pick something
+  // different, not to re-confirm what's already there. Empty string shows
+  // everything on focus; typing after that narrows it down as normal.
+  input.addEventListener('focus', () => openDropdown(''));
   input.addEventListener('input', () => {
     clearBtn.classList.toggle('hidden', !input.value);
     openDropdown(input.value);
@@ -2376,9 +2381,14 @@ function renderGemSlot(slotId, slotIdx, slotState, options, allSlots) {
     onClear: () => { slotState.gemId = ''; saveState(); render(); },
   });
 
-  const tierSelect = el('select', { class: 'equip-select equip-tier-select', disabled: slotState.gemId ? null : 'true' },
-    GEM_TIER_NAMES.map((name, i) => el('option', { value: String(i + 1), selected: (i + 1) === slotState.tier ? 'true' : null }, name)));
-  tierSelect.addEventListener('change', (e) => { slotState.tier = parseInt(e.target.value, 10); saveState(); render(); });
+  const tierSelect = renderSearchCombo({
+    value: slotState.gemId ? GEM_TIER_NAMES[slotState.tier - 1] : '',
+    options: GEM_TIER_NAMES,
+    placeholder: 'Rarity…',
+    getImage: (name) => `assets/images/gem_tiers/${slugify(name)}.webp`,
+    onSelect: (name) => { slotState.tier = GEM_TIER_NAMES.indexOf(name) + 1; saveState(); render(); },
+  });
+  if (!slotState.gemId) tierSelect.querySelector('.equip-combo-input').disabled = true;
 
   const tierIcon = slotState.gemId
     ? el('img', { class: 'equip-gem-tier-icon', src: `assets/images/gem_tiers/${slugify(GEM_TIER_NAMES[slotState.tier - 1])}.webp`, onerror: (e) => { e.target.style.visibility = 'hidden'; } })
