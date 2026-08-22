@@ -1787,7 +1787,19 @@ function renderEquipPetCard(petIndex) {
 
   // ---- Pet Armament ----
   card.appendChild(el('div', { class: 'equip-section-title' }, 'Pet Armament'));
-  const armaments = DB.pet_armaments || [];
+  const allArmaments = DB.pet_armaments || [];
+  // Exclusive armaments only work on their one matching pet — everything
+  // without a restriction (the non-"Exclusive |" ones) stays available
+  // regardless of which pet is equipped.
+  const armaments = allArmaments.filter(a => !a.restricted_pet || a.restricted_pet === s.itemName);
+  // If the pet was changed after an exclusive armament was already
+  // selected, that armament may no longer be valid for the new pet — the
+  // combo's option list wouldn't include it anymore, but s.armament would
+  // still silently hold the stale name unless cleared here.
+  if (s.armament && !armaments.some(a => a.n === s.armament)) {
+    s.armament = '';
+    saveState();
+  }
   const armament = armaments.find(a => a.n === s.armament);
   card.appendChild(equipFieldLabel('Armament'));
   card.appendChild(renderSearchCombo({
