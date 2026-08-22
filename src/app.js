@@ -1774,7 +1774,32 @@ function renderEquipPetCard(petIndex) {
   levelInput.addEventListener('blur', () => render());
   card.appendChild(levelInput);
 
-  if (s.level > 0) {
+  if (pet && pet.star_battle_skills) {
+    // Pingu (so far the only one) ties its Battle Skill tier to its own
+    // star rating instead of Pet Level, unlike every other pet — driven
+    // off star_battle_skills existing in the data rather than checking
+    // the pet's name directly, so this picks up correctly if any other
+    // pet turns out to use the same star-based mechanic later.
+    card.appendChild(equipFieldLabel('Stars'));
+    const starInput = el('input', {
+      type: 'number', class: 'equip-select', min: '0', max: '10', value: String(s.battleStars || 0),
+    });
+    starInput.addEventListener('input', (e) => {
+      s.battleStars = Math.max(0, Math.min(10, parseInt(e.target.value, 10) || 0));
+      saveState();
+    });
+    starInput.addEventListener('blur', () => render());
+    card.appendChild(starInput);
+
+    const thresholds = pet.star_thresholds || [0, 1, 3, 5, 8, 10];
+    const starKeys = Object.keys(pet.star_battle_skills);
+    let activeIdx = 0;
+    for (let i = 0; i < thresholds.length; i++) if ((s.battleStars || 0) >= thresholds[i]) activeIdx = i;
+    const activeKey = starKeys[activeIdx];
+    const activeText = pet.star_battle_skills[activeKey];
+    card.appendChild(equipFieldLabel(activeKey || 'Battle Skill'));
+    card.appendChild(el('div', { class: 'equip-writeup' }, activeText ? renderTextWithSkillTags(activeText) : '—'));
+  } else if (s.level > 0) {
     const battleSkillKeys = Object.keys(pet.battle_skills || {});
     const thresholds = [1, 20, 40, 60, 80];
     let activeIdx = -1;
@@ -3553,10 +3578,14 @@ function renderPetCard(item) {
   ]));
   card.appendChild(el('div', { class: 'item-rarity' }, item.tier || ''));
 
+  const hasStarSkills = !!(item.star_battle_skills);
   const battleStepper = el('div', { class: 'stepper-row' }, [
-    el('span', { class: 'val', style: 'min-width:56px;text-align:left;color:var(--ink-dim);font-family:var(--font-body);font-size:11px;' }, 'Battle Lv'),
-    renderStepper(`pet-${item.idx}-battlelv`, s.battleLv, 1, 5,
-      (next) => { s.battleLv = next; saveState(); render(); }),
+    el('span', { class: 'val', style: 'min-width:56px;text-align:left;color:var(--ink-dim);font-family:var(--font-body);font-size:11px;' }, hasStarSkills ? 'Stars' : 'Battle Lv'),
+    hasStarSkills
+      ? renderStepper(`pet-${item.idx}-battlelv`, s.battleLv, 1, Object.keys(item.star_battle_skills).length,
+          (next) => { s.battleLv = next; saveState(); render(); })
+      : renderStepper(`pet-${item.idx}-battlelv`, s.battleLv, 1, 5,
+          (next) => { s.battleLv = next; saveState(); render(); }),
   ]);
 
   const steppersCol = [battleStepper];
@@ -3576,9 +3605,12 @@ function renderPetCard(item) {
 
   if (!s.owned) return card;
 
-  const skillText = item.battle_skills && item.battle_skills[BATTLE_LV_KEYS[s.battleLv - 1]];
+  const skillText = hasStarSkills
+    ? item.star_battle_skills[Object.keys(item.star_battle_skills)[s.battleLv - 1]]
+    : item.battle_skills && item.battle_skills[BATTLE_LV_KEYS[s.battleLv - 1]];
   if (skillText) {
-    card.appendChild(el('div', { class: 'item-effect' }, [`Lv${s.battleLv}: `, renderTextWithSkillTags(skillText)]));
+    const tierLabel = hasStarSkills ? Object.keys(item.star_battle_skills)[s.battleLv - 1] : `Lv${s.battleLv}`;
+    card.appendChild(el('div', { class: 'item-effect' }, [`${tierLabel}: `, renderTextWithSkillTags(skillText)]));
   } else {
     card.appendChild(el('div', { class: 'item-effect placeholder' }, 'No skill data at this level yet'));
   }
