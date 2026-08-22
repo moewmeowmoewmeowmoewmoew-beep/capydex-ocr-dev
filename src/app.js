@@ -1484,12 +1484,25 @@ function goToCollectionSection(sectionId) {
 // box could look empty while the old value stayed active underneath.
 // Filtering while typing updates only the dropdown's own DOM locally, not
 // a full app re-render, so the input never loses focus mid-type.
-function renderSearchCombo({ value, options, placeholder, onSelect, onClear, getImage }) {
-  const container = el('div', { class: 'search-combo' });
+function renderSearchCombo({ value, options, placeholder, onSelect, onClear, getImage, showValueIcon }) {
+  const container = el('div', { class: 'search-combo' + (showValueIcon ? ' has-value-icon' : '') });
   const input = el('input', {
     type: 'text', class: 'equip-combo-input', placeholder, value: value || '',
     autocomplete: 'off',
   });
+  // Only meaningful alongside getImage — shows the currently selected
+  // option's own thumbnail inside the input, not just in the dropdown
+  // list while it's open, so the icon stays visible as a constant
+  // reference rather than only appearing momentarily while choosing.
+  if (showValueIcon && getImage && value) {
+    const src = getImage(value);
+    if (src) {
+      container.appendChild(el('img', {
+        class: 'search-combo-value-icon', src, alt: '', loading: 'lazy',
+        onerror: (e) => { e.target.style.visibility = 'hidden'; },
+      }));
+    }
+  }
   const clearBtn = el('button', {
     type: 'button', class: 'search-combo-clear' + (value ? '' : ' hidden'),
     onclick: (e) => { e.stopPropagation(); input.value = ''; closeDropdown(); if (onClear) onClear(); },
@@ -1691,6 +1704,7 @@ Respond with ONLY a JSON array, no other text, in this exact shape:
         ? `Filled ${filledCount} — ${unmatchedCount} line${unmatchedCount === 1 ? '' : 's'} didn't match a known pet skill.`
         : `Filled ${filledCount} skill${filledCount === 1 ? '' : 's'}.`;
       statusDiv.className = 'psi-dropzone-status success';
+      showPsionicToast('Pet skill values updated');
       saveState();
       render();
     } catch (err) {
@@ -1996,7 +2010,7 @@ function renderDeployCard(kind, mode, slotIndex) {
     const showAwaken = hasAwakenProgression(item);
     if (showAwaken) {
       card.appendChild(equipFieldLabel('Awaken'));
-      card.appendChild(el('div', { class: 'equip-writeup' }, `A${itemState.awaken}`));
+      card.appendChild(el('div', { class: 'equip-prominent-value' }, `A${itemState.awaken}`));
     }
     if (item.star_up) {
       const resolved = resolveAwakenEffect(item, showAwaken ? itemState.awaken : 0);
@@ -2007,7 +2021,7 @@ function renderDeployCard(kind, mode, slotIndex) {
     const showStars = hasStarProgression(item);
     if (showStars) {
       card.appendChild(equipFieldLabel('Stars'));
-      card.appendChild(el('div', { class: 'equip-writeup' }, `${itemState.stars}★`));
+      card.appendChild(el('div', { class: 'equip-prominent-value' }, `${itemState.stars}★`));
     }
     if (item.star_effects) {
       const starEff = showStars ? item.star_effects[String(itemState.stars)] : item.star_effects['0'];
@@ -2206,6 +2220,26 @@ function matchPsionicOption(rawName, psiOptions) {
 
 const PSIONIC_OCR_WORKER_URL = 'https://solitary-paper-9b01.capydex.workers.dev';
 
+// Desktop gets a floating top-of-screen confirmation since there's room
+// for it and it won't cover anything useful; mobile skips it entirely
+// since the status text already sitting right below the drop zone serves
+// the same "did this work" purpose without needing a second element
+// competing for a much smaller screen.
+let psiToastTimeout = null;
+function showPsionicToast(message) {
+  if (window.innerWidth <= 844) return;
+  let toast = document.querySelector('.psi-toast');
+  if (!toast) {
+    toast = el('div', { class: 'psi-toast' });
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  clearTimeout(psiToastTimeout);
+  requestAnimationFrame(() => toast.classList.add('visible'));
+  psiToastTimeout = setTimeout(() => toast.classList.remove('visible'), 5000);
+}
+
+
 function renderPsionicDropZone(slotDef, s, psiOptions) {
   const wrap = el('div', { class: 'psi-dropzone-wrap' });
   const fileInput = el('input', { type: 'file', accept: 'image/*', style: 'display:none;' });
@@ -2305,6 +2339,7 @@ Respond with ONLY a JSON array, no other text, in this exact shape:
         ? `Filled ${filledCount} — ${unmatchedCount} line${unmatchedCount === 1 ? '' : 's'} didn't match anything in this slot's pool.`
         : `Filled ${filledCount} attribute${filledCount === 1 ? '' : 's'}.`;
       statusDiv.className = 'psi-dropzone-status success';
+      showPsionicToast('Psionic values updated');
       saveState();
       render();
     } catch (err) {
@@ -2425,17 +2460,13 @@ function renderGemSlot(slotId, slotIdx, slotState, options, allSlots) {
     options: GEM_TIER_NAMES,
     placeholder: 'Rarity…',
     getImage: (name) => `assets/images/gem_tiers/${slugify(name)}.webp`,
+    showValueIcon: true,
     onSelect: (name) => { slotState.tier = GEM_TIER_NAMES.indexOf(name) + 1; saveState(); render(); },
   });
   if (!slotState.gemId) tierSelect.querySelector('.equip-combo-input').disabled = true;
 
-  const tierIcon = slotState.gemId
-    ? el('img', { class: 'equip-gem-tier-icon', src: `assets/images/gem_tiers/${slugify(GEM_TIER_NAMES[slotState.tier - 1])}.webp`, onerror: (e) => { e.target.style.visibility = 'hidden'; } })
-    : el('div', { class: 'equip-gem-tier-icon placeholder' });
-
   wrap.appendChild(combo);
   wrap.appendChild(tierSelect);
-  wrap.appendChild(tierIcon);
 
   const container = el('div', {}, [wrap]);
   if (slotState.gemId) {
@@ -2625,6 +2656,18 @@ function renderSetCard({ kind, name, statLabel, tierLabels, vals, members, allOw
       `${ownedCount}/${members.length} owned`),
   ]));
   if (statLabel) card.appendChild(el('div', { class: 'set-card-stat-label' }, `Increases: ${statLabel}`));
+
+  if (allOwned && tierIdx >= 0) {
+    // The per-tier pips below show what each individual bracket adds on
+    // its own, but the set bonus itself stacks — every bracket reached
+    // stays active alongside the ones after it, not replaced by them. So
+    // "how much is this set actually giving me right now" is the sum of
+    // every tier up through the current one, not just the current tier's
+    // own number.
+    const cumulative = vals.slice(0, tierIdx + 1).reduce((sum, v) => sum + (typeof v === 'number' ? v : 0), 0);
+    const isPercent = typeof vals[tierIdx] === 'number' && vals[tierIdx] < 20;
+    card.appendChild(el('div', { class: 'set-card-total' }, `Total: +${cumulative}${isPercent ? '%' : ''}`));
+  }
 
   const memberList = el('div', { class: 'set-member-list' });
   members.forEach(m => {
