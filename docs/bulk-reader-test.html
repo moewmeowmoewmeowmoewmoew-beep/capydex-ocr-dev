@@ -299,10 +299,20 @@ Respond with ONLY a JSON array, no other text, in this exact shape:
     });
 
     if (response.status === 429) throw new Error("You've hit the testing limit for now — try again later.");
-    if (!response.ok) throw new Error(`Request failed (${response.status})`);
 
-    const data = await response.json();
-    if (data.error) throw new Error(data.error.message || 'API error');
+    // Anthropic includes a real, specific error message in the JSON body
+    // even on failed requests (400, etc.) — checking !response.ok first
+    // and throwing immediately, before ever parsing that body, was
+    // throwing away the actual reason and leaving only a bare status code
+    // to debug from.
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error(`Request failed (${response.status}) — no error details in response`);
+    }
+    if (data.error) throw new Error(`(${response.status}) ${data.error.message || JSON.stringify(data.error)}`);
+    if (!response.ok) throw new Error(`Request failed (${response.status})`);
     const textBlock = (data.content || []).find(b => b.type === 'text');
     const raw = textBlock ? textBlock.text : '';
     rawText.textContent = raw;
