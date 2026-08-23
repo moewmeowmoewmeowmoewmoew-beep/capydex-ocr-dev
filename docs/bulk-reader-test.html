@@ -188,21 +188,54 @@ const resultsList = document.getElementById('resultsList');
 const rawToggle = document.getElementById('rawToggle');
 const rawText = document.getElementById('rawText');
 
+// Anthropic caps individual image dimensions more strictly once a request
+// contains many images at once (like the 56 reference images added
+// alongside the main screenshot here) than it would for a single-image
+// request — a full-height phone screenshot (often 2340px+) comfortably
+// clears the single-image limit but not this stricter many-image one.
+// Downscaling here keeps the screenshot's actual content fully intact
+// (still large enough to read clearly), just resized to fit the ceiling
+// this specific request shape imposes.
+const MAX_DIMENSION = 2000;
+
 function handleFile(file) {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = (e) => {
-    imageBase64 = e.target.result.split(',')[1];
-    mediaType = file.type || 'image/jpeg';
-    dropInner.innerHTML = '';
-    const img = document.createElement('img');
-    img.className = 'preview-img';
+    const img = new Image();
+    img.onload = () => {
+      let { width, height } = img;
+      if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+        const scale = MAX_DIMENSION / Math.max(width, height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        const resizedDataUrl = canvas.toDataURL('image/jpeg', 0.92);
+        imageBase64 = resizedDataUrl.split(',')[1];
+        mediaType = 'image/jpeg';
+        dropInner.innerHTML = '';
+        const previewImg = document.createElement('img');
+        previewImg.className = 'preview-img';
+        previewImg.src = resizedDataUrl;
+        dropInner.appendChild(previewImg);
+      } else {
+        imageBase64 = e.target.result.split(',')[1];
+        mediaType = file.type || 'image/jpeg';
+        dropInner.innerHTML = '';
+        const previewImg = document.createElement('img');
+        previewImg.className = 'preview-img';
+        previewImg.src = e.target.result;
+        dropInner.appendChild(previewImg);
+      }
+      extractBtn.disabled = false;
+      resultsWrap.style.display = 'none';
+      rawToggle.style.display = 'none';
+      statusDiv.textContent = '';
+    };
     img.src = e.target.result;
-    dropInner.appendChild(img);
-    extractBtn.disabled = false;
-    resultsWrap.style.display = 'none';
-    rawToggle.style.display = 'none';
-    statusDiv.textContent = '';
   };
   reader.readAsDataURL(file);
 }
