@@ -68,6 +68,7 @@
   .result-row { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-top: 1px solid #2C2A28; }
   .result-name { color: var(--ink); font-size: 13px; font-weight: 600; flex: 1; }
   .result-stars { color: var(--accent); font-size: 13px; font-weight: 700; white-space: nowrap; }
+  .result-unowned { color: var(--ink-faint); font-size: 12px; font-style: italic; white-space: nowrap; }
   .result-match-icon { width: 16px; text-align: center; font-size: 13px; }
   .result-match-icon.good { color: #8FBF8F; }
   .result-match-icon.bad { color: #C97B7B; }
@@ -236,25 +237,21 @@ extractBtn.addEventListener('click', async () => {
             { type: 'image', source: { type: 'base64', media_type: mediaType, data: imageBase64 } },
             {
               type: 'text',
-              text: `This is a "${kindLabel}" page from a mobile game showing items in a grid, most of which have been unlocked and star-rated, some of which have not been unlocked yet.
+              text: `This is a "${kindLabel}" page from a mobile game showing items in a grid. Some items are owned (unlocked), some are not owned yet — this ownership status is separate from star level, and both need to be reported independently. An unowned item should never be reported as "0 stars" — owned-with-0-stars and not-owned are different things entirely.
 
-Items are unlocked by collecting "shards" of them. An item can be in one of these states:
-
-UNLOCKED — shows a row of star icons under its name. The star icons' COLOR changes what range they represent:
+OWNED items show a row of star icons under their name. The star icons' COLOR changes what range they represent:
   - Filled stars that are YELLOW/GOLD: the star level is that count directly, 1 through 5.
   - Filled stars that are PURPLE: the star level is that count PLUS 5, so 6 through 10 (e.g. 3 filled purple stars = 8 stars total, not 3).
 
-NOT YET UNLOCKED — the item has no star rating at all, because it needs more shards before it can be leveled up. This shows up in a couple of different ways depending on how many shards have been collected so far:
-  - Some shards collected: a progress bar is shown instead of a star row (e.g. "38/50").
-  - No shards collected yet: nothing is shown below the name at all — no star row, no progress bar, just the icon and name plain.
-  - Some items in this state also render the icon/name visibly greyed out or desaturated, though not always — the absence of a star row (with or without a progress bar) is the reliable signal, not the greyscale look.
+NOT OWNED items show no star row at all. This can look a few different ways, but all of them mean the same thing — not owned:
+  - A progress bar shown instead of a star row (e.g. "38/50")
+  - Nothing at all shown below the name — no star row, no progress bar, just the icon and name plain
+  - The icon and name visibly greyed out / desaturated
 
-For ALL of these "not yet unlocked" cases — progress bar, no progress bar, greyed out or not — the correct star level to report is 0. The only time to report a number above 0 is when an actual row of colored star icons is visible under the item's name.
-
-Go through the grid systematically, row by row, left to right. For each item, extract its name EXACTLY as printed on the banner, including every word, and its star level using the rules above. Before finalizing each item, check specifically: is there a real row of star icons here, or is this actually one of the "not yet unlocked" states?
+Go through the grid systematically, row by row, left to right. For each item, extract its name EXACTLY as printed on the banner, including every word, then decide: is there a real row of colored star icons under this item, or is it one of the not-owned appearances above? Set "owned" accordingly, and only include a "stars" value when owned is true.
 
 Respond with ONLY a JSON array, no other text, in this exact shape:
-[{"name": "Item Name", "stars": 5}, {"name": "Another Item", "stars": 8}, {"name": "Not Unlocked Yet", "stars": 0}]
+[{"name": "Item Name", "owned": true, "stars": 5}, {"name": "Another Item", "owned": true, "stars": 8}, {"name": "Not Owned Yet", "owned": false}]
 
 Be precise — look carefully at each star's actual color (yellow vs purple) and each item's unlock state before deciding on a number.`,
             },
@@ -288,7 +285,7 @@ Be precise — look carefully at each star's actual color (yellow vs purple) and
       <div class="result-row">
         <span class="result-match-icon ${r.matched ? 'good' : 'bad'}">${r.matched ? '✓' : '✗'}</span>
         <span class="result-name">${r.name}</span>
-        <span class="result-stars">${r.stars}★</span>
+        <span class="${r.owned ? 'result-stars' : 'result-unowned'}">${r.owned ? `${r.stars}★` : 'Not owned'}</span>
       </div>
     `).join('');
     resultsWrap.style.display = 'block';
