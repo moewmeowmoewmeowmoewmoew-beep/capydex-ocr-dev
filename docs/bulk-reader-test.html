@@ -139,10 +139,21 @@ function normalizeName(name) {
   return (name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
+// Strips a trailing "(...)" suffix — some of the stored data names carry a
+// disambiguation suffix (like "Holy Grail (Mythic Treasure)", added since
+// Collectibles separately has its own plain "Holy Grail") that only exists
+// to distinguish entries in the data itself and never actually appears in
+// the game's own UI, so a screenshot can never contain it verbatim.
+function stripParenSuffix(name) {
+  return (name || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
+}
+
 function matchName(extractedName, kind) {
   const pool = kind === 'relics' ? RELIC_NAMES : COLLECTIBLE_NAMES;
   const clean = normalizeName(extractedName);
-  return pool.find(n => normalizeName(n) === clean) || null;
+  const exact = pool.find(n => normalizeName(n) === clean);
+  if (exact) return exact;
+  return pool.find(n => normalizeName(stripParenSuffix(n)) === clean) || null;
 }
 
 let imageBase64 = null;
@@ -208,17 +219,18 @@ extractBtn.addEventListener('click', async () => {
             { type: 'image', source: { type: 'base64', media_type: mediaType, data: imageBase64 } },
             {
               type: 'text',
-              text: `This is a "${kindLabel}" page from a mobile game showing owned items in a grid. Each item shows its star level using a row of exactly 5 star icons — but the star icons' COLOR changes what range they represent, which is the key thing to get right:
+              text: `This is a "${kindLabel}" page from a mobile game showing owned items in a grid. Each item shows its star level using a row of up to 5 star icons underneath its name — but the star icons' COLOR changes what range they represent, and some items show no star row at all, which is the key thing to get right:
 
 - If the filled stars are YELLOW/GOLD, the item's actual star level is that count directly, 1 through 5 (e.g. 3 filled yellow stars = 3 stars total).
 - If the filled stars are PURPLE, the item's actual star level is that count PLUS 5, so 6 through 10 (e.g. 3 filled purple stars = 8 stars total, not 3).
+- If the item's icon and name are in full, normal color (owned) but there is NO star row visible under the name at all — not even empty/unfilled star outlines, just nothing there — the star level is 0. This is different from the item being locked; it just means it hasn't been star-upgraded yet. Do NOT default to 1 for this case.
 - If the item shows a progress bar underneath instead of a star row (like "25/60"), it has not been unlocked yet — star level is 0.
 - If the item's icon and name look greyed out / desaturated rather than in full color, it has not been unlocked yet — star level is 0, even if no progress bar is visible.
 
-Go through the grid systematically, row by row, left to right. For each item, extract its name and its FINAL star level (already converted using the color rule above — the number you output should be the true 0-10 value, not just the raw count of filled icons).
+Go through the grid systematically, row by row, left to right. For each item, extract its name EXACTLY as printed on the banner, including every word — and its FINAL star level (already converted using the color rule above — the number you output should be the true 0-10 value, not just the raw count of filled icons). Before finalizing each item, double check: is there truly a star row there, or did you assume one that isn't actually visible?
 
 Respond with ONLY a JSON array, no other text, in this exact shape:
-[{"name": "Item Name", "stars": 5}, {"name": "Another Item", "stars": 8}, {"name": "Locked Item", "stars": 0}]
+[{"name": "Item Name", "stars": 5}, {"name": "Another Item", "stars": 8}, {"name": "Locked Item", "stars": 0}, {"name": "Owned But Unstarred", "stars": 0}]
 
 Be precise — look carefully at each star's actual color (yellow vs purple) and each item's unlock state before deciding on a number.`,
             },
