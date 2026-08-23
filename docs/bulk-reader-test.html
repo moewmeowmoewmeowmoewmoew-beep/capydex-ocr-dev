@@ -236,18 +236,25 @@ extractBtn.addEventListener('click', async () => {
             { type: 'image', source: { type: 'base64', media_type: mediaType, data: imageBase64 } },
             {
               type: 'text',
-              text: `This is a "${kindLabel}" page from a mobile game showing owned items in a grid. Each item shows its star level using a row of up to 5 star icons underneath its name — but the star icons' COLOR changes what range they represent, and some items show no star row at all, which is the key thing to get right:
+              text: `This is a "${kindLabel}" page from a mobile game showing items in a grid, most of which have been unlocked and star-rated, some of which have not been unlocked yet.
 
-- If the filled stars are YELLOW/GOLD, the item's actual star level is that count directly, 1 through 5 (e.g. 3 filled yellow stars = 3 stars total).
-- If the filled stars are PURPLE, the item's actual star level is that count PLUS 5, so 6 through 10 (e.g. 3 filled purple stars = 8 stars total, not 3).
-- If the item's icon and name are in full, normal color (owned) but there is NO star row visible under the name at all — not even empty/unfilled star outlines, just nothing there — the star level is 0. This is different from the item being locked; it just means it hasn't been star-upgraded yet. Do NOT default to 1 for this case.
-- If the item shows a progress bar underneath instead of a star row (like "25/60"), it has not been unlocked yet — star level is 0.
-- If the item's icon and name look greyed out / desaturated rather than in full color, it has not been unlocked yet — star level is 0, even if no progress bar is visible.
+Items are unlocked by collecting "shards" of them. An item can be in one of these states:
 
-Go through the grid systematically, row by row, left to right. For each item, extract its name EXACTLY as printed on the banner, including every word — and its FINAL star level (already converted using the color rule above — the number you output should be the true 0-10 value, not just the raw count of filled icons). Before finalizing each item, double check: is there truly a star row there, or did you assume one that isn't actually visible?
+UNLOCKED — shows a row of star icons under its name. The star icons' COLOR changes what range they represent:
+  - Filled stars that are YELLOW/GOLD: the star level is that count directly, 1 through 5.
+  - Filled stars that are PURPLE: the star level is that count PLUS 5, so 6 through 10 (e.g. 3 filled purple stars = 8 stars total, not 3).
+
+NOT YET UNLOCKED — the item has no star rating at all, because it needs more shards before it can be leveled up. This shows up in a couple of different ways depending on how many shards have been collected so far:
+  - Some shards collected: a progress bar is shown instead of a star row (e.g. "38/50").
+  - No shards collected yet: nothing is shown below the name at all — no star row, no progress bar, just the icon and name plain.
+  - Some items in this state also render the icon/name visibly greyed out or desaturated, though not always — the absence of a star row (with or without a progress bar) is the reliable signal, not the greyscale look.
+
+For ALL of these "not yet unlocked" cases — progress bar, no progress bar, greyed out or not — the correct star level to report is 0. The only time to report a number above 0 is when an actual row of colored star icons is visible under the item's name.
+
+Go through the grid systematically, row by row, left to right. For each item, extract its name EXACTLY as printed on the banner, including every word, and its star level using the rules above. Before finalizing each item, check specifically: is there a real row of star icons here, or is this actually one of the "not yet unlocked" states?
 
 Respond with ONLY a JSON array, no other text, in this exact shape:
-[{"name": "Item Name", "stars": 5}, {"name": "Another Item", "stars": 8}, {"name": "Locked Item", "stars": 0}, {"name": "Owned But Unstarred", "stars": 0}]
+[{"name": "Item Name", "stars": 5}, {"name": "Another Item", "stars": 8}, {"name": "Not Unlocked Yet", "stars": 0}]
 
 Be precise — look carefully at each star's actual color (yellow vs purple) and each item's unlock state before deciding on a number.`,
             },
