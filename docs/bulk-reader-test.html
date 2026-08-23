@@ -225,6 +225,37 @@ extractBtn.addEventListener('click', async () => {
   const kindLabel = selectedKind === 'relics' ? 'Relics' : 'Collectibles';
 
   try {
+    // Reference images let the model compare each item's actual on-screen
+    // appearance against its known, guaranteed-full-color version, rather
+    // than judging "does this look desaturated" with nothing to anchor
+    // that judgment to. Only built out for Collectibles so far (56 items,
+    // small enough to send every reference image in one call) — Relics
+    // has 140+ entries, too many to include wholesale the same way without
+    // a smarter per-tier filtering step, so it still relies on the
+    // description-only approach for now.
+    let referenceBlocks = [];
+    if (selectedKind === 'collectibles') {
+      statusDiv.textContent = 'Loading reference images…';
+      const fetched = await Promise.all(COLLECTIBLE_NAMES.map(async (name) => {
+        try {
+          const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+          const resp = await fetch(`assets/images/collectibles/${slug}.webp`);
+          if (!resp.ok) return null;
+          const blob = await resp.blob();
+          const base64 = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.readAsDataURL(blob);
+          });
+          return { name, base64 };
+        } catch {
+          return null;
+        }
+      }));
+      referenceBlocks = fetched.filter(Boolean);
+      statusDiv.textContent = 'Reading…';
+    }
+
     const response = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -234,27 +265,33 @@ extractBtn.addEventListener('click', async () => {
         messages: [{
           role: 'user',
           content: [
+            ...(referenceBlocks.length ? [{
+              type: 'text',
+              text: `Here are ${referenceBlocks.length} reference images, each showing one collectible item's TRUE, full-color appearance — the way it looks when actually owned. Use these as your ground truth for what "normal color" looks like for each specific item, since desaturation can be subtle and hard to judge without something concrete to compare against.`,
+            }] : []),
+            ...referenceBlocks.flatMap(ref => ([
+              { type: 'text', text: `Reference — ${ref.name}:` },
+              { type: 'image', source: { type: 'base64', media_type: 'image/webp', data: ref.base64 } },
+            ])),
             { type: 'image', source: { type: 'base64', media_type: mediaType, data: imageBase64 } },
             {
               type: 'text',
-              text: `This is a "${kindLabel}" page from a mobile game showing items in a grid. Some items are owned (unlocked), some are not owned yet — this ownership status is separate from star level, and both need to be reported independently. An unowned item should never be reported as "0 stars" — owned-with-0-stars and not-owned are genuinely different things, and NOT the same visual appearance either. There are three distinct states to tell apart, not two:
+              text: `${referenceBlocks.length ? 'The image above (after all the reference images) is' : 'This is'} a "${kindLabel}" page from a mobile game showing items in a grid. Some items are owned (unlocked), some are not owned yet — this ownership status is separate from star level, and both need to be reported independently. An unowned item should never be reported as "0 stars" — owned-with-0-stars and not-owned are genuinely different things, and NOT the same visual appearance either. There are three distinct states to tell apart, not two:
 
-1. OWNED, WITH STARS — a row of star icons is shown under the item's name, in full normal color. The star icons' COLOR changes what range they represent:
+1. OWNED, WITH STARS — a row of star icons is shown directly under the item's name, in full normal color. Each item's OWN star row is uniformly one single color — but different items right next to each other in the grid can easily have completely different colors and counts from one another (e.g. one item might show 5 purple stars while the item directly beside it shows 5 yellow stars — these are two separate items' own readings, not one mixed row). Be careful to attribute each star icon to the item whose name it's actually positioned under, especially between neighboring items in the same grid row — don't let one item's stars bleed into your reading of the item beside it. The star icons' COLOR changes what range they represent:
   - Filled stars that are YELLOW/GOLD: the star level is that count directly, 1 through 5.
   - Filled stars that are PURPLE: the star level is that count PLUS 5, so 6 through 10 (e.g. 3 filled purple stars = 8 stars total, not 3).
 
-2. OWNED, ZERO STARS — the item's icon and name are in full, normal, saturated color (same as any owned item), but there is no star row visible under the name at all — no icons, not even empty/unfilled outlines, just nothing there. This item IS owned, it just hasn't been star-upgraded. Star level: 0.
+2. OWNED, ZERO STARS — the item's icon is in full, normal, saturated color — matching its reference image above — but there is no star row visible under the name at all. This item IS owned, it just hasn't been star-upgraded. Star level: 0.
 
-3. NOT OWNED — the item is not yet unlocked at all. This looks different from state 2 above: either the icon and name appear visibly greyed out / desaturated / faded compared to owned items, OR there's a progress bar shown instead of a star row (e.g. "38/50"). Both of these mean not owned — set owned to false, and don't include a stars value at all.
+3. NOT OWNED — the item is not yet unlocked. Either its icon looks visibly greyscale/desaturated COMPARED TO ITS OWN REFERENCE IMAGE above (colors muted or missing entirely, closer to grey than the reference's actual colors), OR there's a progress bar shown instead of a star row (e.g. "38/50"). Both mean not owned — set owned to false, don't include a stars value.
 
-The critical distinction is between state 2 and state 3: both can show "no star row", but state 2 is in full color (owned) and state 3 is greyed out or shows a progress bar (not owned). Look carefully at whether the item's actual color/saturation looks the same as clearly-owned items nearby, or visibly duller than them, before deciding between these two.
+${referenceBlocks.length ? 'Since you have the real reference image for each item, state 2 vs state 3 is a direct visual comparison, not a guess: look at the item in the grid, find its matching reference image above, and check whether the grid version has the same colors or looks washed out toward grey by comparison.' : 'The critical distinction is between state 2 and state 3: both can show "no star row", but state 2 is in full color (owned) and state 3 is greyed out or shows a progress bar (not owned).'}
 
 Go through the grid systematically, row by row, left to right. For each item, extract its name EXACTLY as printed on the banner, including every word, then classify it into exactly one of the three states above.
 
 Respond with ONLY a JSON array, no other text, in this exact shape:
-[{"name": "Owned With Stars", "owned": true, "stars": 5}, {"name": "Owned Zero Stars", "owned": true, "stars": 0}, {"name": "Not Owned Yet", "owned": false}]
-
-Be precise — look carefully at each star's actual color (yellow vs purple), and at each item's actual color saturation, before deciding.`,
+[{"name": "Owned With Stars", "owned": true, "stars": 5}, {"name": "Owned Zero Stars", "owned": true, "stars": 0}, {"name": "Not Owned Yet", "owned": false}]`,
             },
           ],
         }],
