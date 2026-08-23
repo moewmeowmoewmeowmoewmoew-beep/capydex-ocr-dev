@@ -208,14 +208,19 @@ extractBtn.addEventListener('click', async () => {
             { type: 'image', source: { type: 'base64', media_type: mediaType, data: imageBase64 } },
             {
               type: 'text',
-              text: `This is a "${kindLabel}" page from a mobile game showing owned items in a grid. Each item has a name banner, and most have a row of small star icons underneath showing a star rating (0 to 10 stars — 0 if no star row is visible under that item at all).
+              text: `This is a "${kindLabel}" page from a mobile game showing owned items in a grid. Each item shows its star level using a row of exactly 5 star icons — but the star icons' COLOR changes what range they represent, which is the key thing to get right:
 
-Go through the grid systematically, row by row, left to right. For each item, extract its name and star count.
+- If the filled stars are YELLOW/GOLD, the item's actual star level is that count directly, 1 through 5 (e.g. 3 filled yellow stars = 3 stars total).
+- If the filled stars are PURPLE, the item's actual star level is that count PLUS 5, so 6 through 10 (e.g. 3 filled purple stars = 8 stars total, not 3).
+- If the item shows a progress bar underneath instead of a star row (like "25/60"), it has not been unlocked yet — star level is 0.
+- If the item's icon and name look greyed out / desaturated rather than in full color, it has not been unlocked yet — star level is 0, even if no progress bar is visible.
+
+Go through the grid systematically, row by row, left to right. For each item, extract its name and its FINAL star level (already converted using the color rule above — the number you output should be the true 0-10 value, not just the raw count of filled icons).
 
 Respond with ONLY a JSON array, no other text, in this exact shape:
-[{"name": "Item Name", "stars": 5}, {"name": "Another Item", "stars": 0}]
+[{"name": "Item Name", "stars": 5}, {"name": "Another Item", "stars": 8}, {"name": "Locked Item", "stars": 0}]
 
-Be precise about star counts — look carefully at each individual star's fill state rather than estimating.`,
+Be precise — look carefully at each star's actual color (yellow vs purple) and each item's unlock state before deciding on a number.`,
             },
           ],
         }],
