@@ -237,23 +237,24 @@ extractBtn.addEventListener('click', async () => {
             { type: 'image', source: { type: 'base64', media_type: mediaType, data: imageBase64 } },
             {
               type: 'text',
-              text: `This is a "${kindLabel}" page from a mobile game showing items in a grid. Some items are owned (unlocked), some are not owned yet — this ownership status is separate from star level, and both need to be reported independently. An unowned item should never be reported as "0 stars" — owned-with-0-stars and not-owned are different things entirely.
+              text: `This is a "${kindLabel}" page from a mobile game showing items in a grid. Some items are owned (unlocked), some are not owned yet — this ownership status is separate from star level, and both need to be reported independently. An unowned item should never be reported as "0 stars" — owned-with-0-stars and not-owned are genuinely different things, and NOT the same visual appearance either. There are three distinct states to tell apart, not two:
 
-OWNED items show a row of star icons under their name. The star icons' COLOR changes what range they represent:
+1. OWNED, WITH STARS — a row of star icons is shown under the item's name, in full normal color. The star icons' COLOR changes what range they represent:
   - Filled stars that are YELLOW/GOLD: the star level is that count directly, 1 through 5.
   - Filled stars that are PURPLE: the star level is that count PLUS 5, so 6 through 10 (e.g. 3 filled purple stars = 8 stars total, not 3).
 
-NOT OWNED items show no star row at all. This can look a few different ways, but all of them mean the same thing — not owned:
-  - A progress bar shown instead of a star row (e.g. "38/50")
-  - Nothing at all shown below the name — no star row, no progress bar, just the icon and name plain
-  - The icon and name visibly greyed out / desaturated
+2. OWNED, ZERO STARS — the item's icon and name are in full, normal, saturated color (same as any owned item), but there is no star row visible under the name at all — no icons, not even empty/unfilled outlines, just nothing there. This item IS owned, it just hasn't been star-upgraded. Star level: 0.
 
-Go through the grid systematically, row by row, left to right. For each item, extract its name EXACTLY as printed on the banner, including every word, then decide: is there a real row of colored star icons under this item, or is it one of the not-owned appearances above? Set "owned" accordingly, and only include a "stars" value when owned is true.
+3. NOT OWNED — the item is not yet unlocked at all. This looks different from state 2 above: either the icon and name appear visibly greyed out / desaturated / faded compared to owned items, OR there's a progress bar shown instead of a star row (e.g. "38/50"). Both of these mean not owned — set owned to false, and don't include a stars value at all.
+
+The critical distinction is between state 2 and state 3: both can show "no star row", but state 2 is in full color (owned) and state 3 is greyed out or shows a progress bar (not owned). Look carefully at whether the item's actual color/saturation looks the same as clearly-owned items nearby, or visibly duller than them, before deciding between these two.
+
+Go through the grid systematically, row by row, left to right. For each item, extract its name EXACTLY as printed on the banner, including every word, then classify it into exactly one of the three states above.
 
 Respond with ONLY a JSON array, no other text, in this exact shape:
-[{"name": "Item Name", "owned": true, "stars": 5}, {"name": "Another Item", "owned": true, "stars": 8}, {"name": "Not Owned Yet", "owned": false}]
+[{"name": "Owned With Stars", "owned": true, "stars": 5}, {"name": "Owned Zero Stars", "owned": true, "stars": 0}, {"name": "Not Owned Yet", "owned": false}]
 
-Be precise — look carefully at each star's actual color (yellow vs purple) and each item's unlock state before deciding on a number.`,
+Be precise — look carefully at each star's actual color (yellow vs purple), and at each item's actual color saturation, before deciding.`,
             },
           ],
         }],
