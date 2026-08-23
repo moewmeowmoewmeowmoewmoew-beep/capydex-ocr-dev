@@ -93,6 +93,11 @@
     <button class="kind-btn" id="kindCollectibles">Collectibles</button>
   </div>
 
+  <div class="kind-toggle">
+    <button class="kind-btn active" id="modelHaiku">Haiku 4.5</button>
+    <button class="kind-btn" id="modelSonnet">Sonnet 5</button>
+  </div>
+
   <div class="drop-zone" id="dropZone">
     <div id="dropInner">
       <div class="drop-icon">◈</div>
@@ -133,6 +138,18 @@ document.getElementById('kindCollectibles').addEventListener('click', () => {
   selectedKind = 'collectibles';
   document.getElementById('kindCollectibles').classList.add('active');
   document.getElementById('kindRelics').classList.remove('active');
+});
+
+let selectedModel = 'claude-haiku-4-5-20251001';
+document.getElementById('modelHaiku').addEventListener('click', () => {
+  selectedModel = 'claude-haiku-4-5-20251001';
+  document.getElementById('modelHaiku').classList.add('active');
+  document.getElementById('modelSonnet').classList.remove('active');
+});
+document.getElementById('modelSonnet').addEventListener('click', () => {
+  selectedModel = 'claude-sonnet-4-6';
+  document.getElementById('modelSonnet').classList.add('active');
+  document.getElementById('modelHaiku').classList.remove('active');
 });
 
 function normalizeName(name) {
@@ -211,7 +228,7 @@ extractBtn.addEventListener('click', async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
+        model: selectedModel,
         max_tokens: 2000,
         messages: [{
           role: 'user',
@@ -258,7 +275,8 @@ Be precise — look carefully at each star's actual color (yellow vs purple) and
     }));
 
     const matchedCount = results.filter(r => r.matched).length;
-    resultsHeaderText.textContent = `${results.length} items read · ${matchedCount} matched`;
+    const modelLabel = selectedModel === 'claude-haiku-4-5-20251001' ? 'Haiku 4.5' : 'Sonnet 5';
+    resultsHeaderText.textContent = `${modelLabel} · ${results.length} items read · ${matchedCount} matched`;
     resultsList.innerHTML = results.map(r => `
       <div class="result-row">
         <span class="result-match-icon ${r.matched ? 'good' : 'bad'}">${r.matched ? '✓' : '✗'}</span>
