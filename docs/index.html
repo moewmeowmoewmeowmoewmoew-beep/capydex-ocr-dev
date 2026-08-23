@@ -4341,8 +4341,6 @@ function renderSetCard({ kind, name, statLabel, tierLabels, vals, members, allOw
     el('div', { class: 'set-card-count' + (ownedCount === members.length ? ' complete' : '') },
       `${ownedCount}/${members.length} owned`),
   ]));
-  if (statLabel) card.appendChild(el('div', { class: 'set-card-stat-label' }, `Increases: ${statLabel}`));
-
   if (allOwned && tierIdx >= 0) {
     // The per-tier pips below show what each individual bracket adds on
     // its own, but the set bonus itself stacks — every bracket reached
@@ -4351,8 +4349,13 @@ function renderSetCard({ kind, name, statLabel, tierLabels, vals, members, allOw
     // every tier up through the current one, not just the current tier's
     // own number.
     const cumulative = vals.slice(0, tierIdx + 1).reduce((sum, v) => sum + (typeof v === 'number' ? v : 0), 0);
-    const isPercent = typeof vals[tierIdx] === 'number' && vals[tierIdx] < 20;
-    card.appendChild(el('div', { class: 'set-card-total' }, `Total: +${cumulative}${isPercent ? '%' : ''}`));
+    // No separate "%" suffix here — statLabel itself already carries the
+    // unit for stats where it applies (e.g. "DEF%"), so appending one
+    // again would just duplicate it; flat-value stats (Tenacity, etc.)
+    // read correctly as plain numbers without a label ending in "%".
+    card.appendChild(el('div', { class: 'set-card-total' }, `Set: ${statLabel} +${cumulative}`));
+  } else if (statLabel) {
+    card.appendChild(el('div', { class: 'set-card-stat-label' }, `Increases: ${statLabel}`));
   }
 
   const memberList = el('div', { class: 'set-member-list' });
