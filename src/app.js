@@ -277,6 +277,39 @@ function renderFilterDropdown(label, options, currentValue, onChange) {
   return group;
 }
 
+// Per-section open/closed state for the mobile filter toggle — persists
+// across render() calls (which rebuild the whole DOM) since it lives at
+// module scope, not on any DOM node. Defaults closed: she was explicit
+// that the filter must never be exposed immediately, only by the user's
+// own tap.
+const filterToggleOpen = { collectibles: false, relics: false, mounts: false, artifacts: false };
+
+// Wraps a section's Tier/Owned dropdown row behind a "Filters" toggle
+// for mobile — desktop shows the dropdowns directly via CSS (this
+// wrapper is visually inert above 844px), only the mobile media query
+// actually hides/reveals anything.
+function renderFilterToggleSection(key, dropdownsRow) {
+  const wrap = el('div', {});
+  const toggleRow = el('div', { class: 'filter-toggle-row' + (filterToggleOpen[key] ? ' open' : '') });
+  const chevron = el('span', { class: 'filter-toggle-chevron' }, '▾');
+  toggleRow.appendChild(chevron);
+  toggleRow.appendChild(el('span', {}, 'Filters'));
+
+  const collapse = el('div', { class: 'filter-collapse' + (filterToggleOpen[key] ? ' open' : '') });
+  const inner = el('div', { class: 'filter-collapse-inner' }, [dropdownsRow]);
+  collapse.appendChild(inner);
+
+  toggleRow.onclick = () => {
+    filterToggleOpen[key] = !filterToggleOpen[key];
+    toggleRow.classList.toggle('open', filterToggleOpen[key]);
+    collapse.classList.toggle('open', filterToggleOpen[key]);
+  };
+
+  wrap.appendChild(toggleRow);
+  wrap.appendChild(collapse);
+  return wrap;
+}
+
 function renderRarityTag(tier) {
   return el('span', { class: `rarity-tag tag-${tier}` }, tier);
 }
@@ -525,39 +558,44 @@ function renderHomesteadCard(b) {
   const owned = currentLevel > 0;
   const maxLevel = b.values.length;
   const card = el('div', { class: 'item-card' });
-  card.appendChild(el('div', { class: 'card-header-row' }, [
-    el('div', { class: 'header-left' }, [
+
+  card.appendChild(el('div', { class: 'card-title-row' }, [
+    el('div', { class: 'card-title-image-group' }, [
+      renderThumb('homestead', { n: b.name }),
       el('div', { class: 'item-name', title: b.name }, b.name),
     ]),
   ]));
-  card.appendChild(el('div', { class: 'item-rarity' }, b.event ? `Set: ${b.event}` : b.label));
+  if (b.event) card.appendChild(el('div', { class: 'item-rarity' }, `Set: ${b.event}`));
 
-  const stepper = renderStepper(
-    `homestead-${b.id}`, currentLevel, 0, maxLevel,
-    (next) => {
-      if (next <= 0) delete state.homestead[b.id];
-      else state.homestead[b.id] = next;
-      saveState();
-      render();
-    },
-    (v) => `Lv${v}`
-  );
-  card.appendChild(el('div', { class: 'card-controls-row' }, [
+  card.appendChild(el('div', { class: 'card-badge-row' }, [
     renderOwnedBadge(owned, (checked) => {
       if (!checked) delete state.homestead[b.id];
       else state.homestead[b.id] = 1;
       saveState();
       render();
     }),
-    el('div', { class: 'steppers-col' }, [stepper]),
+  ]));
+
+  card.appendChild(el('div', { class: 'card-stepper-row' }, [
+    el('div', { class: 'card-stepper-label' }, 'Level'),
+    renderStepper(`homestead-${b.id}`, currentLevel, 0, maxLevel,
+      (next) => {
+        if (next <= 0) delete state.homestead[b.id];
+        else state.homestead[b.id] = next;
+        saveState();
+        render();
+      },
+      (v) => `Lv${v}`),
   ]));
 
   if (owned) {
     const val = b.values[currentLevel - 1];
     const pct = Math.round(val * 10000) / 100;
-    card.appendChild(el('div', { class: 'item-effect' }, [
-      b.label + ': ',
-      el('span', { class: 'stat-value-live' }, `+${pct}%`),
+    card.appendChild(el('div', { class: 'card-info' }, [
+      el('div', { class: 'item-effect' }, [
+        b.label + ': ',
+        el('span', { class: 'stat-value-live' }, `+${pct}%`),
+      ]),
     ]));
   }
   return card;
@@ -3183,7 +3221,7 @@ function renderRelics() {
     relicOwnedFilter = v;
     renderRelicGroups(groupsWrap);
   });
-  toolbar.appendChild(el('div', { class: 'filter-row-dropdowns' }, [tierDropdown, ownedDropdown]));
+  toolbar.appendChild(renderFilterToggleSection('relics', el('div', { class: 'filter-row-dropdowns' }, [tierDropdown, ownedDropdown])));
   wrap.appendChild(toolbar);
 
   const groupsWrap = el('div', {});
@@ -3234,31 +3272,38 @@ function renderRelicCard(relic) {
   const owned = !!state.relicOwned[relic.n];
   const star = state.relicStars[relic.n] || 0;
 
-  const card = el('div', { class: `item-card r-${relic.rarity}` + (selectMode.relics && selectedItems.relics.has(relic.n) ? ' selected' : '') });
+  const card = el('div', { class: 'item-card' + (selectMode.relics && selectedItems.relics.has(relic.n) ? ' selected' : '') });
   if (selectMode.relics) card.appendChild(renderSelectionOverlay('relics', relic.n));
-  card.appendChild(el('div', { class: 'card-header-row' }, [
-    el('div', { class: 'header-left' }, [
+
+  // Title row: thumb + name on the left, rarity Tag pinned top-right —
+  // per Figma, the Tag sits alone in the corner, not inline with any
+  // subtitle text.
+  card.appendChild(el('div', { class: 'card-title-row' }, [
+    el('div', { class: 'card-title-image-group' }, [
       renderThumb('relics', relic),
       el('div', { class: 'item-name', title: relic.n }, relic.n),
     ]),
+    renderRarityTag(relic.rarity),
   ]));
-  card.appendChild(el('div', { class: 'item-rarity' }, renderRarityTag(relic.rarity)));
 
-  const stepper = renderStepper(
-    `relic-${relic.n}`, star, 0, 10,
-    (next) => setRelicStar(relic.n, next),
-    (v) => `${v}★`
-  );
-  card.appendChild(el('div', { class: 'card-controls-row' }, [
+  // Owned badge alone on its own row — no stepper beside it.
+  card.appendChild(el('div', { class: 'card-badge-row' }, [
     renderOwnedBadge(owned, (checked) => {
       state.relicOwned[relic.n] = checked;
       if (!checked) state.relicStars[relic.n] = 0;
       saveState();
       render();
     }),
-    el('div', { class: 'steppers-col' }, [stepper]),
   ]));
 
+  // Stars: its own full-width row with an explicit label above the
+  // stepper, not sharing space with the badge or any other control.
+  card.appendChild(el('div', { class: 'card-stepper-row' }, [
+    el('div', { class: 'card-stepper-label' }, 'Stars'),
+    renderStepper(`relic-${relic.n}`, star, 0, 10, (next) => setRelicStar(relic.n, next)),
+  ]));
+
+  const infoLines = [];
   if (owned) {
     // Relics with base/5★/10★ effect text (35 of them, from the "Relic
     // Equip effect" sheet) should show whichever tier actually matches the
@@ -3274,7 +3319,7 @@ function renderRelicCard(relic) {
       else { effectText = relic.effect; effectLabel = '10★'; }
     }
     if (effectText) {
-      card.appendChild(el('div', { class: 'item-effect' },
+      infoLines.push(el('div', { class: 'item-effect' },
         el('span', {}, [`${effectLabel}: `, renderTextWithSkillTags(effectText)])));
     }
 
@@ -3282,9 +3327,10 @@ function renderRelicCard(relic) {
       const nodes = formatStatBlockNodes(
         Object.fromEntries(Object.entries(relic.star_stats).map(([stat, vals]) => [stat, vals[star]]))
       );
-      card.appendChild(el('div', { class: 'item-effect' }, nodes));
+      infoLines.push(el('div', { class: 'item-effect' }, nodes));
     }
   }
+  if (infoLines.length) card.appendChild(el('div', { class: 'card-info' }, infoLines));
 
   return card;
 }
@@ -3365,7 +3411,7 @@ function renderCollectibles() {
     collectibleOwnedFilter = v;
     renderCollectibleGroups(groupsWrap);
   });
-  toolbar.appendChild(el('div', { class: 'filter-row-dropdowns' }, [tierDropdown, ownedDropdown]));
+  toolbar.appendChild(renderFilterToggleSection('collectibles', el('div', { class: 'filter-row-dropdowns' }, [tierDropdown, ownedDropdown])));
   wrap.appendChild(toolbar);
 
   const groupsWrap = el('div', {});
@@ -3406,48 +3452,50 @@ function renderCollectibleCard(item) {
   const owned = !!state.collectibleOwned[item.n];
   const maxStar = 10;
   const stars = Math.min(state.collectibleStars[item.n] || 0, maxStar);
-  const card = el('div', { class: `item-card r-${item.rarity}` + (selectMode.collectibles && selectedItems.collectibles.has(item.n) ? ' selected' : '') });
+  const card = el('div', { class: 'item-card' + (selectMode.collectibles && selectedItems.collectibles.has(item.n) ? ' selected' : '') });
   if (selectMode.collectibles) card.appendChild(renderSelectionOverlay('collectibles', item.n));
-  card.appendChild(el('div', { class: 'card-header-row' }, [
-    el('div', { class: 'header-left' }, [
+
+  card.appendChild(el('div', { class: 'card-title-row' }, [
+    el('div', { class: 'card-title-image-group' }, [
       renderThumb('collectibles', item),
       el('div', { class: 'item-name', title: item.n }, item.n),
     ]),
+    renderRarityTag(item.rarity),
   ]));
-  card.appendChild(el('div', { class: 'item-rarity' },
-    [renderRarityTag(item.rarity), item.set ? ` · Set: ${item.set}` : '']));
+  if (item.set) card.appendChild(el('div', { class: 'item-rarity' }, `Set: ${item.set}`));
 
-  const stepper = renderStepper(
-    `collectible-${item.n}`, stars, 0, maxStar,
-    (next) => setCollectibleStar(item.n, next, maxStar),
-    (v) => `${v}★`
-  );
-  card.appendChild(el('div', { class: 'card-controls-row' }, [
+  card.appendChild(el('div', { class: 'card-badge-row' }, [
     renderOwnedBadge(owned, (checked) => {
       state.collectibleOwned[item.n] = checked;
       if (!checked) state.collectibleStars[item.n] = 0;
       saveState();
       render();
     }),
-    el('div', { class: 'steppers-col' }, [stepper]),
+  ]));
+
+  card.appendChild(el('div', { class: 'card-stepper-row' }, [
+    el('div', { class: 'card-stepper-label' }, 'Stars'),
+    renderStepper(`collectible-${item.n}`, stars, 0, maxStar, (next) => setCollectibleStar(item.n, next, maxStar)),
   ]));
 
   if (owned) {
     const val = item.star_vals[stars];
+    let effectLine;
     if (val == null) {
-      card.appendChild(el('div', { class: 'item-effect placeholder' },
-        `${item.stat_label}: not documented at ${stars}★ yet`));
+      effectLine = el('div', { class: 'item-effect placeholder' },
+        `${item.stat_label}: not documented at ${stars}★ yet`);
     } else {
       // New source data gives raw numbers directly (percent stats are
       // already whole percentages like 1.0 = 1%, not a 0.01 fraction) —
       // no more ×100 conversion, and flat stats (HP/ATK/DEF/Block) get no
       // "%" at all since they're not percentages to begin with.
       const display = item.is_percent ? `${val}%` : `${val}`;
-      card.appendChild(el('div', { class: 'item-effect' }, [
+      effectLine = el('div', { class: 'item-effect' }, [
         item.stat_label.replace(/\s*%$/, '') + ': ',
         el('span', { class: 'stat-value-live' }, display),
-      ]));
+      ]);
     }
+    card.appendChild(el('div', { class: 'card-info' }, [effectLine]));
   }
   return card;
 }
@@ -3543,7 +3591,7 @@ function renderMountsOrArtifacts(kind) {
     filters.owned = v;
     renderMountArtifactGroups(kind, groupsWrap);
   });
-  toolbar.appendChild(el('div', { class: 'filter-row-dropdowns' }, [tierDropdown, ownedDropdown]));
+  toolbar.appendChild(renderFilterToggleSection(kind, el('div', { class: 'filter-row-dropdowns' }, [tierDropdown, ownedDropdown])));
   wrap.appendChild(toolbar);
 
   const groupsWrap = el('div', {});
@@ -3628,15 +3676,20 @@ function hasAwakenProgression(item) {
 function renderMountArtifactCard(item, bucket, isMount) {
   const kind = isMount ? 'mounts' : 'artifacts';
   const s = getMountOrArtifactState(bucket, item.idx);
-  const card = el('div', { class: `item-card r-${item.tier}` + (selectMode[kind] && selectedItems[kind].has(item.idx) ? ' selected' : '') });
+  const card = el('div', { class: 'item-card' + (selectMode[kind] && selectedItems[kind].has(item.idx) ? ' selected' : '') });
   if (selectMode[kind]) card.appendChild(renderSelectionOverlay(kind, item.idx));
-  card.appendChild(el('div', { class: 'card-header-row' }, [
-    el('div', { class: 'header-left' }, [
+
+  card.appendChild(el('div', { class: 'card-title-row' }, [
+    el('div', { class: 'card-title-image-group' }, [
       renderThumb(isMount ? 'mounts' : 'artifacts', item),
       el('div', { class: 'item-name', title: item.n }, item.n),
     ]),
+    item.tier ? renderRarityTag(item.tier) : null,
   ]));
-  card.appendChild(el('div', { class: 'item-rarity' }, item.tier ? renderRarityTag(item.tier) : ''));
+
+  card.appendChild(el('div', { class: 'card-badge-row' }, [
+    renderOwnedBadge(s.owned, (checked) => { s.owned = checked; saveState(); render(); }),
+  ]));
 
   // Uncommon/Rare/Epic mounts have a star stepper in-game that does
   // nothing — confirmed by every star delta being an empty object, unlike
@@ -3648,33 +3701,31 @@ function renderMountArtifactCard(item, bucket, isMount) {
   const showStars = hasStarProgression(item);
   const showAwaken = hasAwakenProgression(item);
 
-  const stepperRows = [];
+  // Each stepper gets its own full-width, labeled row — Stars and
+  // Awakening never share a row, per Figma.
   if (showStars) {
-    stepperRows.push(el('div', { class: 'stepper-row' }, [
-      el('span', { class: 'val', style: 'min-width:56px;text-align:left;color:var(--ink-dim);font-family:var(--font-body);font-size:11px;' }, 'Stars'),
+    card.appendChild(el('div', { class: 'card-stepper-row' }, [
+      el('div', { class: 'card-stepper-label' }, 'Stars'),
       renderStepper(`${bucket}-${item.idx}-stars`, s.stars, 0, 5,
         (next) => { s.stars = next; s.owned = true; saveState(); render(); }),
     ]));
   }
   if (showAwaken) {
-    stepperRows.push(el('div', { class: 'stepper-row' }, [
-      el('span', { class: 'val', style: 'min-width:56px;text-align:left;color:var(--ink-dim);font-family:var(--font-body);font-size:11px;' }, 'Awaken'),
+    card.appendChild(el('div', { class: 'card-stepper-row' }, [
+      el('div', { class: 'card-stepper-label' }, 'Awakening'),
       renderStepper(`${bucket}-${item.idx}-awaken`, s.awaken, 0, 10,
         (next) => { s.awaken = next; s.owned = true; saveState(); render(); },
         (v) => `A${v}`),
     ]));
   }
 
-  card.appendChild(el('div', { class: 'card-controls-row' }, [
-    renderOwnedBadge(s.owned, (checked) => { s.owned = checked; saveState(); render(); }),
-    el('div', { class: 'steppers-col' }, stepperRows),
-  ]));
-
   if (!s.owned) return card;
 
   if (!item.star_up) {
-    card.appendChild(el('div', { class: 'item-effect placeholder' },
-      el('span', { class: 'coming-soon-badge' }, 'Coming Soon')));
+    card.appendChild(el('div', { class: 'card-info' }, [
+      el('div', { class: 'item-effect placeholder' },
+        el('span', { class: 'coming-soon-badge' }, 'Coming Soon')),
+    ]));
     return card;
   }
 
@@ -3689,17 +3740,21 @@ function renderMountArtifactCard(item, bucket, isMount) {
   const labelParts = [];
   if (showStars) labelParts.push(`${s.stars}★`);
   if (showAwaken) labelParts.push(`A${s.awaken}`);
-  card.appendChild(el('div', { class: 'item-effect', style: 'margin-top:8px;border-top:1px solid var(--hairline);padding-top:8px;' },
-    [labelParts.length ? `At ${labelParts.join(' / ')}: ` : '', formatStatBlockNodes(total, true)]));
+
+  const infoLines = [
+    el('div', { class: 'item-effect' },
+      [labelParts.length ? `At ${labelParts.join(' / ')}: ` : '', formatStatBlockNodes(total, true)]),
+  ];
 
   const starEff = showStars && item.star_effects && item.star_effects[String(s.stars)];
-  if (starEff) card.appendChild(el('div', { class: 'item-effect', style: 'font-style:italic;' }, [`★${s.stars}: `, renderTextWithSkillTags(starEff)]));
+  if (starEff) infoLines.push(el('div', { class: 'item-effect', style: 'font-style:italic;' }, [`★${s.stars}: `, renderTextWithSkillTags(starEff)]));
 
   const resolved = resolveAwakenEffect(item, s.awaken);
   if (resolved) {
-    card.appendChild(el('div', { class: 'item-effect', style: 'font-style:italic;' },
+    infoLines.push(el('div', { class: 'item-effect', style: 'font-style:italic;' },
       [`A${s.awaken}: `, renderTextWithSkillTags(resolved.text)]));
   }
+  card.appendChild(el('div', { class: 'card-info' }, infoLines));
 
   return card;
 }
