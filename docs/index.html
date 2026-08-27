@@ -350,7 +350,6 @@ body {
   width: 36px;
   height: 36px;
   flex-shrink: 0;
-  background: var(--bg-panel-2);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -367,7 +366,7 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
 }
 
@@ -411,9 +410,11 @@ body {
   color: var(--ink-dim);
   margin-bottom: 10px;
 }
-/* Rarity tag badge — from Figma's Tag component. Fill uses each rarity's
-   full-saturation color directly (matches --rarity-*/--tier-* exactly);
-   text uses the paired -text variant for contrast on top of it. */
+/* Rarity tag badge — from Figma's Tag component. Background is each
+   rarity's color at 10% opacity (matches the Tag component's fill
+   opacity exactly, not a separate CSS opacity on the whole badge — the
+   text stays fully opaque); text uses the paired -text variant for
+   contrast on top of it. */
 .rarity-tag {
   display: inline-block;
   padding: 4px;
@@ -423,13 +424,13 @@ body {
   font-weight: 400;
   line-height: 1;
 }
-.rarity-tag.tag-Rare { background: var(--rarity-rare); color: var(--rarity-rare-text); }
-.rarity-tag.tag-Epic { background: var(--rarity-epic); color: var(--rarity-epic-text); }
-.rarity-tag.tag-Legendary { background: var(--rarity-legendary); color: var(--rarity-legendary-text); }
-.rarity-tag.tag-Mythic { background: var(--rarity-mythic); color: var(--rarity-mythic-text); }
-.rarity-tag.tag-Uncommon { background: var(--tier-uncommon); color: var(--tier-uncommon-text); }
-.rarity-tag.tag-Immortal { background: var(--tier-immortal); color: var(--tier-immortal-text); }
-.rarity-tag.tag-Transcendent { background: var(--tier-transcendent); color: var(--tier-transcendent-text); }
+.rarity-tag.tag-Rare { background: color-mix(in srgb, var(--rarity-rare) 10%, transparent); color: var(--rarity-rare-text); }
+.rarity-tag.tag-Epic { background: color-mix(in srgb, var(--rarity-epic) 10%, transparent); color: var(--rarity-epic-text); }
+.rarity-tag.tag-Legendary { background: color-mix(in srgb, var(--rarity-legendary) 10%, transparent); color: var(--rarity-legendary-text); }
+.rarity-tag.tag-Mythic { background: color-mix(in srgb, var(--rarity-mythic) 10%, transparent); color: var(--rarity-mythic-text); }
+.rarity-tag.tag-Uncommon { background: color-mix(in srgb, var(--tier-uncommon) 10%, transparent); color: var(--tier-uncommon-text); }
+.rarity-tag.tag-Immortal { background: color-mix(in srgb, var(--tier-immortal) 10%, transparent); color: var(--tier-immortal-text); }
+.rarity-tag.tag-Transcendent { background: color-mix(in srgb, var(--tier-transcendent) 10%, transparent); color: var(--tier-transcendent-text); }
 .item-effect {
   font-size: 12px;
   color: var(--ink-dim);
@@ -605,7 +606,7 @@ body {
   overflow: hidden;
   flex-shrink: 0;
 }
-.set-member-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.set-member-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .set-member-name {
   font-size: 12.5px;
   color: var(--ink-dim);
@@ -1413,7 +1414,7 @@ body {
   width: 44px;
   height: 44px;
   border-radius: 6px;
-  object-fit: cover;
+  object-fit: contain;
   background: var(--bg-panel-2);
   flex-shrink: 0;
 }
@@ -1502,7 +1503,7 @@ body {
   width: 16px;
   height: 16px;
   border-radius: 3px;
-  object-fit: cover;
+  object-fit: contain;
   z-index: 1;
   pointer-events: none;
 }
@@ -1550,7 +1551,7 @@ body {
   width: 24px;
   height: 24px;
   border-radius: 4px;
-  object-fit: cover;
+  object-fit: contain;
   flex-shrink: 0;
   background: var(--bg-panel-2);
 }
