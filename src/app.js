@@ -254,6 +254,14 @@ function renderOwnedBadge(isOwned, onToggle) {
   }, el('span', { class: 'owned-label' }, isOwned ? 'Owned' : 'Not Owned'));
 }
 
+// Rarity/tier badge — from Figma's Tag component. Covers both the
+// Rare/Epic/Legendary/Mythic rarity tiers and the Uncommon/Immortal/
+// Transcendent mount/artifact tiers with the same class, since both sets
+// already share one --rarity-*/--tier-* CSS token naming scheme.
+function renderRarityTag(tier) {
+  return el('span', { class: `rarity-tag tag-${tier}` }, tier);
+}
+
 function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
 
 let editingStepperKey = null;
@@ -796,6 +804,97 @@ function specTrackKey(group, trackName) {
   return `${group}||${trackName}`;
 }
 
+// Parses "N Tier 3" -> { dir: 'N', tierNum: 3 }. Group names are otherwise
+// free text, so this is deliberately strict — a non-match returns null
+// rather than guessing, since silently misparsing a direction/tier would
+// corrupt the whole cascade below it.
+function parseSpecGroupName(groupName) {
+  const m = (groupName || '').trim().match(/^([NESW])\s+Tier\s+(\d+)$/i);
+  if (!m) return null;
+  return { dir: m[1].toUpperCase(), tierNum: parseInt(m[2], 10) };
+}
+
+// Direction -> tier groups, sorted ascending by tier number, each tagged
+// with its parsed tier number for quick lookup by the cascade below.
+function buildSpecDirectionIndex() {
+  const byDir = { N: [], E: [], S: [], W: [] };
+  (DB.General || []).forEach(g => {
+    const parsed = parseSpecGroupName(g.group);
+    if (parsed && byDir[parsed.dir]) byDir[parsed.dir].push({ tierNum: parsed.tierNum, group: g });
+  });
+  Object.keys(byDir).forEach(dir => byDir[dir].sort((a, b) => a.tierNum - b.tierNum));
+  return byDir;
+}
+
+// Walks backward from one tier through every earlier tier in the same
+// direction, raising whatever prerequisite tracks the game's own
+// progression rules actually require — never lowering anything already
+// higher than the minimum, so a deliberate extra investment isn't
+// clobbered back down.
+//
+//   N direction: the entire previous tier must be fully maxed before the
+//   next tier can hold any investment at all — every earlier tier gets
+//   every one of its tracks maxed, all the way back to Tier 1.
+//
+//   E/S/W directions: the tree's own layout converges and diverges — a
+//   tier with 3 tracks can feed into a single-track tier ahead of it, or
+//   a single track can fan back out into 3. Matching is by POSITION
+//   within each tier's track list, not by name: Tier 12's 1st track can
+//   pair with Tier 11's 1st track even when the two share no words at
+//   all ("Dragon Armor Beast's Blessing" ↔ "Blessing of Capytti Veyron").
+//   That pairing only holds when both tiers have the same track count —
+//   whenever the count changes between adjacent tiers (a converge or
+//   diverge point), there's no clean 1-to-1 mapping, so every track in
+//   the earlier tier becomes required instead of just one.
+function autoFillSpecPrerequisites(tab, group, trackName) {
+  const parsed = parseSpecGroupName(group.group);
+  if (!parsed) return;
+  const { dir, tierNum } = parsed;
+  const dirIndex = buildSpecDirectionIndex()[dir];
+  if (!dirIndex) return;
+
+  const raiseTo = (groupName, name, level) => {
+    if (getSpecTrackLevel(tab, groupName, name) < level) {
+      setSpecTrackLevel(tab, groupName, name, level);
+    }
+  };
+
+  if (dir === 'N') {
+    dirIndex.forEach(entry => {
+      if (entry.tierNum >= tierNum) return;
+      entry.group.tracks.forEach(t => raiseTo(entry.group.group, t.name, t.levels.length));
+    });
+    return;
+  }
+
+  // Starts from just the one track's position that triggered this, not
+  // every track in the tier — a different, uninvested track sitting in
+  // the same tier shouldn't get pulled into a cascade nobody asked for.
+  const startIdx = group.tracks.findIndex(t => t.name === trackName);
+  if (startIdx === -1) return;
+
+  let neededIndices = [startIdx];
+  let producingTierCount = group.tracks.length;
+
+  for (let n = tierNum - 1; n >= 1; n--) {
+    const entry = dirIndex.find(e => e.tierNum === n);
+    if (!entry) continue;
+    const thisTierCount = entry.group.tracks.length;
+
+    const indicesToSatisfy = thisTierCount === producingTierCount
+      ? neededIndices
+      : entry.group.tracks.map((_, i) => i);
+
+    indicesToSatisfy.forEach(i => {
+      const t = entry.group.tracks[i];
+      if (t) raiseTo(entry.group.group, t.name, 1);
+    });
+
+    neededIndices = indicesToSatisfy;
+    producingTierCount = thisTierCount;
+  }
+}
+
 function getSpecTrackLevel(tab, group, trackName) {
   return state.specialization.progress[tab][specTrackKey(group, trackName)] || 0;
 }
@@ -903,6 +1002,15 @@ function openSpecDrawer(tab, group) {
     const applyLevel = (n) => {
       const clamped = Math.max(0, Math.min(max, n));
       setSpecTrackLevel(tab, group.group, track.name, clamped);
+      // Investing in a track should automatically satisfy whatever
+      // earlier-tier prerequisites the game's own rules require for it —
+      // nobody should have to remember to go fill in earlier tiers by
+      // hand, or find and press a separate button, every time they raise
+      // something further along. Only fires while actually raising a
+      // track above 0; autoFillSpecPrerequisites only ever raises levels
+      // too, so calling it repeatedly (or after a decrease that's still
+      // above 0) is always safe — it just confirms what's already there.
+      if (clamped > 0) autoFillSpecPrerequisites(tab, group, track.name);
       saveState();
       input.value = clamped === 0 && document.activeElement === input ? '' : String(clamped);
       if (effectDiv) effectDiv.textContent = clamped > 0 ? stripLevelText(track.levels[clamped - 1]) : 'Not yet invested';
@@ -1804,18 +1912,26 @@ function renderEquipPetCard(petIndex) {
   }
 
   card.appendChild(el('div', { class: 'equip-section-title' }, 'Battle Skills'));
-  card.appendChild(equipFieldLabel('Pet Level'));
-  const levelInput = el('input', {
-    type: 'number', class: 'equip-select', min: '1', max: '100', value: String(s.level || ''),
-    placeholder: 'e.g. 23',
-    'data-focus-id': `pet-level-${petIndex}`,
-  });
-  levelInput.addEventListener('input', (e) => {
-    s.level = parseInt(e.target.value, 10) || 0;
-    saveState();
-  });
-  levelInput.addEventListener('blur', () => render());
-  card.appendChild(levelInput);
+
+  // Pingu (so far the only one, per star_battle_skills existing in the
+  // data) ties its Battle Skill tier entirely to its own star rating —
+  // Pet Level plays no part in its tier resolution below, so the field
+  // is hidden rather than shown alongside a value that wouldn't do
+  // anything. Every other pet keeps the normal Pet Level input.
+  if (!(pet && pet.star_battle_skills)) {
+    card.appendChild(equipFieldLabel('Pet Level'));
+    const levelInput = el('input', {
+      type: 'number', class: 'equip-select', min: '1', max: '100', value: String(s.level || ''),
+      placeholder: 'e.g. 23',
+      'data-focus-id': `pet-level-${petIndex}`,
+    });
+    levelInput.addEventListener('input', (e) => {
+      s.level = parseInt(e.target.value, 10) || 0;
+      saveState();
+    });
+    levelInput.addEventListener('blur', () => render());
+    card.appendChild(levelInput);
+  }
 
   if (pet && pet.star_battle_skills) {
     // Pingu (so far the only one) ties its Battle Skill tier to its own
@@ -3124,7 +3240,7 @@ function renderRelicCard(relic) {
       el('div', { class: 'item-name', title: relic.n }, relic.n),
     ]),
   ]));
-  card.appendChild(el('div', { class: 'item-rarity' }, relic.rarity));
+  card.appendChild(el('div', { class: 'item-rarity' }, renderRarityTag(relic.rarity)));
 
   const stepper = renderStepper(
     `relic-${relic.n}`, star, 0, 10,
@@ -3319,7 +3435,7 @@ function renderCollectibleCard(item) {
     ]),
   ]));
   card.appendChild(el('div', { class: 'item-rarity' },
-    item.rarity + (item.set ? ' · Set: ' + item.set : '')));
+    [renderRarityTag(item.rarity), item.set ? ` · Set: ${item.set}` : '']));
 
   const stepper = renderStepper(
     `collectible-${item.n}`, stars, 0, maxStar,
@@ -3562,7 +3678,7 @@ function renderMountArtifactCard(item, bucket, isMount) {
       el('div', { class: 'item-name', title: item.n }, item.n),
     ]),
   ]));
-  card.appendChild(el('div', { class: 'item-rarity' }, item.tier || ''));
+  card.appendChild(el('div', { class: 'item-rarity' }, item.tier ? renderRarityTag(item.tier) : ''));
 
   // Uncommon/Rare/Epic mounts have a star stepper in-game that does
   // nothing — confirmed by every star delta being an empty object, unlike
@@ -3668,7 +3784,7 @@ function renderPetCard(item) {
       el('div', { class: 'item-name', title: item.n }, item.n),
     ]),
   ]));
-  card.appendChild(el('div', { class: 'item-rarity' }, item.tier || ''));
+  card.appendChild(el('div', { class: 'item-rarity' }, item.tier ? renderRarityTag(item.tier) : ''));
 
   const hasStarSkills = !!(item.star_battle_skills);
   const battleStepper = el('div', { class: 'stepper-row' }, [

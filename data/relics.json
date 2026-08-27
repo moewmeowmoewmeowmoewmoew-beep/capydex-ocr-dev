@@ -161,7 +161,7 @@
     },
     {
       "id": null,
-      "n": "Holy Grail (Mythic Treasure)",
+      "n": "Holy Grail",
       "type": "",
       "effect": "When hitting an enemy with HP >30%, hero's final damage bonus +20%",
       "pve": "",
@@ -796,7 +796,7 @@
     },
     {
       "id": "1376008",
-      "n": "Da Vinci's Codex",
+      "n": "Da Vinci's Codex Leicester",
       "type": "Defensive",
       "effect": "At the start of battle, gain [ Iron Shield ] for 5 turns. [ Iron Shield ]: hero's final damage reduction +10%, each turn hero gains a shield equal to 5% of max HP",
       "pve": "",
@@ -5006,7 +5006,7 @@
     },
     {
       "id": "1373008",
-      "n": "Marshal's Medal",
+      "n": "Marshal’s Medal",
       "type": "",
       "effect": "",
       "pve": "",
@@ -7648,7 +7648,7 @@
         ],
         "items": [
           "Dead Sea Scrolls",
-          "Da Vinci's Codex"
+          "Da Vinci's Codex Leicester"
         ],
         "tracked": true
       },
@@ -7664,7 +7664,7 @@
           5.0
         ],
         "items": [
-          "Holy Grail (Mythic Treasure)",
+          "Holy Grail",
           "Galileo's Telescope"
         ],
         "tracked": true
