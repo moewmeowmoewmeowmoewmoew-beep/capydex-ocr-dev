@@ -2664,7 +2664,7 @@ function render() {
 }
 
 function renderSectionShell(sections, pageLabel, pageClearAllFn) {
-  const outer = el('div', {});
+  const outer = el('div', { class: 'collection-page-outer' });
   if (pageLabel) {
     outer.appendChild(el('div', { class: 'section-title-row' }, [
       el('div', { class: 'section-title' }, pageLabel),

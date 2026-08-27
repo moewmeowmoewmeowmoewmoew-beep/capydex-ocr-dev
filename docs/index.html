@@ -152,22 +152,51 @@ body {
   border-color: var(--accent-dim);
 }
 
-/* ---- Collection tab: internal sidenav + anchor scroll ---- */
-.collection-shell { display: flex; align-items: flex-start; }
+/* ---- Collection tab: internal sidenav + anchor scroll ----
+   12-column grid (32px margin, 16px gutter), matching the Figma layout
+   exactly at both the 1280px and 1440px reference frames. The margin is
+   NOT container padding — Figma's own Sidenav/Main Content frames each
+   span from their column's true edge and account for the 32px margin
+   via their own internal padding instead, so the grid's column-width
+   formula has to subtract that margin space itself: 12 columns must
+   divide up (100% - 64px margin - 176px gutters), not the full 100%,
+   even though no element here actually has 32px of container padding. */
+.collection-shell {
+  display: grid;
+  grid-template-columns: repeat(12, calc((100% - 64px - 11 * 16px) / 12));
+  column-gap: 16px;
+  justify-content: center;
+  align-items: flex-start;
+}
 
 .collection-shell .sidenav {
-  width: 220px;
-  flex-shrink: 0;
+  grid-column: 1 / span 2;
+  padding: 16px 0 40px 0;
   background: var(--bg-panel);
   border-right: 1px solid var(--hairline);
   position: sticky;
   top: 61px;
   height: calc(100vh - 61px);
   overflow-y: auto;
-  padding: 16px 0 40px;
+}
+/* justify-content: center on .collection-shell distributes the 64px
+   "missing" from the narrower, margin-adjusted columns as 32px on each
+   side — which naturally starts the sidenav's grid track at x=32,
+   matching Figma's margin exactly. This bleeds its background further
+   left to cover that 32px so it still reads as one continuous panel to
+   the actual viewport edge, rather than visibly starting 32px in. */
+.collection-shell .sidenav::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -32px;
+  width: 32px;
+  background: var(--bg-panel);
+  z-index: -1;
 }
 
-.sidenav-links { list-style: none; margin: 0; padding: 0 10px; }
+.sidenav-links { list-style: none; margin: 0; padding: 0 32px 0 0; }
 .sidenav-links > li { margin-bottom: 2px; }
 .sidenav-link {
   display: block;
@@ -227,14 +256,26 @@ body {
 
 /* ---- Layout ---- */
 #app-root { min-height: calc(100vh - 61px); }
-/* .collection-content deliberately doesn't center itself the way the
-   placeholder-view/other-pages rule does — it sits inside .collection-shell
-   next to a 220px sidenav, so centering it in the *remaining* flex space
-   (rather than the full viewport) made its left edge drift out of
-   alignment with every other page's content on wide screens. Left-aligned
-   with the same padding keeps both consistent instead. */
-.collection-content { flex: 1; min-width: 0; padding: 24px 32px 100px; max-width: 1100px; }
-.placeholder-view, #app-root > div:not(.collection-shell) { padding: 24px 32px 100px; max-width: 1100px; margin: 0 auto; }
+/* .collection-content spans columns 3-12 of the outer 12-col grid (10
+   columns), stretching to fill whatever's left of the viewport rather
+   than capping at a fixed max-width — matches both the 1280px and
+   1440px Figma references, which use the same grid, just wider columns
+   at 1440. Left padding is 16px (half the 16px gutter, since the
+   sidenav's own right edge already accounts for the other half);
+   right padding is the full 32px margin, since that edge is the actual
+   screen edge. */
+.collection-content { grid-column: 3 / span 10; min-width: 0; padding: 24px 32px 100px 16px; }
+.placeholder-view, #app-root > div:not(.collection-page-outer) { padding: 24px 32px 100px; max-width: 1100px; margin: 0 auto; }
+
+/* Constrains an element (search bar, intro/description text) to 6 of
+   the page's 10 inner columns. The formula looks different from a
+   literal "6/10 of the grid" because it has to be expressed in terms of
+   THIS element's own 100% — which already has .collection-content's own
+   16+32px padding subtracted out by the time it reaches here. Verified
+   against real measured widths, not just derived: solving the full
+   6-column formula in terms of that already-reduced 100% simplifies to
+   this. */
+.constrain-6col { max-width: calc(100% * 0.6 + 22.4px); }
 
 .page-section { scroll-margin-top: 70px; }
 
@@ -253,7 +294,7 @@ body {
    sitting next to it in the same row. */
 .page-section + .page-section > .section-title,
 .page-section + .page-section .section-title-row { margin-top: 12px; border-top: 1px solid var(--hairline); padding-top: 40px; }
-.section-desc { color: var(--ink-dim); font-size: 13px; margin-bottom: 18px; max-width: 640px; line-height: 1.5; }
+.section-desc { color: var(--ink-dim); font-size: 13px; margin-bottom: 18px; max-width: calc(100% * 0.6 + 22.4px); line-height: 1.5; }
 
 .section-title-row {
   display: flex;
@@ -290,6 +331,7 @@ body {
   border-radius: 4px;
   font-size: 13px;
   min-width: 220px;
+  max-width: calc(100% * 0.6 + 22.4px);
 }
 .search-input:focus { outline: none; border-color: var(--accent-dim); }
 
@@ -956,19 +998,15 @@ body {
     transform: translateY(-150%);
   }
 
-  /* align-items: flex-start on .collection-shell (set for the desktop row
-     layout) has a very different effect once flex-direction switches to
-     column here: in a column flex container, align-items governs the
-     WIDTH axis, not height, and flex-start means children size to their
-     own preferred content width instead of stretching to fill the parent.
-     That's what was actually causing collection-content — and everything
-     inside it — to render wider than the viewport, not any individual
-     card. Overriding back to stretch fixes it at the source. */
-  .collection-shell { flex-direction: column; align-items: stretch; }
+  /* .collection-shell is a 12-col grid on desktop; on mobile it needs to
+     go back to a simple single-column block layout instead — grid-column
+     spans from the desktop rules would otherwise still apply with no
+     grid columns actually defined at this width. */
+  .collection-shell { display: block; }
   .collection-shell .sidenav { display: none; }
 
-  .collection-content { padding: 20px 16px 80px; }
-  .placeholder-view, #app-root > div:not(.collection-shell) { padding: 20px 16px 80px; }
+  .collection-content { grid-column: unset; padding: 20px 16px 80px; }
+  .placeholder-view, #app-root > div:not(.collection-page-outer) { padding: 20px 16px 80px; }
 }
 
 @media (max-width: 560px) {
@@ -4357,7 +4395,7 @@ function render() {
 }
 
 function renderSectionShell(sections, pageLabel, pageClearAllFn) {
-  const outer = el('div', {});
+  const outer = el('div', { class: 'collection-page-outer' });
   if (pageLabel) {
     outer.appendChild(el('div', { class: 'section-title-row' }, [
       el('div', { class: 'section-title' }, pageLabel),
