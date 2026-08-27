@@ -301,6 +301,13 @@ body {
 .section-title-row .section-title { margin: 0; padding: 0; }
 .section-title-row .clear-all-btn { margin-bottom: 0; flex-shrink: 0; }
 
+/* The page-level title ("Collection", "Equipment", etc.) is visually
+   distinct from a section title within the page — Figma's "Display/Page
+   Title" style is 28px Bold, not the 24px used for "Collectibles"/
+   "Relics"/etc. section headers beneath it. */
+.page-title-row { padding-top: 32px; margin-bottom: 8px; }
+.page-title { font-family: var(--font-display); font-weight: 700; font-size: 28px; }
+
 .toolbar {
   display: flex;
   gap: 10px;
@@ -310,6 +317,36 @@ body {
 }
 .toolbar-stacked { flex-direction: column; align-items: stretch; }
 .toolbar-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+/* Dropdown-style filter (replaces the old inline chip-row filter) — a
+   label above a native <select> styled to match the app's other input/
+   dropdown fields, per the new Figma Filter/Form structure. Native
+   <select> rather than a custom JS dropdown: filters are simple, single-
+   choice, no thumbnails needed, and native keeps keyboard/accessibility
+   behavior free. */
+.filter-dropdown-group { display: flex; flex-direction: column; gap: 6px; }
+.filter-dropdown-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--ink-dim);
+}
+.filter-dropdown {
+  appearance: none;
+  background: var(--bg-panel-2);
+  border: 1px solid var(--hairline);
+  color: var(--ink);
+  padding: 8px 32px 8px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4' viewBox='0 0 8 4' fill='none'%3E%3Cpath d='M1 1L4 3L7 1' stroke='%23c1b7af' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+.filter-dropdown:focus { outline: none; border-color: var(--accent-dim); }
+.filter-row-dropdowns { display: flex; gap: 24px; flex-wrap: wrap; }
+
 .toolbar-row-label {
   font-size: 11px;
   color: var(--ink-faint);

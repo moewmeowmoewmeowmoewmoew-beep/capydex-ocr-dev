@@ -307,6 +307,13 @@ body {
 .section-title-row .section-title { margin: 0; padding: 0; }
 .section-title-row .clear-all-btn { margin-bottom: 0; flex-shrink: 0; }
 
+/* The page-level title ("Collection", "Equipment", etc.) is visually
+   distinct from a section title within the page — Figma's "Display/Page
+   Title" style is 28px Bold, not the 24px used for "Collectibles"/
+   "Relics"/etc. section headers beneath it. */
+.page-title-row { padding-top: 32px; margin-bottom: 8px; }
+.page-title { font-family: var(--font-display); font-weight: 700; font-size: 28px; }
+
 .toolbar {
   display: flex;
   gap: 10px;
@@ -316,6 +323,36 @@ body {
 }
 .toolbar-stacked { flex-direction: column; align-items: stretch; }
 .toolbar-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+/* Dropdown-style filter (replaces the old inline chip-row filter) — a
+   label above a native <select> styled to match the app's other input/
+   dropdown fields, per the new Figma Filter/Form structure. Native
+   <select> rather than a custom JS dropdown: filters are simple, single-
+   choice, no thumbnails needed, and native keeps keyboard/accessibility
+   behavior free. */
+.filter-dropdown-group { display: flex; flex-direction: column; gap: 6px; }
+.filter-dropdown-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--ink-dim);
+}
+.filter-dropdown {
+  appearance: none;
+  background: var(--bg-panel-2);
+  border: 1px solid var(--hairline);
+  color: var(--ink);
+  padding: 8px 32px 8px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4' viewBox='0 0 8 4' fill='none'%3E%3Cpath d='M1 1L4 3L7 1' stroke='%23c1b7af' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+.filter-dropdown:focus { outline: none; border-color: var(--accent-dim); }
+.filter-row-dropdowns { display: flex; gap: 24px; flex-wrap: wrap; }
+
 .toolbar-row-label {
   font-size: 11px;
   color: var(--ink-faint);
@@ -1989,6 +2026,25 @@ function renderOwnedBadge(isOwned, onToggle) {
 // Rare/Epic/Legendary/Mythic rarity tiers and the Uncommon/Immortal/
 // Transcendent mount/artifact tiers with the same class, since both sets
 // already share one --rarity-*/--tier-* CSS token naming scheme.
+// Dropdown-style filter control — label above a native <select>,
+// replacing the old inline chip-row filter per the new Figma Filter/Form
+// structure. Fires onChange with the selected value; caller owns state.
+function renderFilterDropdown(label, options, currentValue, onChange) {
+  const group = el('div', { class: 'filter-dropdown-group' });
+  group.appendChild(el('label', { class: 'filter-dropdown-label' }, label));
+  const select = el('select', {
+    class: 'filter-dropdown',
+    onchange: (e) => onChange(e.target.value),
+  });
+  options.forEach(opt => {
+    const optionEl = el('option', { value: opt }, opt);
+    if (opt === currentValue) optionEl.selected = true;
+    select.appendChild(optionEl);
+  });
+  group.appendChild(select);
+  return group;
+}
+
 function renderRarityTag(tier) {
   return el('span', { class: `rarity-tag tag-${tier}` }, tier);
 }
@@ -4396,12 +4452,6 @@ function render() {
 
 function renderSectionShell(sections, pageLabel, pageClearAllFn) {
   const outer = el('div', { class: 'collection-page-outer' });
-  if (pageLabel) {
-    outer.appendChild(el('div', { class: 'section-title-row' }, [
-      el('div', { class: 'section-title' }, pageLabel),
-      pageClearAllFn ? renderClearAllButton(pageLabel, pageClearAllFn, true) : null,
-    ]));
-  }
 
   const shell = el('div', { class: 'collection-shell' });
 
@@ -4456,6 +4506,17 @@ function renderSectionShell(sections, pageLabel, pageClearAllFn) {
   nav.appendChild(linksList);
 
   const content = el('div', { class: 'collection-content' });
+  // The page-level title ("Collection" + its Clear All) belongs inside
+  // .collection-content, not as a full-width row above the sidenav+content
+  // grid — Figma's own "Title" frame sits inside "Main Content" at column
+  // 3, aligned with the content column, not the page edge above the
+  // sidenav.
+  if (pageLabel) {
+    content.appendChild(el('div', { class: 'section-title-row page-title-row' }, [
+      el('div', { class: 'section-title page-title' }, pageLabel),
+      pageClearAllFn ? renderClearAllButton(pageLabel, pageClearAllFn, true) : null,
+    ]));
+  }
   sections.forEach(sec => {
     const section = el('section', { id: sec.id, class: 'page-section' });
     if (sec.clearAll) {
@@ -4871,48 +4932,26 @@ function renderRelics() {
     class: 'search-input', type: 'text', placeholder: 'Search relics…', value: relicSearch,
     oninput: (e) => { relicSearch = e.target.value; renderRelicGroups(groupsWrap); },
   });
-  toolbar.appendChild(search);
+  const selectMultipleBtn = el('button', {
+    class: 'filter-chip' + (selectMode.relics ? ' active' : ''),
+    onclick: () => toggleSelectMode('relics'),
+  }, selectMode.relics ? 'Cancel selecting' : 'Select multiple…');
+  toolbar.appendChild(el('div', { class: 'toolbar-row' }, [search, selectMultipleBtn]));
 
-  const tierRow = el('div', { class: 'toolbar-row' });
-  tierRow.appendChild(el('span', { class: 'toolbar-row-label' }, 'Tier'));
   // Derived from the actual data, not a hand-maintained list — a hardcoded
   // array here is exactly how a real tier (Rare) went missing from this
   // filter before. If a new rarity is ever added to the data, it shows up
   // here automatically instead of silently needing a matching code edit.
   const relicTierOptions = ['All', ...buildTierGroups(DB.relics, 'rarity').map(g => g.tier)];
-  relicTierOptions.forEach(r => {
-    const chip = el('button', {
-      class: 'filter-chip' + (relicRarityFilter === r ? ' active' : ''),
-      onclick: () => {
-        relicRarityFilter = r;
-        tierRow.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        renderRelicGroups(groupsWrap);
-      },
-    }, r);
-    tierRow.appendChild(chip);
+  const tierDropdown = renderFilterDropdown('Tier', relicTierOptions, relicRarityFilter, (v) => {
+    relicRarityFilter = v;
+    renderRelicGroups(groupsWrap);
   });
-  toolbar.appendChild(tierRow);
-
-  const ownedRow = el('div', { class: 'toolbar-row' });
-  ownedRow.appendChild(el('span', { class: 'toolbar-row-label' }, 'Owned'));
-  ['All', 'Owned', 'Not Owned'].forEach(o => {
-    const chip = el('button', {
-      class: 'filter-chip' + (relicOwnedFilter === o ? ' active' : ''),
-      onclick: () => {
-        relicOwnedFilter = o;
-        ownedRow.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        renderRelicGroups(groupsWrap);
-      },
-    }, o);
-    ownedRow.appendChild(chip);
+  const ownedDropdown = renderFilterDropdown('Owned', ['All', 'Owned', 'Not Owned'], relicOwnedFilter, (v) => {
+    relicOwnedFilter = v;
+    renderRelicGroups(groupsWrap);
   });
-  ownedRow.appendChild(el('button', {
-    class: 'filter-chip' + (selectMode.relics ? ' active' : ''),
-    onclick: () => toggleSelectMode('relics'),
-  }, selectMode.relics ? 'Cancel selecting' : 'Select multiple…'));
-  toolbar.appendChild(ownedRow);
+  toolbar.appendChild(el('div', { class: 'filter-row-dropdowns' }, [tierDropdown, ownedDropdown]));
   wrap.appendChild(toolbar);
 
   const groupsWrap = el('div', {});
@@ -5076,47 +5115,25 @@ function renderCollectibles() {
     class: 'search-input', type: 'text', placeholder: 'Search collectibles…', value: collectibleSearch,
     oninput: (e) => { collectibleSearch = e.target.value; renderCollectibleGroups(groupsWrap); },
   });
-  toolbar.appendChild(search);
+  const selectMultipleBtn = el('button', {
+    class: 'filter-chip' + (selectMode.collectibles ? ' active' : ''),
+    onclick: () => toggleSelectMode('collectibles'),
+  }, selectMode.collectibles ? 'Cancel selecting' : 'Select multiple…');
+  toolbar.appendChild(el('div', { class: 'toolbar-row' }, [search, selectMultipleBtn]));
 
-  const tierRow = el('div', { class: 'toolbar-row' });
-  tierRow.appendChild(el('span', { class: 'toolbar-row-label' }, 'Tier'));
   // Derived from the actual data, not a hand-maintained list — see the
   // matching comment in renderRelics for why: a hardcoded list here was
   // exactly how Rare-tier collectibles went missing from this filter.
   const collectibleTierOptions = ['All', ...buildTierGroups(DB.collectibles, 'rarity').map(g => g.tier)];
-  collectibleTierOptions.forEach(r => {
-    const chip = el('button', {
-      class: 'filter-chip' + (collectibleRarityFilter === r ? ' active' : ''),
-      onclick: () => {
-        collectibleRarityFilter = r;
-        tierRow.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        renderCollectibleGroups(groupsWrap);
-      },
-    }, r);
-    tierRow.appendChild(chip);
+  const tierDropdown = renderFilterDropdown('Tier', collectibleTierOptions, collectibleRarityFilter, (v) => {
+    collectibleRarityFilter = v;
+    renderCollectibleGroups(groupsWrap);
   });
-  toolbar.appendChild(tierRow);
-
-  const ownedRow = el('div', { class: 'toolbar-row' });
-  ownedRow.appendChild(el('span', { class: 'toolbar-row-label' }, 'Owned'));
-  ['All', 'Owned', 'Not Owned'].forEach(o => {
-    const chip = el('button', {
-      class: 'filter-chip' + (collectibleOwnedFilter === o ? ' active' : ''),
-      onclick: () => {
-        collectibleOwnedFilter = o;
-        ownedRow.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        renderCollectibleGroups(groupsWrap);
-      },
-    }, o);
-    ownedRow.appendChild(chip);
+  const ownedDropdown = renderFilterDropdown('Owned', ['All', 'Owned', 'Not Owned'], collectibleOwnedFilter, (v) => {
+    collectibleOwnedFilter = v;
+    renderCollectibleGroups(groupsWrap);
   });
-  ownedRow.appendChild(el('button', {
-    class: 'filter-chip' + (selectMode.collectibles ? ' active' : ''),
-    onclick: () => toggleSelectMode('collectibles'),
-  }, selectMode.collectibles ? 'Cancel selecting' : 'Select multiple…'));
-  toolbar.appendChild(ownedRow);
+  toolbar.appendChild(el('div', { class: 'filter-row-dropdowns' }, [tierDropdown, ownedDropdown]));
   wrap.appendChild(toolbar);
 
   const groupsWrap = el('div', {});
@@ -5278,45 +5295,23 @@ function renderMountsOrArtifacts(kind) {
     class: 'search-input', type: 'text', placeholder: `Search ${kind}…`, value: filters.search,
     oninput: (e) => { filters.search = e.target.value; renderMountArtifactGroups(kind, groupsWrap); },
   });
-  toolbar.appendChild(search);
-
-  const tierRow = el('div', { class: 'toolbar-row' });
-  tierRow.appendChild(el('span', { class: 'toolbar-row-label' }, 'Tier'));
-  const allItems = (isMount ? DB.mounts : DB.artifacts).filter(x => x.n !== 'None');
-  const tierOptions = ['All', ...buildTierGroups(allItems).map(g => g.tier)];
-  tierOptions.forEach(t => {
-    const chip = el('button', {
-      class: 'filter-chip' + (filters.tier === t ? ' active' : ''),
-      onclick: () => {
-        filters.tier = t;
-        tierRow.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        renderMountArtifactGroups(kind, groupsWrap);
-      },
-    }, t);
-    tierRow.appendChild(chip);
-  });
-  toolbar.appendChild(tierRow);
-
-  const ownedRow = el('div', { class: 'toolbar-row' });
-  ownedRow.appendChild(el('span', { class: 'toolbar-row-label' }, 'Owned'));
-  ['All', 'Owned', 'Not Owned'].forEach(o => {
-    const chip = el('button', {
-      class: 'filter-chip' + (filters.owned === o ? ' active' : ''),
-      onclick: () => {
-        filters.owned = o;
-        ownedRow.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        renderMountArtifactGroups(kind, groupsWrap);
-      },
-    }, o);
-    ownedRow.appendChild(chip);
-  });
-  ownedRow.appendChild(el('button', {
+  const selectMultipleBtn = el('button', {
     class: 'filter-chip' + (selectMode[kind] ? ' active' : ''),
     onclick: () => toggleSelectMode(kind),
-  }, selectMode[kind] ? 'Cancel selecting' : 'Select multiple…'));
-  toolbar.appendChild(ownedRow);
+  }, selectMode[kind] ? 'Cancel selecting' : 'Select multiple…');
+  toolbar.appendChild(el('div', { class: 'toolbar-row' }, [search, selectMultipleBtn]));
+
+  const allItems = (isMount ? DB.mounts : DB.artifacts).filter(x => x.n !== 'None');
+  const tierOptions = ['All', ...buildTierGroups(allItems).map(g => g.tier)];
+  const tierDropdown = renderFilterDropdown('Tier', tierOptions, filters.tier, (v) => {
+    filters.tier = v;
+    renderMountArtifactGroups(kind, groupsWrap);
+  });
+  const ownedDropdown = renderFilterDropdown('Owned', ['All', 'Owned', 'Not Owned'], filters.owned, (v) => {
+    filters.owned = v;
+    renderMountArtifactGroups(kind, groupsWrap);
+  });
+  toolbar.appendChild(el('div', { class: 'filter-row-dropdowns' }, [tierDropdown, ownedDropdown]));
   wrap.appendChild(toolbar);
 
   const groupsWrap = el('div', {});
