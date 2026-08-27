@@ -13,7 +13,6 @@ function defaultState() {
     artifactState: {},      // idx -> { owned, stars(0-5), awaken(0-10) }
     fashionLevel: 0,
     homestead: {},           // buildingId -> level (0 = not owned)
-    petState: {},           // idx -> { owned, battleLv(1-5), awaken(0-10) }
     equipment: {},           // slotId -> { itemName, quality, surpass, arcana, psionics[4], gems[5] }
     petSlots: [
       { itemName: '', arcana: -1, level: 0, armament: '', armamentLevel: 1, skills: [{ stat: '', val: 0 }, { stat: '', val: 0 }, { stat: '', val: 0 }, { stat: '', val: 0 }, { stat: '', val: 0 }] },
@@ -192,12 +191,6 @@ function getMountOrArtifactState(bucket, idx) {
   return state[bucket][idx];
 }
 
-function getPetState(idx) {
-  if (!state.petState[idx]) {
-    state.petState[idx] = { owned: false, battleLv: 1, awaken: 0 };
-  }
-  return state.petState[idx];
-}
 
 /* ============================================================
    Small DOM helpers
@@ -346,11 +339,26 @@ function restorePendingFocus() {
 
 /* Shared stepper: −/+ buttons for incremental adjustment, plus click-to-edit
    on the number itself for typing an exact value directly. format() controls
-   how the value displays (e.g. "3★", "A5") when not being edited. */
+   how the value displays (e.g. "3★", "A5") when not being edited.
+
+   value === null is the "not owned yet" state — displays as an em dash,
+   and the − button is disabled (nothing to revert to). The first + click
+   from there sets it to min (typically 0) and the caller's onChange is
+   expected to also flip ownership on. From then on − never goes below
+   min and never reverts back to the em dash — per her explicit call:
+   clicking + is a low-stakes, obviously-intentional action, but clicking
+   − back to "unowned" would be an easy way to lose data through a click
+   that didn't feel deliberate. Un-owning stays a separate, deliberate
+   action (the Owned badge itself), not something the stepper does. */
 function renderStepper(key, value, min, max, onChange, format) {
   format = format || (v => String(v));
+  const isUnset = value === null;
+  const minusDisabled = isUnset || value <= min;
 
-  if (editingStepperKey === key) {
+  const handlePlus = () => onChange(isUnset ? min : clamp(value + 1, min, max));
+  const handleMinus = () => { if (!minusDisabled) onChange(clamp(value - 1, min, max)); };
+
+  if (editingStepperKey === key && !isUnset) {
     const input = el('input', {
       type: 'number', class: 'stepper-input',
       value: String(value), min: String(min), max: String(max),
@@ -367,19 +375,19 @@ function renderStepper(key, value, min, max, onChange, format) {
       },
     });
     return el('div', { class: 'stepper' }, [
-      el('button', { onclick: () => onChange(clamp(value - 1, min, max)) }, '−'),
+      el('button', { onclick: handleMinus }, '−'),
       input,
-      el('button', { onclick: () => onChange(clamp(value + 1, min, max)) }, '+'),
+      el('button', { onclick: handlePlus }, '+'),
     ]);
   }
 
   return el('div', { class: 'stepper' }, [
-    el('button', { onclick: () => onChange(clamp(value - 1, min, max)) }, '−'),
+    el('button', minusDisabled ? { onclick: handleMinus, disabled: true, class: 'stepper-btn-disabled' } : { onclick: handleMinus }, '−'),
     el('span', {
-      class: 'val val-editable',
-      onclick: () => { editingStepperKey = key; render(); },
-    }, format(value)),
-    el('button', { onclick: () => onChange(clamp(value + 1, min, max)) }, '+'),
+      class: 'val' + (isUnset ? '' : ' val-editable'),
+      onclick: isUnset ? null : (() => { editingStepperKey = key; render(); }),
+    }, isUnset ? '—' : format(value)),
+    el('button', { onclick: handlePlus }, '+'),
   ]);
 }
 
@@ -490,10 +498,6 @@ const COLLECTION_SECTIONS = [
   { id: 'artifacts', label: 'Artifacts', build: () => renderMountsOrArtifacts('artifacts'), sub: () => buildTierGroups(DB.artifacts.filter(x => x.n !== 'None')), clearAll: () => clearAllMountsOrArtifacts('artifacts') },
   { id: 'fashion', label: 'Fashion Level', build: buildFashionSectionContent, clearAll: () => { state.fashionLevel = 0; saveState(); render(); } },
   { id: 'homestead', label: 'Homestead', build: buildHomesteadSectionContent, clearAll: () => { state.homestead = {}; saveState(); render(); } },
-  // Pets deliberately hidden from Collection for now (still fully built —
-  // Equipment tab's Pet card already covers pet selection/arcana/skills).
-  // Remind J this section still exists next time Collection scope comes up.
-  // { id: 'pets', label: 'Pets', build: renderPets, sub: () => buildTierGroups(DB.pets) },
 ];
 
 function parseFashionNoteStats(note) {
@@ -578,10 +582,13 @@ function renderHomesteadCard(b) {
 
   card.appendChild(el('div', { class: 'card-stepper-row' }, [
     el('div', { class: 'card-stepper-label' }, 'Level'),
-    renderStepper(`homestead-${b.id}`, currentLevel, 0, maxLevel,
+    // min is 1, not 0 — unlike Relic/Collectible, Homestead has no
+    // meaningful "owned at 0" state (owned is derived from level > 0
+    // above), so the em dash's first + click should land on Lv1
+    // directly, not an "owned Lv0" that doesn't really exist.
+    renderStepper(`homestead-${b.id}`, owned ? currentLevel : null, 1, maxLevel,
       (next) => {
-        if (next <= 0) delete state.homestead[b.id];
-        else state.homestead[b.id] = next;
+        state.homestead[b.id] = next;
         saveState();
         render();
       },
@@ -3270,7 +3277,10 @@ function renderSelectionOverlay(kind, name) {
 
 function renderRelicCard(relic) {
   const owned = !!state.relicOwned[relic.n];
-  const star = state.relicStars[relic.n] || 0;
+  // null (not 0) while unowned — the stepper displays an em dash for
+  // that state regardless of whatever's still stored underneath, and
+  // only resolves to a real number once actually owned.
+  const star = owned ? (state.relicStars[relic.n] || 0) : null;
 
   const card = el('div', { class: 'item-card' + (selectMode.relics && selectedItems.relics.has(relic.n) ? ' selected' : '') });
   if (selectMode.relics) card.appendChild(renderSelectionOverlay('relics', relic.n));
@@ -3337,7 +3347,12 @@ function renderRelicCard(relic) {
 
 function setRelicStar(relicName, next) {
   state.relicStars[relicName] = next;
-  if (next > 0) state.relicOwned[relicName] = true;
+  // Always true here, not just "next > 0" — this only ever fires from a
+  // deliberate + click or typed edit (the − button is disabled while
+  // unowned, so it can never reach this function in that state), and the
+  // first + click from the em dash passes 0 itself, which needs to count
+  // as owned too, not just values above it.
+  state.relicOwned[relicName] = true;
   saveState();
   render();
 }
@@ -3451,7 +3466,8 @@ function renderCollectibleGroups(container) {
 function renderCollectibleCard(item) {
   const owned = !!state.collectibleOwned[item.n];
   const maxStar = 10;
-  const stars = Math.min(state.collectibleStars[item.n] || 0, maxStar);
+  // null (not 0) while unowned — same em-dash pattern as Relic.
+  const stars = owned ? Math.min(state.collectibleStars[item.n] || 0, maxStar) : null;
   const card = el('div', { class: 'item-card' + (selectMode.collectibles && selectedItems.collectibles.has(item.n) ? ' selected' : '') });
   if (selectMode.collectibles) card.appendChild(renderSelectionOverlay('collectibles', item.n));
 
@@ -3502,7 +3518,10 @@ function renderCollectibleCard(item) {
 
 function setCollectibleStar(name, next, maxStar) {
   state.collectibleStars[name] = Math.max(0, Math.min(maxStar != null ? maxStar : 10, next));
-  if (next > 0) state.collectibleOwned[name] = true;
+  // Always true, same reasoning as setRelicStar — only ever fires from a
+  // deliberate + click or typed edit, and the first + click passes 0
+  // itself, which needs to count as owned too.
+  state.collectibleOwned[name] = true;
   saveState();
   render();
 }
@@ -3702,18 +3721,21 @@ function renderMountArtifactCard(item, bucket, isMount) {
   const showAwaken = hasAwakenProgression(item);
 
   // Each stepper gets its own full-width, labeled row — Stars and
-  // Awakening never share a row, per Figma.
+  // Awakening never share a row, per Figma. Each shows an em dash and a
+  // disabled − while !s.owned, same as Relic/Collectible — the onChange
+  // handlers below already set s.owned = true on any interaction, so no
+  // separate change needed there.
   if (showStars) {
     card.appendChild(el('div', { class: 'card-stepper-row' }, [
       el('div', { class: 'card-stepper-label' }, 'Stars'),
-      renderStepper(`${bucket}-${item.idx}-stars`, s.stars, 0, 5,
+      renderStepper(`${bucket}-${item.idx}-stars`, s.owned ? s.stars : null, 0, 5,
         (next) => { s.stars = next; s.owned = true; saveState(); render(); }),
     ]));
   }
   if (showAwaken) {
     card.appendChild(el('div', { class: 'card-stepper-row' }, [
       el('div', { class: 'card-stepper-label' }, 'Awakening'),
-      renderStepper(`${bucket}-${item.idx}-awaken`, s.awaken, 0, 10,
+      renderStepper(`${bucket}-${item.idx}-awaken`, s.owned ? s.awaken : null, 0, 10,
         (next) => { s.awaken = next; s.owned = true; saveState(); render(); },
         (v) => `A${v}`),
     ]));
@@ -3755,94 +3777,6 @@ function renderMountArtifactCard(item, bucket, isMount) {
       [`A${s.awaken}: `, renderTextWithSkillTags(resolved.text)]));
   }
   card.appendChild(el('div', { class: 'card-info' }, infoLines));
-
-  return card;
-}
-
-/* ---------- Pets ---------- */
-function renderPets() {
-  const wrap = el('div', {});
-  wrap.appendChild(el('p', { class: 'section-desc' },
-    'Pet roster. Battle Skill level reflects your pet\'s level tier (1★ at Lv1, up to 5★ at Lv80+). Only Mythic and above awaken — the Awaken control only appears where it applies.'));
-
-  const groups = buildTierGroups(DB.pets);
-  groups.forEach(g => {
-    wrap.appendChild(el('div', { class: 'tier-group-title', id: `pets-${g.slug}` }, g.tier));
-    const grid = el('div', { class: 'card-grid cols-3' });
-    g.items.forEach(item => grid.appendChild(renderPetCard(item)));
-    wrap.appendChild(grid);
-  });
-
-  return wrap;
-}
-
-const BATTLE_LV_KEYS = ['Lv1 (pet lv 1+)', 'Lv2 (pet lv 20+)', 'Lv3 (pet lv 40+)', 'Lv4 (pet lv 60+)', 'Lv5 (pet lv 80+)'];
-
-function resolvePetAwakenEffect(item, awakenLevel) {
-  for (let lvl = awakenLevel; lvl >= 0; lvl--) {
-    const text = item.awaken_effects && item.awaken_effects[`A${lvl}`];
-    if (text) return { level: lvl, text };
-  }
-  return null;
-}
-
-function renderPetCard(item) {
-  const s = getPetState(item.idx);
-  const hasAwaken = item.awaken_effects && Object.keys(item.awaken_effects).length > 0;
-
-  const card = el('div', { class: `item-card r-${item.tier}` });
-  card.appendChild(el('div', { class: 'card-header-row' }, [
-    el('div', { class: 'header-left' }, [
-      renderThumb('pets', item),
-      el('div', { class: 'item-name', title: item.n }, item.n),
-    ]),
-  ]));
-  card.appendChild(el('div', { class: 'item-rarity' }, item.tier ? renderRarityTag(item.tier) : ''));
-
-  const hasStarSkills = !!(item.star_battle_skills);
-  const battleStepper = el('div', { class: 'stepper-row' }, [
-    el('span', { class: 'val', style: 'min-width:56px;text-align:left;color:var(--ink-dim);font-family:var(--font-body);font-size:11px;' }, hasStarSkills ? 'Stars' : 'Battle Lv'),
-    hasStarSkills
-      ? renderStepper(`pet-${item.idx}-battlelv`, s.battleLv, 1, Object.keys(item.star_battle_skills).length,
-          (next) => { s.battleLv = next; saveState(); render(); })
-      : renderStepper(`pet-${item.idx}-battlelv`, s.battleLv, 1, 5,
-          (next) => { s.battleLv = next; saveState(); render(); }),
-  ]);
-
-  const steppersCol = [battleStepper];
-  if (hasAwaken) {
-    steppersCol.push(el('div', { class: 'stepper-row' }, [
-      el('span', { class: 'val', style: 'min-width:56px;text-align:left;color:var(--ink-dim);font-family:var(--font-body);font-size:11px;' }, 'Awaken'),
-      renderStepper(`pet-${item.idx}-awaken`, s.awaken, 0, 10,
-        (next) => { s.awaken = next; saveState(); render(); },
-        (v) => `A${v}`),
-    ]));
-  }
-
-  card.appendChild(el('div', { class: 'card-controls-row' }, [
-    renderOwnedBadge(s.owned, (checked) => { s.owned = checked; saveState(); render(); }),
-    el('div', { class: 'steppers-col' }, steppersCol),
-  ]));
-
-  if (!s.owned) return card;
-
-  const skillText = hasStarSkills
-    ? item.star_battle_skills[Object.keys(item.star_battle_skills)[s.battleLv - 1]]
-    : item.battle_skills && item.battle_skills[BATTLE_LV_KEYS[s.battleLv - 1]];
-  if (skillText) {
-    const tierLabel = hasStarSkills ? Object.keys(item.star_battle_skills)[s.battleLv - 1] : `Lv${s.battleLv}`;
-    card.appendChild(el('div', { class: 'item-effect' }, [`${tierLabel}: `, renderTextWithSkillTags(skillText)]));
-  } else {
-    card.appendChild(el('div', { class: 'item-effect placeholder' }, 'No skill data at this level yet'));
-  }
-
-  if (hasAwaken) {
-    const resolved = resolvePetAwakenEffect(item, s.awaken);
-    if (resolved) {
-      card.appendChild(el('div', { class: 'item-effect', style: 'font-style:italic;' },
-        [`A${s.awaken}: `, renderTextWithSkillTags(resolved.text)]));
-    }
-  }
 
   return card;
 }

@@ -37,6 +37,13 @@
   --tier-immortal-text: #CF84A9;
   --tier-transcendent-text: #B797DE;
 
+  /* Disabled state — built as Figma variables earlier but never actually
+     synced into real CSS here until now. Deliberately low contrast
+     (~2:1), matching WCAG's own exemption for disabled UI states rather
+     than the AAA standard enforced on active text elsewhere. */
+  --bg-disabled: #242220;
+  --text-disabled: #5A5650;
+
   --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif;
   --font-mono: 'SF Mono', 'Cascadia Code', Consolas, monospace;
@@ -61,6 +68,9 @@
   --tier-uncommon-text: #376000;
   --tier-immortal-text: #902E5F;
   --tier-transcendent-text: #65458B;
+
+  --bg-disabled: #E6E4DF;
+  --text-disabled: #A8A29C;
 }
 
 html { scroll-behavior: smooth; }
@@ -351,6 +361,13 @@ body {
 .filter-dropdown:focus { outline: none; border-color: var(--accent-dim); }
 .filter-row-dropdowns { display: flex; gap: 24px; flex-wrap: wrap; }
 
+/* Desktop default: the "Filters" toggle row doesn't exist here at all —
+   filters are always shown directly, no collapse/expand. Only the
+   mobile media query below turns the toggle on and hides the dropdowns
+   behind it. */
+.filter-toggle-row { display: none; }
+.filter-collapse { display: contents; }
+
 .toolbar-row-label {
   font-size: 11px;
   color: var(--ink-faint);
@@ -496,24 +513,6 @@ body {
 }
 .card-badge-row { display: flex; }
 
-/* Still used by renderPetCard, which wasn't part of this rebuild's scope
-   (she specifically named Collectibles/Mounts/Artifacts/Homestead) —
-   restored after being accidentally removed while rewriting the shared
-   card shell above. */
-.card-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
-}
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  flex: 1;
-}
-
 
 .card-stepper-row { display: flex; flex-direction: column; gap: 8px; }
 .card-stepper-label { font-family: var(--font-body); font-size: 12px; color: var(--ink); }
@@ -555,44 +554,6 @@ body {
 
 .skill-tag { white-space: nowrap; display: inline-block; }
 
-.star-row { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
-.star-btn {
-  background: none;
-  border: none;
-  color: var(--ink-faint);
-  font-size: 16px;
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-}
-.star-btn.filled { color: var(--accent); }
-.star-count-label { margin-left: 6px; font-size: 11px; color: var(--ink-dim); font-family: var(--font-mono); }
-
-.stepper-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-}
-.stepper-row .stepper { margin-top: 0; }
-
-.card-controls-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  margin-top: 10px;
-}
-.steppers-col {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  align-items: flex-end;
-  min-width: 0;
-}
-.steppers-col .stepper-row { margin-top: 0; }
-
 .stepper {
   display: flex;
   align-items: center;
@@ -610,6 +571,13 @@ body {
   line-height: 1;
 }
 .stepper button:hover { border-color: var(--accent-dim); }
+.stepper button.stepper-btn-disabled {
+  background: var(--bg-disabled);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+  border-color: var(--hairline);
+}
+.stepper button.stepper-btn-disabled:hover { border-color: var(--hairline); }
 .stepper .val { font-family: var(--font-mono); font-size: 13px; min-width: 20px; text-align: center; }
 .stepper .val-editable {
   cursor: pointer;
