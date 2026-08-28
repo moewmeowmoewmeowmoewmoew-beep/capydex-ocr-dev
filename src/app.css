@@ -342,7 +342,7 @@ body {
 }
 .filter-dropdown {
   appearance: none;
-  background: var(--bg-panel-2);
+  background: var(--bg-panel);
   border: 1px solid var(--hairline);
   color: var(--ink);
   padding: 8px 32px 8px 12px;
@@ -544,15 +544,14 @@ body {
   font-size: 12px;
   color: var(--ink-dim);
   line-height: 1.5;
-  margin-top: 8px;
-  margin-bottom: 10px;
-  min-height: 32px;
+  margin-top: 4px;
+  margin-bottom: 4px;
 }
 .item-effect.placeholder { font-style: italic; color: var(--ink-faint); }
 
 .stat-value-live { color: var(--accent); font-weight: 600; }
 
-.skill-tag { white-space: nowrap; display: inline-block; }
+.skill-tag { white-space: nowrap; display: inline; }
 
 .stepper {
   display: flex;
@@ -634,8 +633,8 @@ body {
 .sets-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .set-card-total {
@@ -1510,8 +1509,8 @@ body {
 .equip-card {
   background: var(--bg-panel);
   border: 1px solid var(--hairline);
-  border-radius: 8px;
-  padding: 22px;
+  border-radius: 4px;
+  padding: 16px;
   min-width: 0; /* let the card shrink to its grid track instead of being
                    forced wider by content like the gem row (input + tier
                    select + icon) — without this, a filled-in card can end
@@ -1521,15 +1520,14 @@ body {
 .equip-card-header {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 8px;
   margin-bottom: 8px;
 }
 .equip-card-thumb {
-  width: 44px;
-  height: 44px;
+  width: 32px;
+  height: 32px;
   border-radius: 6px;
   object-fit: contain;
-  background: var(--bg-panel-2);
   flex-shrink: 0;
 }
 .equip-card-thumb.placeholder { border: 1px dashed var(--hairline); }

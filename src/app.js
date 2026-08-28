@@ -416,7 +416,6 @@ function renderTextWithSkillTags(text) {
     // inline with the surrounding prose — easier to spot at a glance, and
     // the nowrap on .skill-tag means the bracket text itself never splits
     // across two lines once it's isolated like this.
-    frag.appendChild(el('br'));
     frag.appendChild(el('span', { class: 'skill-tag' }, match[0]));
     lastIndex = match.index + match[0].length;
   }
