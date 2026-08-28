@@ -498,7 +498,7 @@ body {
   flex: 1;
   min-width: 0;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -687,7 +687,6 @@ body {
 .set-member-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .set-member-name {
   font-size: 12.5px;
-  color: var(--ink-dim);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
