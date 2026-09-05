@@ -4485,9 +4485,11 @@ function renderPsionicDropZone(slotDef, s, psiOptions) {
               { type: 'image', source: { type: 'base64', media_type: file.type || 'image/jpeg', data: base64 } },
               {
                 type: 'text',
-                text: `Look at the "Psychic Attributes" section of this equipment screenshot (a mobile game UI). Extract each attribute line as JSON.
+                text: `Look at the "Psychic Attributes" section of this equipment screenshot (a mobile game UI). It's a dark header bar reading "Psychic Attributes" (with a "Loadout N" button on the right), followed by EXACTLY 4 lines of stats. Extract only those 4 lines as JSON.
 
-Each line has a stat name (may be prefixed with "[Special]") and a value (either a percentage like "+29.26%" or a flat number like "+18"). Ignore the parenthetical percentage in gray/muted color next to each line (e.g. "(91.45%)") — that's a roll-quality indicator, not the stat value itself.
+Each of the 4 lines has a stat name (may be prefixed with "[Special]") and a value (either a percentage like "+29.26%" or a flat number like "+18"). Ignore the parenthetical percentage in gray/muted color next to each line (e.g. "(91.45%)") — that's a roll-quality indicator, not the stat value itself.
+
+Stop reading once you've captured those 4 lines. Below them is a SEPARATE, unrelated list of effect descriptions, each with a green or blue circular bullet icon (e.g. "Release 1 lightning bolt each turn" followed by something like "Lightning Damage +50%"). That lower list is NOT part of Psychic Attributes, even when it happens to mention a stat name that sounds identical to one of the 4 real lines above it — never pull a value from that lower, bulleted section, and never let it overwrite or substitute for one of the 4 real lines. If you can only clearly find fewer than 4 lines in the actual Psychic Attributes panel, only return the ones you're confident about — do not fill in a missing line using text from the bulleted section below.
 
 Respond with ONLY a JSON array, no other text, in this exact shape:
 [{"name": "Basic ATK DMG", "value": 29.26, "isPercent": true}]`,
