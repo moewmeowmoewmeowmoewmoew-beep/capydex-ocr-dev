@@ -2158,16 +2158,16 @@
         "Mythic": "Lightning Crit Rate +15%. After each lightning strike, 50% chance to deal lightning DMG equal to 75% of the hero's ATK to enemies, triggering up to 10 times per turn."
       },
       "polarization_effects": {
-        "P1": null,
-        "P2": null,
-        "P3": null,
-        "P4": null,
-        "P5": null,
-        "P6": null,
-        "P7": null,
-        "P8": null,
-        "P9": null,
-        "P10": null
+        "P1": "Final Damage +0.8%",
+        "P2": "Final Damage +1.6%",
+        "P3": "Final Damage +2.4%",
+        "P4": "Final Damage +3.2%",
+        "P5": "Final Damage +4.0%",
+        "P6": "Final Damage +4.8%",
+        "P7": "Final Damage +5.6%",
+        "P8": "Final Damage +6.4%",
+        "P9": "Final Damage +7.2%",
+        "P10": "Final Damage +8.0%"
       }
     },
     {

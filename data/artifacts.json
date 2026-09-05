@@ -1158,6 +1158,79 @@
         "A9": "No additional effect (Suppression only).",
         "A10": "Based on the previous level, CRIT Rate +10% when having [ Breath of the Abyss ]; when [ Breath of the Abyss ] is removed, reduces the enemy's Final DMG Reduction by 10% and has a 50% chance to Silence the enemy for 1 round."
       }
+    },
+    {
+      "idx": 17,
+      "n": "Zeus Arcane Blade",
+      "tier": "Transcendent",
+      "base_effect": "Every 4 times Lightning triggers, Zeus Arcane Blade unleashes [ Thunderblade Flash], dealing Lightning DMG equal to 750% of Protagonist ATK to all enemies, granting the Protagonist a Shield equal to 2% of Max HP, and inflicting 1 stack of [ Thunderlight Secret Seal ] on enemies. Each stack of [ Thunderlight Secret Seal ] reduces enemies’ Final Lightning DMG Reduction by -1%. When an enemy is hit by the Protagonist’s [ Lightning ], deals Lightning DMG equal to 1.5% of Max HP, capped at 15x Protagonist ATK (triggers up to 5 times per round). [ Thunderlight Secret Seal ] stacks up to 5 times; at max stacks, it grants the Protagonist the [ Lightning Shield ] effect: when the Shield takes damage, unleash 1 bolt of Lightning at enemies. ([ Lightning Shield ] triggers up to 2 times per round). [ Thunderblade Flash ] triggers up to 3 times per round.",
+      "awaken_base_effect": "After gathering lightning power, Zeus Arcane Blade pierces the battlefield to cast [ Zeus’ Divine Punishment ], dealing 6 instances of Lightning DMG equal to 75% Artifact ATK to all enemies, and grants the Protagonist [ Thunder Domain ] at the start of the battle until the battle ends. [ Thunder Domain ]: Each time Lightning is cast, grants the Protagonist 1 stack of [ Heavenly Might ]. Each stack of [ Heavenly Might ], increases Protagonist Lightning DMG by +5% (up to 10 stacks); at 10 stacks, detonates [ Heavenly Might ], casting 1 bolt of Lightning at enemies and granting Protagonist Lightning DMG +100% and Final Lightning DMG +5% for 3 rounds. The detonation effect takes effect up to 1 time per round.",
+      "star_up": {
+        "base_stats": {
+          "global_attack_pct": 20,
+          "suppression": 90
+        },
+        "deltas": {
+          "1": {
+            "global_attack_pct": 3,
+            "suppression": 30
+          },
+          "2": {
+            "global_attack_pct": 7,
+            "suppression": 60
+          },
+          "3": {
+            "global_attack_pct": 12,
+            "suppression": 90
+          },
+          "4": {
+            "global_attack_pct": 18,
+            "suppression": 120
+          },
+          "5": {
+            "global_attack_pct": 25,
+            "suppression": 150
+          }
+        }
+      },
+      "awaken": {
+        "base_stats": {
+          "global_attack_pct": 20,
+          "suppression": 90
+        },
+        "deltas": {
+          "A1": {},
+          "A2": {},
+          "A3": {},
+          "A4": {},
+          "A5": {},
+          "A6": {},
+          "A7": {},
+          "A8": {},
+          "A9": {},
+          "A10": {}
+        }
+      },
+      "star_effects": {
+        "0": "Every 4 times Lightning triggers, Zeus Arcane Blade unleashes [ Thunderblade Flash ], dealing Lightning DMG equal to 750% of Protagonist ATK to all enemies, granting the Protagonist a Shield equal to 2% of Max HP, and inflicting 1 stack of [ Thunderlight Secret Seal ] on enemies. Each stack of [ Thunderlight Secret Seal ] reduces enemies’ Final Lightning DMG Reduction by -1%. When an enemy is hit by the Protagonist’s [ Lightning ], deals Lightning DMG equal to 1.5% of Max HP, capped at 15x Protagonist ATK (triggers up to 5 times per round). [ Thunderlight Secret Seal ] stacks up to 5 times; at max stacks, it grants the Protagonist the [ Lightning Shield ] effect: when the Shield takes damage, unleash 1 bolt of Lightning at enemies. ([ Lightning Shield ] triggers up to 2 times per round). [ Thunderblade Flash ] triggers up to 3 times per round.",
+        "1": "Every 4 times Lightning triggers, Zeus Arcane Blade unleashes [ Thunderblade Flash ], dealing Lightning DMG equal to 850% of Protagonist ATK to all enemies, granting the Protagonist a Shield equal to 2% of Max HP, and inflicting 1 stack of [ Thunderlight Secret Seal ] on enemies. Each stack of [ Thunderlight Secret Seal ] reduces enemies’ Final Lightning DMG Reduction by -1.5%. When an enemy is hit by the Protagonist’s [ Lightning ], deals Lightning DMG equal to 1.5% of Max HP, capped at 15x Protagonist ATK (triggers up to 5 times per round). [ Thunderlight Secret Seal ] stacks up to 5 times; at max stacks, it grants the Protagonist the [ Lightning Shield ] effect: when the Shield takes damage, unleash 1 bolt of Lightning at enemies. ([ Lightning Shield ] triggers up to 2 times per round). [ Thunderblade Flash ] triggers up to 3 times per round.",
+        "2": "Every 4 times Lightning triggers, Zeus Arcane Blade unleashes [ Thunderblade Flash ], dealing Lightning DMG equal to 900% of Protagonist ATK to all enemies, granting the Protagonist a Shield equal to 2% of Max HP, and inflicting 1 stack of [ Thunderlight Secret Seal ] on enemies. Each stack of [ Thunderlight Secret Seal ] reduces enemies’ Final Lightning DMG Reduction by -1.5%. When an enemy is hit by the Protagonist’s [ Lightning ], deals Lightning DMG equal to 1.5% of Max HP, capped at 15x Protagonist ATK (triggers up to 5 times per round). [ Thunderlight Secret Seal ] stacks up to 5 times; at max stacks, it grants the Protagonist the [ Lightning Shield ] effect: when the Shield takes damage, unleash 1 bolt of Lightning at enemies. ([ Lightning Shield ] triggers up to 2 times per round). [ Thunderblade Flash ] triggers up to 3 times per round.",
+        "3": "Every 4 times Lightning triggers, Zeus Arcane Blade unleashes [ Thunderblade Flash ], dealing Lightning DMG equal to 950% of Protagonist ATK to all enemies, granting the Protagonist a Shield equal to 2% of Max HP, and inflicting 1 stack of [ Thunderlight Secret Seal ] on enemies. Each stack of [ Thunderlight Secret Seal ] reduces enemies’ Final Lightning DMG Reduction by -2%. When an enemy is hit by the Protagonist’s [ Lightning ], deals Lightning DMG equal to 1.5% of Max HP, capped at 15x Protagonist ATK (triggers up to 5 times per round). [ Thunderlight Secret Seal ] stacks up to 5 times; at max stacks, it grants the Protagonist the [ Lightning Shield ] effect: when the Shield takes damage, unleash 1 bolt of Lightning at enemies. ([ Lightning Shield ] triggers up to 2 times per round). [ Thunderblade Flash ] triggers up to 3 times per round.",
+        "4": "Every 4 times Lightning triggers, Zeus Arcane Blade unleashes [ Thunderblade Flash ], dealing Lightning DMG equal to 1050% of Protagonist ATK to all enemies, granting the Protagonist a Shield equal to 2% of Max HP, and inflicting 1 stack of [ Thunderlight Secret Seal ] on enemies. Each stack of [ Thunderlight Secret Seal ] reduces enemies’ Final Lightning DMG Reduction by -2%. When an enemy is hit by the Protagonist’s [ Lightning ], deals Lightning DMG equal to 2% of Max HP, capped at 20x Protagonist ATK (triggers up to 5 times per round). [ Thunderlight Secret Seal ] stacks up to 5 times; at max stacks, it grants the Protagonist the [ Lightning Shield ] effect: when the Shield takes damage, unleash 1 bolt of Lightning at enemies. ([ Lightning Shield ] triggers up to 2 times per round). [ Thunderblade Flash ] triggers up to 3 times per round.",
+        "5": "Every 3 times Lightning triggers, Zeus Arcane Blade unleashes [ Thunderblade Flash ], dealing Lightning DMG equal to 1100% of Protagonist ATK to all enemies, granting the Protagonist a Shield equal to 2% of Max HP, and inflicting 1 stack of [ Thunderlight Secret Seal ] on enemies. Each stack of [ Thunderlight Secret Seal ] reduces enemies’ Final Lightning DMG Reduction by -2%. When an enemy is hit by the Protagonist’s [ Lightning ], deals Lightning DMG equal to 2% of Max HP, capped at 20x Protagonist ATK (triggers up to 5 times per round). [ Thunderlight Secret Seal ] stacks up to 5 times; at max stacks, it grants the Protagonist the [ Lightning Shield ] effect: when the Shield takes damage, unleash 1 bolt of Lightning at enemies. ([ Lightning Shield ] triggers up to 2 times per round). [ Thunderblade Flash ] triggers up to 3 times per round."
+      },
+      "awaken_effects": {
+        "A1": "No additional effect (Suppression only).",
+        "A2": "After gathering lightning power, Zeus Arcane Blade pierces the battlefield to cast [ Zeus’ Divine Punishment ], dealing 6 instances of Lightning DMG equal to 125% Artifact ATK to all enemies. Each DMG instance additionally deals Lightning DMG equal to 2% of enemy Max HP (capped at 20x Protagonist ATK). Grants the Protagonist [ Thunder Domain ] at the start of the battle until the battle ends. [ Thunder Domain ]: Each time Lightning is cast, grants the Protagonist 1 stack of [ Heavenly Might ]. Each stack of [ Heavenly Might ] increases Protagonist Lightning DMG by +5% (up to 10 stacks); at 10 stacks, detonates [ Heavenly Might ], casting 1 bolt of Lightning at enemies and granting Protagonist Lightning DMG +100% and Final Lightning DMG +5% for 3 rounds. The detonation effect takes effect up to 1 time per round.",
+        "A3": "No additional effect (Suppression only).",
+        "A4": "After gathering lightning power, Zeus Arcane Blade pierces the battlefield to cast [ Zeus' Divine Punishment ], dealing 6 instances of Lightning DMG equal to 125% Artifact ATK to all enemies. Each DMG instance additionally deals Lightning DMG equal to 2% of enemy Max HP (capped at 20x Protagonist ATK). Casting [ Zeus' Divine Punishment ] reduces enemies' Control Resist Ignore by -30% for 2 rounds. Grants the Protagonist [ Thunder Domain ] at the start of battle until the battle ends. [ Thunder Domain ]: Unleashes 1 bolt of Lightning at enemies every round. Each time the Protagonist casts Lightning, grants the Protagonist 1 stack of [ Heavenly Might ]. Each stack of [ Heavenly Might ] increases Protagonist Lightning DMG by +5% (up to 10 stacks); at 10 stacks, detonates [ Heavenly Might ], casting 1 bolt of Lightning at enemies and granting Protagonist Lightning DMG +100% and Final Lightning DMG +5% for 3 rounds. The detonation effect takes effect up to 1 time per round. When the Protagonist takes single-instance DMG greater than 50% of Max HP, immediately trigger the detonation of [ Heavenly Might ] and reduce that instance of DMG by 50% (triggers only  1 time every 3 rounds).",
+        "A5": "No additional effect (Suppression only).",
+        "A6": "No additional effect (Suppression only).",
+        "A7": "After gathering lightning power, Zeus Arcane Blade pierces the battlefield to cast [ Zeus' Divine Punishment ], dealing 6 instances of Lightning DMG equal to 175% Artifact ATK to all enemies. Each DMG instance  additionally deals Lightning DMG equal to 2% of enemy Max HP (capped at 20x Protagonist ATK). Casting [ Zeus' Divine Punishment ] reduces enemies' Control Resist Ignore by -30% for 2 rounds. Grants the Protagonist [ Thunder Domain ] at the start of battle until the battle ends. [ Thunder Domain ]: Unleashes 1 bolt of Lightning at enemies every round. Each time the Protagonist casts Lightning, grants the Protagonist 1 stack of [ Heavenly Might ]. Each stack of [ Heavenly Might ] increases Protagonist Lightning DMG by +5% (up to 10 stacks); at 10 stacks, detonates [ Heavenly Might ], casting 1 bolt of Lightning at enemies and granting Protagonist Lightning DMG +100% and Final Lightning DMG +10% for 3 rounds. The detonation effect takes effect up to 1 time per round. When the Protagonist takes single-instance DMG greater than 50% of Max HP, immediately trigger the detonation of [ Heavenly Might ] and reduce that instance of DMG by 50% (triggers only 1 time every 3 rounds)",
+        "A8": "No additional effect (Suppression only).",
+        "A9": "No additional effect (Suppression only).",
+        "A10": "After gathering lightning power, Zeus Arcane Blade pierces the battlefield to cast [ Zeus' Divine Punishment ], dealing 6 instances of Lightning DMG equal to 175% Artifact ATK to all enemies. Each DMG instance has a 10% chance to [ Silence ] enemies and additionally deals Lightning DMG equal to 2% of enemy Max HP (capped at 20x Protagonist ATK). Casting [ Zeus' Divine Punishment ] reduces enemies' Control Resist Ignore by -30% for 2 rounds. Grants the Protagonist [ Thunder Domain ] at the start of battle until the battle ends. [ Thunder Domain ]: Unleashes 1 bolt of Lightning at enemies every round. Each time the Protagonist casts Lightning, grants the Protagonist 1 stack of [ Heavenly Might ]. Each stack of [ Heavenly Might ] increases Protagonist Lightning DMG by +5% (up to 10 stacks); at 10 stacks, detonates [ Heavenly Might ], casting 3 bolts of Lightning at enemies, stealing 40% Shield Bonus from enemies, and granting Protagonist Lightning DMG +100% and Final Lightning DMG +10% for 3 rounds. The detonation effect takes effect up to 1 time per round. When the Protagonist takes single-instance DMG greater than 50% of Max HP, immediately trigger the detonation of [ Heavenly Might ] and reduce that instance of DMG by 50% (triggers only 1 time every 3 rounds)."
+      }    
     }
   ]
 }

@@ -220,7 +220,27 @@ function slugify(name) {
 }
 
 function itemImagePath(kind, item) {
-  return `assets/images/${kind}/${slugify(item.n)}.webp`;
+  // item.img is an optional override for when the display name and the
+  // actual image filename have diverged — e.g. a relic's name got
+  // corrected to match its real in-game name after its image was already
+  // converted and saved under the old one. Falls back to slugifying the
+  // display name for every item that doesn't need this (the vast
+  // majority), so nothing else is affected.
+  const slug = item.img || slugify(item.n);
+  return `assets/images/${kind}/${slug}.webp`;
+}
+
+// Shared header for every Equipment-style deploy/slot card (regular
+// equipment slots, Adventurer, Hero/Brand, Relic deploy, Pet, Mount/
+// Artifact deploy) — a thumb + title row. Unlike renderCardTitleRow's
+// Collection cards, there's no dashed-placeholder box shown when nothing
+// is selected — an empty slot simply shows no image at all, just the
+// title, since a slot with nothing chosen yet has no image to represent.
+function renderEquipHeader(imgKind, item, title) {
+  const headerImg = item
+    ? el('img', { src: itemImagePath(imgKind, item), alt: item.n, class: 'equip-card-thumb', onerror: (e) => { e.target.style.visibility = 'hidden'; } })
+    : null;
+  return el('div', { class: 'equip-card-header' }, [headerImg, el('div', { class: 'equip-card-title' }, title)]);
 }
 
 /* Small inline thumbnail (icon-sized, sits left of the item name) with
@@ -229,12 +249,21 @@ function itemImagePath(kind, item) {
    for items without art yet — just add the file later. */
 function renderThumb(kind, item) {
   const thumb = el('div', { class: 'item-thumb-inline' });
-  thumb.appendChild(el('span', { class: 'thumb-placeholder-inline' }, '◈'));
+  const placeholder = el('span', { class: 'thumb-placeholder-inline' }, '◈');
+  thumb.appendChild(placeholder);
   thumb.appendChild(el('img', {
     src: itemImagePath(kind, item),
     alt: item.n,
     loading: 'lazy',
     onerror: (e) => { e.target.style.display = 'none'; },
+    // Explicitly hides the placeholder once the real image is confirmed
+    // loaded, rather than just relying on the image visually covering it.
+    // That assumption only holds for a fully opaque, exactly-square
+    // source image — anything padded to fit the square frame (which is
+    // most of them, via convert_all.py's contain-not-cover resizing)
+    // leaves transparent margins the placeholder was still showing
+    // through, even though the "real" image had already loaded fine.
+    onload: () => { placeholder.style.display = 'none'; },
   }));
   return thumb;
 }
@@ -258,7 +287,7 @@ function renderFilterDropdown(label, options, currentValue, onChange) {
   const group = el('div', { class: 'filter-dropdown-group' });
   group.appendChild(el('label', { class: 'filter-dropdown-label' }, label));
   const select = el('select', {
-    class: 'filter-dropdown',
+    class: 'filter-dropdown p-default',
     onchange: (e) => onChange(e.target.value),
   });
   options.forEach(opt => {
@@ -305,6 +334,22 @@ function renderFilterToggleSection(key, dropdownsRow) {
 
 function renderRarityTag(tier) {
   return el('span', { class: `rarity-tag tag-${tier}` }, tier);
+}
+
+// Shared title row for every item-card variant (Collectibles, Relics,
+// Mounts/Artifacts, Homestead) — thumb + name on the left, rarity Tag
+// pinned top-right. `rarity` is optional and falsy-safe: pass a real
+// rarity/tier to show the Tag, or omit it (Homestead has no rarity at
+// all, Mounts/Artifacts' tier can be missing on some items) to skip the
+// Tag cleanly rather than render one with an undefined label.
+function renderCardTitleRow(kind, item, rarity) {
+  return el('div', { class: 'card-title-row' }, [
+    el('div', { class: 'card-title-image-group' }, [
+      renderThumb(kind, item),
+      el('div', { class: 'item-name', title: item.n }, item.n),
+    ]),
+    rarity ? renderRarityTag(rarity) : null,
+  ]);
 }
 
 function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
@@ -358,12 +403,14 @@ function renderStepper(key, value, min, max, onChange, format) {
   const handlePlus = () => onChange(isUnset ? min : clamp(value + 1, min, max));
   const handleMinus = () => { if (!minusDisabled) onChange(clamp(value - 1, min, max)); };
 
-  if (editingStepperKey === key && !isUnset) {
+  if (editingStepperKey === key) {
+    let cancelled = false;
     const input = el('input', {
       type: 'number', class: 'stepper-input',
-      value: String(value), min: String(min), max: String(max),
+      value: isUnset ? '' : String(value), min: String(min), max: String(max),
       'data-stepper-key': key,
       onblur: (e) => {
+        if (cancelled) return;
         const num = parseInt(e.target.value, 10);
         editingStepperKey = null;
         if (!isNaN(num)) onChange(clamp(num, min, max));
@@ -371,11 +418,11 @@ function renderStepper(key, value, min, max, onChange, format) {
       },
       onkeydown: (e) => {
         if (e.key === 'Enter') e.target.blur();
-        if (e.key === 'Escape') { editingStepperKey = null; render(); }
+        if (e.key === 'Escape') { cancelled = true; editingStepperKey = null; render(); }
       },
     });
     return el('div', { class: 'stepper' }, [
-      el('button', { onclick: handleMinus }, '−'),
+      el('button', minusDisabled ? { onclick: handleMinus, disabled: true, class: 'stepper-btn-disabled' } : { onclick: handleMinus }, '−'),
       input,
       el('button', { onclick: handlePlus }, '+'),
     ]);
@@ -384,8 +431,8 @@ function renderStepper(key, value, min, max, onChange, format) {
   return el('div', { class: 'stepper' }, [
     el('button', minusDisabled ? { onclick: handleMinus, disabled: true, class: 'stepper-btn-disabled' } : { onclick: handleMinus }, '−'),
     el('span', {
-      class: 'val' + (isUnset ? '' : ' val-editable'),
-      onclick: isUnset ? null : (() => { editingStepperKey = key; render(); }),
+      class: 'val val-editable',
+      onclick: () => { editingStepperKey = key; render(); },
     }, isUnset ? '—' : format(value)),
     el('button', { onclick: handlePlus }, '+'),
   ]);
@@ -423,6 +470,17 @@ function renderTextWithSkillTags(text) {
   return frag;
 }
 
+// Stats that are absolute/flat numbers, never percentages, regardless of
+// which raw key names they show up under (ATK/HP don't follow the
+// "_pct" suffix convention the way global buffs and proc rates do) —
+// defaulting new/unrecognized keys to "%" is the safer assumption, since
+// most stats that appear in a star_up/awaken block genuinely are
+// percentage-based bonuses.
+const STAT_BLOCK_FLAT_KEYS = new Set([
+  'atk', 'hp', 'def', 'armor_break', 'armor_break_res',
+  'tenacity', 'tenacity_res', 'speed', 'suppression', 'block',
+]);
+
 /* Stat entries as DOM nodes with the value (the part that changes as you
    move the star/awaken steppers) highlighted in the accent color.
    showSign: prefix positive deltas with '+' (for artifact deltas, not for
@@ -435,7 +493,14 @@ function formatStatBlockNodes(stats, showSign) {
     if (i > 0) frag.appendChild(document.createTextNode(' · '));
     frag.appendChild(document.createTextNode(statLabel(k) + ' '));
     const sign = showSign && v > 0 ? '+' : '';
-    const valText = `${sign}${v}${k.endsWith('_pct') ? '%' : ''}`;
+    // An explicit "_pct" suffix always wins outright — checked BEFORE the
+    // denylist, not after stripping it. Stripping first and then checking
+    // the denylist was the bug: atk_pct and atk both reduce to the same
+    // base name "atk", so a flat atk entry and a genuinely percentage-
+    // based atk_pct entry on the same item were getting treated
+    // identically, incorrectly hiding the % on atk_pct.
+    const isFlat = !k.endsWith('_pct') && STAT_BLOCK_FLAT_KEYS.has(k);
+    const valText = `${sign}${v}${isFlat ? '' : '%'}`;
     frag.appendChild(el('span', { class: 'stat-value-live' }, valText));
   });
   return frag;
@@ -562,12 +627,7 @@ function renderHomesteadCard(b) {
   const maxLevel = b.values.length;
   const card = el('div', { class: 'item-card' });
 
-  card.appendChild(el('div', { class: 'card-title-row' }, [
-    el('div', { class: 'card-title-image-group' }, [
-      renderThumb('homestead', { n: b.name }),
-      el('div', { class: 'item-name', title: b.name }, b.name),
-    ]),
-  ]));
+  card.appendChild(renderCardTitleRow('homestead', { n: b.name }));
   if (b.event) card.appendChild(el('div', { class: 'item-rarity' }, `Set: ${b.event}`));
 
   card.appendChild(el('div', { class: 'card-badge-row' }, [
@@ -1113,7 +1173,7 @@ function openSpecDrawer(tab, group) {
     let summaryDiv = null;
     if (isNamedUpgrade) {
       const activeSummary = track.levels.slice(0, currentLevel).map((l, i) => `Level ${i + 1}: ${stripLevelText(l)}`).join(', ');
-      summaryDiv = el('div', { class: 'spec-track-effect', style: `color:var(--ink-faint);${currentLevel > 0 ? '' : 'display:none;'}` }, activeSummary);
+      summaryDiv = el('div', { class: 'spec-track-effect', style: `color:var(--text-tertiary);${currentLevel > 0 ? '' : 'display:none;'}` }, activeSummary);
       drawer.appendChild(summaryDiv);
     }
 
@@ -1307,11 +1367,8 @@ function renderAdventurerCard() {
   const advs = (DB.adventurers || []).filter(a => a.n !== 'None');
   const adv = advs.find(a => a.n === s.name);
 
-  const card = el('div', { class: 'equip-card' });
-  const headerImg = adv
-    ? el('img', { src: itemImagePath('adventurers', adv), alt: adv.n, class: 'equip-card-thumb', onerror: (e) => { e.target.style.visibility = 'hidden'; } })
-    : el('div', { class: 'equip-card-thumb placeholder' });
-  card.appendChild(el('div', { class: 'equip-card-header' }, [headerImg, el('div', { class: 'equip-card-title' }, 'Adventurer')]));
+  const card = el('div', { class: 'item-card equip-card--adventurer' });
+  card.appendChild(renderEquipHeader('adventurers', adv, 'Adventurer'));
 
   card.appendChild(equipFieldLabel('Adventurer'));
   card.appendChild(renderSearchCombo({
@@ -1379,19 +1436,30 @@ function renderHeroOrBrandCard(kind, slotIndex) {
 
   // Hide non-allowed Inheritance Heroes entirely — future-proofed even
   // though every Inheritance-classified hero we have today is allowed.
-  const options = isHero
+  let options = isHero
     ? all.filter(h => classify(h.n) !== 'Inheritance Heroes' || INHERITANCE_HERO_NAMES.has(h.n))
     : all;
+
+  // Brands can't be equipped twice across the 4 slots — once one's
+  // chosen somewhere, it drops out of every other slot's dropdown. Not
+  // applied to Heroes here since she asked specifically about Brands;
+  // the current slot's own selection stays visible/re-selectable, since
+  // this only excludes a name claimed by a DIFFERENT slot index.
+  if (!isHero) {
+    const takenElsewhere = new Set(
+      state.brandSlots
+        .filter((slot, i) => i !== slotIndex && slot.name)
+        .map(slot => slot.name)
+    );
+    options = options.filter(o => !takenElsewhere.has(o.n));
+  }
 
   const entity = options.find(x => x.n === s.name);
   const label = isHero ? `Hero ${slotIndex + 1}` : `Brand ${slotIndex + 1}`;
   const imgKind = isHero ? 'heroes' : 'brands';
 
-  const card = el('div', { class: 'equip-card' });
-  const headerImg = entity
-    ? el('img', { src: itemImagePath(imgKind, entity), alt: entity.n, class: 'equip-card-thumb', onerror: (e) => { e.target.style.visibility = 'hidden'; } })
-    : el('div', { class: 'equip-card-thumb placeholder' });
-  card.appendChild(el('div', { class: 'equip-card-header' }, [headerImg, el('div', { class: 'equip-card-title' }, label)]));
+  const card = el('div', { class: 'item-card equip-card--hero-brand' });
+  card.appendChild(renderEquipHeader(imgKind, entity, label));
 
   card.appendChild(equipFieldLabel(label));
   const byGroup = {};
@@ -1543,15 +1611,28 @@ function buildRelicsSectionContent() {
 
 function renderRelicDeployCard(slotDef) {
   const relics = (DB.relics || []).filter(r => r.deploy_type === slotDef.type);
-  const ownedOptions = sortByTierDesc(relics.filter(r => state.relicOwned[r.n]), 'rarity');
+  let ownedOptions = sortByTierDesc(relics.filter(r => state.relicOwned[r.n]), 'rarity');
   const currentName = state.relicSlots[slotDef.key];
+
+  // Same duplicate-exclusion as Brands — a relic already equipped in a
+  // different slot drops out of every other slot's dropdown. Most
+  // relevant for Totem 1/2 specifically, since they're the only two
+  // slots that share a deploy_type pool (Core and Guardian each have
+  // their own distinct type, so this could never come up there in the
+  // first place). The current slot's own selection stays visible/
+  // re-selectable, since this only excludes a name claimed by a
+  // DIFFERENT slot key.
+  const takenElsewhere = new Set(
+    Object.entries(state.relicSlots)
+      .filter(([key, name]) => key !== slotDef.key && name)
+      .map(([, name]) => name)
+  );
+  ownedOptions = ownedOptions.filter(r => !takenElsewhere.has(r.n));
+
   const relic = ownedOptions.find(r => r.n === currentName) || null;
 
-  const card = el('div', { class: 'equip-card' });
-  const headerImg = relic
-    ? el('img', { src: itemImagePath('relics', relic), alt: relic.n, class: 'equip-card-thumb', onerror: (e) => { e.target.style.visibility = 'hidden'; } })
-    : el('div', { class: 'equip-card-thumb placeholder' });
-  card.appendChild(el('div', { class: 'equip-card-header' }, [headerImg, el('div', { class: 'equip-card-title' }, slotDef.label)]));
+  const card = el('div', { class: 'item-card equip-card--pulled' });
+  card.appendChild(renderEquipHeader('relics', relic, slotDef.label));
 
   const linkText = 'Information prefilled from your Collections. To update it, please change it ';
   const link = el('a', {
@@ -1926,11 +2007,8 @@ function renderEquipPetCard(petIndex) {
   const pets = sortByTierDesc(DB.pets || []);
   const pet = pets.find(p => p.n === s.itemName) || null;
 
-  const card = el('div', { class: 'equip-card' });
-  const headerImg = pet
-    ? el('img', { src: itemImagePath('pets', pet), alt: pet.n, class: 'equip-card-thumb', onerror: (e) => { e.target.style.visibility = 'hidden'; } })
-    : el('div', { class: 'equip-card-thumb placeholder' });
-  card.appendChild(el('div', { class: 'equip-card-header' }, [headerImg, el('div', { class: 'equip-card-title' }, `Pet ${petIndex + 1}`)]));
+  const card = el('div', { class: 'item-card equip-card--pet' });
+  card.appendChild(renderEquipHeader('pets', pet, `Pet ${petIndex + 1}`));
 
   card.appendChild(equipFieldLabel('Pet'));
   card.appendChild(renderSearchCombo({
@@ -2147,7 +2225,7 @@ function renderEquipPetCard(petIndex) {
       // free-typed skills where it's the only explanation of what the
       // stat actually does.
       const helper = !isFixed && PET_SKILL_HELPER_TEXT[slot.stat];
-      if (helper) container.appendChild(el('div', { class: 'equip-writeup', style: 'color:var(--ink-faint);font-size:11px;' }, helper));
+      if (helper) container.appendChild(el('div', { class: 'equip-writeup', style: 'color:var(--text-tertiary);font-size:11px;' }, helper));
     }
     card.appendChild(container);
   });
@@ -2176,11 +2254,8 @@ function renderDeployCard(kind, mode, slotIndex) {
     ? `Main ${isMount ? 'Mount' : 'Artifact'}`
     : `Deployed ${isMount ? 'Mount' : 'Artifact'} ${slotIndex + 1}`;
 
-  const card = el('div', { class: 'equip-card' });
-  const headerImg = item
-    ? el('img', { src: itemImagePath(isMount ? 'mounts' : 'artifacts', item), alt: item.n, class: 'equip-card-thumb', onerror: (e) => { e.target.style.visibility = 'hidden'; } })
-    : el('div', { class: 'equip-card-thumb placeholder' });
-  card.appendChild(el('div', { class: 'equip-card-header' }, [headerImg, el('div', { class: 'equip-card-title' }, cardTitle)]));
+  const card = el('div', { class: 'item-card equip-card--pulled' });
+  card.appendChild(renderEquipHeader(isMount ? 'mounts' : 'artifacts', item, cardTitle));
 
   const linkText = `Information prefilled from your Collections. To update it, please change it `;
   const link = el('a', {
@@ -2298,13 +2373,10 @@ function renderEquipCard(slotDef) {
   const items = (DB[slotDef.dataKey] || []).filter(it => it.n !== 'None' && it.tier);
   const item = items.find(it => it.n === s.itemName) || null;
 
-  const card = el('div', { class: 'equip-card' });
+  const card = el('div', { class: 'item-card equip-card--slot' });
 
   // ---- Header: image + slot label ----
-  const headerImg = item
-    ? el('img', { src: itemImagePath(slotDef.imgKind, item), alt: item.n, class: 'equip-card-thumb', onerror: (e) => { e.target.style.visibility = 'hidden'; } })
-    : el('div', { class: 'equip-card-thumb placeholder' });
-  card.appendChild(el('div', { class: 'equip-card-header' }, [headerImg, el('div', { class: 'equip-card-title' }, slotDef.label)]));
+  card.appendChild(renderEquipHeader(slotDef.imgKind, item, slotDef.label));
 
   // ---- Equipped ----
   card.appendChild(equipFieldLabel('Equipped'));
@@ -2770,7 +2842,7 @@ function renderSectionShell(sections, pageLabel, pageClearAllFn) {
         groups.forEach(g => {
           const anchorId = `#${sec.id}-${g.slug}`;
           sub.appendChild(el('li', {}, el('a', {
-            href: anchorId, class: 'sidenav-sublink', onclick: (e) => scrollToAnchor(e, anchorId),
+            href: anchorId, class: 'sidenav-sublink p-default', onclick: (e) => scrollToAnchor(e, anchorId),
           }, g.tier)));
           mobileSelect.appendChild(el('option', { value: anchorId }, `— ${sec.label}: ${g.tier}`));
         });
@@ -2852,6 +2924,7 @@ function setupScrollSpy(navEl) {
 let relicSearch = '';
 let relicRarityFilter = 'All';
 let relicOwnedFilter = 'All';
+let relicStatFilter = 'All';
 
 function renderSetMemberIcon(kind, name) {
   const img = el('img', {
@@ -2863,16 +2936,19 @@ function renderSetMemberIcon(kind, name) {
   return el('div', { class: 'set-member-icon' }, img);
 }
 
-function renderSetCard({ kind, name, statLabel, tierLabels, vals, members, allOwned, minStar, tierIdx }) {
+function renderSetCard({ kind, name, statLabel, tierLabels, vals, members, allOwned, minStar, tierIdx, incomplete }) {
   const ownedCount = members.filter(m => m.owned).length;
 
   const card = el('div', { class: 'set-card' });
   card.appendChild(el('div', { class: 'set-card-header' }, [
     el('div', { class: 'set-card-name' }, name),
-    el('div', { class: 'set-card-count' + (ownedCount === members.length ? ' complete' : '') },
+    el('div', { class: 'set-card-count' + (!incomplete && ownedCount === members.length ? ' complete' : '') },
       `${ownedCount}/${members.length} owned`),
   ]));
-  if (allOwned && tierIdx >= 0) {
+  if (incomplete) {
+    card.appendChild(el('div', { class: 'set-card-stat-label' },
+      `This set is currently incomplete — a relic hasn't been released yet.`));
+  } else if (allOwned && tierIdx >= 0) {
     // The per-tier pips below show what each individual bracket adds on
     // its own, but the set bonus itself stacks — every bracket reached
     // stays active alongside the ones after it, not replaced by them. So
@@ -2891,26 +2967,28 @@ function renderSetCard({ kind, name, statLabel, tierLabels, vals, members, allOw
 
   const memberList = el('div', { class: 'set-member-list' });
   members.forEach(m => {
-    memberList.appendChild(el('div', { class: 'set-member-row' }, [
+    memberList.appendChild(el('div', { class: 'set-member-row' + (m.unreleased ? ' unreleased' : '') }, [
       el('div', { class: 'set-member-left' }, [
         renderSetMemberIcon(kind, m.name),
         el('div', { class: 'set-member-name' + (m.owned ? ' owned' : '') }, m.name),
       ]),
-      el('div', { class: 'set-member-value' }, m.owned ? `${m.star}★` : '—'),
+      el('div', { class: 'set-member-value' }, m.unreleased ? 'Unreleased' : (m.owned ? `${m.star}★` : '—')),
     ]));
   });
   card.appendChild(memberList);
 
-  const tierGrid = el('div', { class: 'set-tier-grid' });
-  vals.forEach((v, i) => {
-    const reached = allOwned && i <= tierIdx;
-    const active = allOwned && i === tierIdx;
-    tierGrid.appendChild(el('div', { class: 'set-tier-pip2' + (reached ? ' reached' : '') + (active ? ' active' : '') }, [
-      el('span', { class: 'pip-star' }, tierLabels[i]),
-      el('span', { class: 'pip-val' }, `${v}${typeof v === 'number' && v < 20 ? '%' : ''}`),
-    ]));
-  });
-  card.appendChild(tierGrid);
+  if (!incomplete) {
+    const tierGrid = el('div', { class: 'set-tier-grid' });
+    vals.forEach((v, i) => {
+      const reached = allOwned && i <= tierIdx;
+      const active = allOwned && i === tierIdx;
+      tierGrid.appendChild(el('div', { class: 'set-tier-pip2' + (reached ? ' reached' : '') + (active ? ' active' : '') }, [
+        el('span', { class: 'pip-star' }, tierLabels[i]),
+        el('span', { class: 'pip-val' }, `${v}${typeof v === 'number' && v < 20 ? '%' : ''}`),
+      ]));
+    });
+    card.appendChild(tierGrid);
+  }
 
   return card;
 }
@@ -2999,13 +3077,16 @@ function renderTierGroupHeader(kind, tierLabel, groupId, groupItems) {
           // Deselect just this tier's items, leaving any others untouched
           groupItems.forEach(it => selectedItems[kind].delete(cfg.idKey(it)));
         } else {
-          // Select ONLY this tier — replaces whatever was selected before
-          // (selection is always scoped to one tier at a time), and
-          // auto-enters selection mode so this button alone is enough to
-          // get to the Mark Owned / Star Update actions without a separate
-          // "Select multiple…" toggle first.
+          // Add this tier's items to whatever's already selected, rather
+          // than replacing it — lets multiple tiers build up together
+          // (Legendary + Rare both selected, not either/or), so a second
+          // "Select Tier" click on a different tier no longer wipes out
+          // the first one. Still only within the same kind, though —
+          // exitOtherSelectModes keeps a different category (Collectibles
+          // vs Relics) from being selectable at the same time.
+          exitOtherSelectModes(kind);
           selectMode[kind] = true;
-          selectedItems[kind] = new Set(groupItems.map(cfg.idKey));
+          groupItems.forEach(it => selectedItems[kind].add(cfg.idKey(it)));
         }
         render();
       },
@@ -3018,9 +3099,28 @@ function renderTierGroupHeader(kind, tierLabel, groupId, groupItems) {
   return header;
 }
 
+// Only one category can be "in select mode" at a time across the whole
+// Collection page — it's one continuous scroll with every section visible
+// together, so letting two sections both stay in select mode independently
+// produced two separate floating bulk-action bars stacked on screen at
+// once, with no way to tell which "Mark as Owned" applied to which
+// selection. Entering select mode for one kind now force-exits any other.
+function exitOtherSelectModes(exceptKind) {
+  Object.keys(selectMode).forEach(kind => {
+    if (kind !== exceptKind && selectMode[kind]) {
+      selectMode[kind] = false;
+      selectedItems[kind].clear();
+    }
+  });
+}
+
 function toggleSelectMode(kind) {
   selectMode[kind] = !selectMode[kind];
-  if (!selectMode[kind]) selectedItems[kind].clear();
+  if (!selectMode[kind]) {
+    selectedItems[kind].clear();
+  } else {
+    exitOtherSelectModes(kind);
+  }
   render();
 }
 
@@ -3227,7 +3327,11 @@ function renderRelics() {
     relicOwnedFilter = v;
     renderRelicGroups(groupsWrap);
   });
-  toolbar.appendChild(renderFilterToggleSection('relics', el('div', { class: 'filter-row-dropdowns' }, [tierDropdown, ownedDropdown])));
+  const statDropdown = renderFilterDropdown('Stat', ['All', 'Tenacity', 'Tenacity Res', 'Armor Break', 'Armor Break Res'], relicStatFilter, (v) => {
+    relicStatFilter = v;
+    renderRelicGroups(groupsWrap);
+  });
+  toolbar.appendChild(renderFilterToggleSection('relics', el('div', { class: 'filter-row-dropdowns' }, [tierDropdown, ownedDropdown, statDropdown])));
   wrap.appendChild(toolbar);
 
   const groupsWrap = el('div', {});
@@ -3246,12 +3350,22 @@ function renderRelics() {
 
 function renderRelicGroups(container) {
   container.innerHTML = '';
+  const STAT_FILTER_KEY = {
+    'Tenacity': 'tenacity',
+    'Tenacity Res': 'tenacity_res',
+    'Armor Break': 'armor_break',
+    'Armor Break Res': 'armor_break_res',
+  };
   const items = DB.relics.filter(r => {
     if (relicRarityFilter !== 'All' && r.rarity !== relicRarityFilter) return false;
     if (relicSearch && !r.n.toLowerCase().includes(relicSearch.toLowerCase())) return false;
     const owned = !!state.relicOwned[r.n];
     if (relicOwnedFilter === 'Owned' && !owned) return false;
     if (relicOwnedFilter === 'Not Owned' && owned) return false;
+    if (STAT_FILTER_KEY[relicStatFilter]) {
+      const statKeys = Object.keys(r.star_stats || {});
+      if (!statKeys.includes(STAT_FILTER_KEY[relicStatFilter])) return false;
+    }
     return true;
   });
   const groups = buildTierGroups(items, 'rarity');
@@ -3284,16 +3398,7 @@ function renderRelicCard(relic) {
   const card = el('div', { class: 'item-card' + (selectMode.relics && selectedItems.relics.has(relic.n) ? ' selected' : '') });
   if (selectMode.relics) card.appendChild(renderSelectionOverlay('relics', relic.n));
 
-  // Title row: thumb + name on the left, rarity Tag pinned top-right —
-  // per Figma, the Tag sits alone in the corner, not inline with any
-  // subtitle text.
-  card.appendChild(el('div', { class: 'card-title-row' }, [
-    el('div', { class: 'card-title-image-group' }, [
-      renderThumb('relics', relic),
-      el('div', { class: 'item-name', title: relic.n }, relic.n),
-    ]),
-    renderRarityTag(relic.rarity),
-  ]));
+  card.appendChild(renderCardTitleRow('relics', relic, relic.rarity));
 
   // Owned badge alone on its own row — no stepper beside it.
   card.appendChild(el('div', { class: 'card-badge-row' }, [
@@ -3360,9 +3465,14 @@ const RELIC_TIER_STARS = [0, 2, 4, 6, 8, 10];
 const RELIC_TIER_LABELS = ['Set', '2★', '4★', '6★', '8★', '10★'];
 
 function renderRelicSetPanel(set) {
-  const memberRelics = set.items.map(name => DB.relics.find(r => r.n === name)).filter(Boolean);
-  const allOwned = memberRelics.length > 0 && memberRelics.every(r => state.relicOwned[r.n]);
-  const minStar = allOwned ? Math.min(...memberRelics.map(r => state.relicStars[r.n] || 0)) : -1;
+  const members = set.items.map(name => {
+    const r = DB.relics.find(x => x.n === name);
+    if (!r) return { name, owned: false, star: 0, unreleased: true };
+    return { name, owned: !!state.relicOwned[r.n], star: state.relicStars[r.n] || 0, unreleased: false };
+  });
+  const incomplete = set.tracked === false;
+  const allOwned = !incomplete && members.length > 0 && members.every(m => m.owned && !m.unreleased);
+  const minStar = allOwned ? Math.min(...members.map(m => m.star)) : -1;
 
   let tierIdx = -1;
   if (allOwned) {
@@ -3372,16 +3482,10 @@ function renderRelicSetPanel(set) {
     }
   }
 
-  const members = memberRelics.map(r => ({
-    name: r.n,
-    owned: !!state.relicOwned[r.n],
-    star: state.relicStars[r.n] || 0,
-  }));
-
   return renderSetCard({
     kind: 'relics', name: set.set, statLabel: set.stat,
     tierLabels: RELIC_TIER_LABELS, vals: set.vals,
-    members, allOwned, minStar, tierIdx,
+    members, allOwned, minStar, tierIdx, incomplete,
   });
 }
 
@@ -3470,14 +3574,7 @@ function renderCollectibleCard(item) {
   const card = el('div', { class: 'item-card' + (selectMode.collectibles && selectedItems.collectibles.has(item.n) ? ' selected' : '') });
   if (selectMode.collectibles) card.appendChild(renderSelectionOverlay('collectibles', item.n));
 
-  card.appendChild(el('div', { class: 'card-title-row' }, [
-    el('div', { class: 'card-title-image-group' }, [
-      renderThumb('collectibles', item),
-      el('div', { class: 'item-name', title: item.n }, item.n),
-    ]),
-    renderRarityTag(item.rarity),
-  ]));
-  if (item.set) card.appendChild(el('div', { class: 'item-rarity' }, `Set: ${item.set}`));
+  card.appendChild(renderCardTitleRow('collectibles', item, item.rarity));
 
   card.appendChild(el('div', { class: 'card-badge-row' }, [
     renderOwnedBadge(owned, (checked) => {
@@ -3529,7 +3626,8 @@ const COLLECTIBLE_TIER_STARS = [0, 3, 6, 10];
 const COLLECTIBLE_TIER_LABELS = ['0★', '3★', '6★', '10★'];
 
 function renderCollectibleSetPanel(set) {
-  const allOwned = set.items.every(name => state.collectibleOwned[name]);
+  const incomplete = set.tracked === false;
+  const allOwned = !incomplete && set.items.every(name => state.collectibleOwned[name]);
   const minStar = allOwned ? Math.min(...set.items.map(name => state.collectibleStars[name] || 0)) : -1;
   let tierIdx = 0;
   if (allOwned) {
@@ -3538,16 +3636,20 @@ function renderCollectibleSetPanel(set) {
     }
   }
 
-  const members = set.items.map(name => ({
+  const members = set.items.map(name => {
+  const exists = DB.collectibles.some(c => c.n === name);
+  return {
     name,
     owned: !!state.collectibleOwned[name],
     star: state.collectibleStars[name] || 0,
-  }));
+    unreleased: !exists,
+  };
+});
 
-  return renderSetCard({
+    return renderSetCard({
     kind: 'collectibles', name: set.set, statLabel: set.stat,
     tierLabels: COLLECTIBLE_TIER_LABELS, vals: set.vals,
-    members, allOwned, minStar, tierIdx: allOwned ? tierIdx : -1,
+    members, allOwned, minStar, tierIdx: allOwned ? tierIdx : -1, incomplete,
   });
 }
 
@@ -3697,13 +3799,7 @@ function renderMountArtifactCard(item, bucket, isMount) {
   const card = el('div', { class: 'item-card' + (selectMode[kind] && selectedItems[kind].has(item.idx) ? ' selected' : '') });
   if (selectMode[kind]) card.appendChild(renderSelectionOverlay(kind, item.idx));
 
-  card.appendChild(el('div', { class: 'card-title-row' }, [
-    el('div', { class: 'card-title-image-group' }, [
-      renderThumb(isMount ? 'mounts' : 'artifacts', item),
-      el('div', { class: 'item-name', title: item.n }, item.n),
-    ]),
-    item.tier ? renderRarityTag(item.tier) : null,
-  ]));
+  card.appendChild(renderCardTitleRow(isMount ? 'mounts' : 'artifacts', item, item.tier));
 
   card.appendChild(el('div', { class: 'card-badge-row' }, [
     renderOwnedBadge(s.owned, (checked) => { s.owned = checked; saveState(); render(); }),
@@ -3803,8 +3899,8 @@ function sumBlockAtLevel(item, stars, awaken) {
 // Quick Stats. This just extracts the totals from the same comprehensive
 // aggregation the full table already uses, so the two can never drift
 // out of sync with each other again.
-function aggregatePvpStats() {
-  const full = aggregateFullStatsWithSources();
+function aggregatePvpStats(round = null) {
+  const full = aggregateFullStatsWithSources(round);
   const totals = {};
   Object.entries(full).forEach(([label, entry]) => { totals[label] = entry.total; });
   return totals;
@@ -3831,23 +3927,17 @@ function aggregatePvpStats() {
 // but that timing lives only in unstructured effect text, not as tagged
 // data — building a fabricated 5-column split from that would look far
 // more precise than it actually is.
-const RELIC_KEY_TO_LABEL = {
-  armor_break: 'Armor Break', armor_break_res: 'Armor Break Resistance',
-  tenacity: 'Tenacity', tenacity_res: 'Tenacity Resistance',
-  hp: 'HP', hp_pct: 'HP%', atk: 'ATK', atk_pct: 'ATK%',
-  global_hp: 'Global HP', global_hp_pct: 'Global HP%', global_atk: 'Global ATK', global_attack_pct: 'Global ATK', global_def_pct: 'Global DEF%',
-  combo: 'Combo Rate', counter: 'Counter Rate',
-  combo_rate_pct: 'Combo Rate', counter_rate_pct: 'Counter Rate',
-  crit_rate_pct: 'Crit Rate (Generic)', ignore_crit_pct: 'Ignore Crit',
-  skill_crit_rate: 'Skill Crit Rate', basic_atk_crit_rate: 'Basic ATK Crit Rate', ignore_basic_atk_crit_rate: 'Ignore Normal ATK Crit', ignore_skill_crit: 'Ignore Skill Crit',
-  ignore_combo: 'Ignore Combo', ignore_combo_pct: 'Ignore Combo', ignore_counter: 'Ignore Counter', ignore_counter_pct: 'Ignore Counter',
-  dmg_reduction_pct: 'Generic DMG Reduction', skill_dmg: 'Skill DMG', skill_dmg_reduction: 'Skill DMG Reduction',
-  basic_atk_dmg: 'Basic ATK DMG', basic_atk_dmg_reduction: 'Basic ATK DMG Reduction',
-  final_skill_dmg: 'Final Skill Damage', final_skill_dmg_reduction: 'Skill Damage Final Damage Reduction',
-  final_basic_atk_dmg: 'Final Normal ATK DMG', final_basic_atk_dmg_reduction: 'Basic Attack Final Damage Reduction',
-  pet_dmg_pct: 'Pet DMG', speed: 'Speed', suppression: 'Suppression',
-  control_immunity: 'Control Immunity Rate', ignore_control_immunity: 'Ignore Control Immunity Rate',
-  dotcritrate: 'DoT Crit Rates', ignoredotcritrate: 'Ignore DoT Crit', block: 'Block',
+
+  // Merged into General Final Damage — both keys describe the same kind of
+  // conditional bonus Holy Grail grants at different star tiers
+  // (final_dmg_bonus for 0★/5★, conditional_final_dmg for 10★), and a
+  // separate "Conditional Final Damage" bucket became redundant once the
+  // round-by-round table itself shows exactly which round a conditional
+  // effect activates — the round display does that job now, not a
+  // parallel category name. final_dmg_bonus was never actually mapped to
+  // anything before this, so Holy Grail's 0★/5★ tiers were silently
+  // contributing nothing even before this change.
+
   // Collectibles use a different (but conceptually identical) key-naming
   // convention than relics/mounts/artifacts — without these, their
   // contributions were silently computed but never shown, since the
@@ -3856,13 +3946,109 @@ const RELIC_KEY_TO_LABEL = {
   // the concept is an unambiguous match to an existing category — stats
   // with no real Calculator category (gold gain, AFK gains, lifesteal,
   // shield bonus, etc.) are deliberately left out rather than force-fit.
-  crit_dmg: 'Crit DMG', crit_dmg_reduction: 'Crit DMG Reduction',
-  combo_dmg: 'Combo DMG', combo_dmg_reduction: 'Combo DMG Reduction',
-  counter_dmg: 'Counter DMG', counter_dmg_reduction: 'Counter DMG Reduction',
-  lightning_dmg: 'Lightning DMG', lightning_dmg_reduction: 'Lightning DMG Reduction',
-  fire_dmg: 'Fire DMG',
+const RELIC_KEY_TO_LABEL = {
+  dmg_reduction: 'Generic DMG Reduction',
+  final_dmg_reduction: 'General Final Damage Reduction',
+
+  dmg_bonus: 'Bonus Damage',
+  final_dmg: 'General Final Damage',
+
+  final_dmg_to_shields: 'Final Damage to Shields',
+
+  sword_qi_dmg: 'Sword Qi DMG', 
+  final_sword_qi_dmg: 'Final Sword Qi DMG',
+
+  crit_rate_pct: 'Crit Rate (Generic)', 
+  ignore_crit_pct: 'Ignore Crit',
+  ignore_skill_crit: 'Ignore Skill Crit',
+  
+  crit_dmg: 'Crit DMG', 
+  crit_dmg_reduction: 'Crit DMG Reduction', 
+
+  basic_atk_crit_rate: 'Basic ATK Crit Rate', 
+  ignore_normal_attack_crit_rate: 'Ignore Normal ATK Crit',
+  
+  final_basic_atk_dmg: 'Final Normal ATK DMG', 
+  final_basic_atk_dmg_reduction: 'Basic Attack Final Damage Reduction',
+
+  skill_crit_rate: 'Skill Crit Rate', 
+  skill_crit_dmg: 'Skill Crit DMG',
+  ignore_skill_crit_rate: 'Ignore Skill Crit', 
+
+  skill_dmg: 'Skill DMG', 
+  final_skill_dmg: 'Final Skill Damage', 
+  skill_dmg_reduction: 'Skill DMG Reduction',
+  final_skill_dmg_reduction: 'Skill Damage Final Damage Reduction',
+  
+  lightning_crit_rate: 'Lightning Crit Rate',
+  lightning_dmg: 'Lightning DMG', 
+  lightning_dmg_reduction: 'Lightning DMG Reduction',
+  final_lightning_dmg: 'Final Lightning DMG', 
+
+  conditional_final_dmg: 'General Final Damage',
+  conditional_dmg_reduction: 'Conditional Damage Reduction',
+  conditional_final_dmg_reduction: 'Conditional Final Damage Reduction',
+  conditional_dmg: 'Conditional Damage',  
+  
+  crit_dmg: 'Crit DMG', 
+  crit_dmg_reduction: 'Crit DMG Reduction', 
+
+  armor_break: 'Armor Break', 
+  armor_break_res: 'Armor Break Resistance',
+  tenacity: 'Tenacity', 
+  tenacity_res: 'Tenacity Resistance',
+
+  hp: 'HP', 
+  hp_pct: 'HP%',
+  global_hp: 'Global HP', 
+  global_hp_pct: 'Global HP%', 
+
+  atk: 'ATK', 
+  atk_pct: 'ATK%',
+  global_atk: 'Global ATK', 
+  global_attack_pct: 'Global ATK', 
+
+  global_def_pct: 'Global DEF%',
+  
+  combo: 'Combo Rate', 
+  combo_rate_pct: 'Combo Rate', 
+  ignore_combo: 'Ignore Combo', 
+  ignore_combo_pct: 'Ignore Combo',
+
+  combo_dmg: 'Combo DMG', 
+  combo_dmg_reduction: 'Combo DMG Reduction',
+  final_combo_dmg: 'Final Combo DMG',
+  
+  counter: 'Counter Rate',
+  counter_rate_pct: 'Counter Rate',
+  ignore_counter: 'Ignore Counter', 
+  ignore_counter_pct: 'Ignore Counter',
+  counter_dmg: 'Counter DMG', 
+  counter_dmg_reduction: 'Counter DMG Reduction',
+  final_counter_dmg: 'Final Counter DMG',
+
+  basic_atk_dmg: 'Basic ATK DMG', 
+  basic_atk_dmg_reduction: 'Basic ATK DMG Reduction',
+
+  pet_dmg_pct: 'Pet DMG', 
+
+  speed: 'Speed', 
+
+  suppression: 'Suppression',
+
+  control_immunity: 'Control Immunity Rate', 
+  ignore_control_immunity: 'Ignore Control Immunity Rate',
+
   dot_crit_rate: 'DoT Crit Rates',
-  ignore_skill_crit_rate: 'Ignore Skill Crit', ignore_normal_attack_crit_rate: 'Ignore Normal ATK Crit',
+  ignore_dot_crit_rate: 'Ignore DoT Crit', 
+
+  block: 'Block',
+
+  dagger_crit_dmg: 'Dagger Crit DMG',
+  dagger_dmg: 'Dagger DMG',
+  final_dagger_dmg: 'Final Dagger DMG',
+
+  fire_dmg: 'Fire DMG',
 };
 
 // Gem names carry their number baked in (e.g. "Combo Damage Boost +45%"),
@@ -4012,9 +4198,9 @@ const INHERIT_CALC_TO_LABEL = {
 const EQUIP_CONTRIB_TO_LABEL = {
   'basiccrit::': 'Basic ATK Crit Rate', 'combo::': 'Combo Rate', 'counter::': 'Counter Rate',
   'daggercrit::': 'Dagger Crit Rate', 'dmgbonus::skill': 'Skill DMG',
-  'fd::counter': 'Final Counter DMG', 'fd::dagger': 'Final Dagger DMG', 'fd::general': 'General Final Damage',
+  'fd::counter': 'Final Counter DMG', 'fd::dagger': 'Final Dagger DMG', 'fd::general': 'General Final Damage', 'fd:conditional:': 'General Final Damage',
   'fd::lightning': 'Final Lightning DMG', 'fd::normal': 'Final Normal ATK DMG', 'fd::swordqi': 'Final Sword Qi DMG',
-  'fdr:basic:': 'Basic Attack Final Damage Reduction', 'fdr:conditional:': 'Conditional Final Damage Reduction',
+  'fdr:basic:': 'Basic Attack Final Damage Reduction', 'fdr:conditional:': 'General Final Damage Reduction',
   'fdr:general:': 'General Final Damage Reduction', 'fdr:skill:': 'Skill Damage Final Damage Reduction',
   'icombo::': 'Ignore Combo', 'icounter::': 'Ignore Counter', 'icrit::': 'Ignore Crit',
   'skillcrit::': 'Skill Crit Rate', 'skilldmg::': 'Skill DMG', 'weapcrit::': 'Weapon Crit Rate',
@@ -4077,27 +4263,96 @@ function parseSpecEffectValue(text) {
   return m ? parseFloat(m[1]) : null;
 }
 
-function aggregateFullStatsWithSources() {
-  const stats = {}; // label -> { total, sources: [{name, val}] }
-  const add = (label, val, sourceName) => {
+// Round-tracking: a universal default window for when conditional (proc/
+// trigger-based) effects are assumed active, since modeling each item's
+// actual in-battle trigger condition and duration precisely isn't
+// feasible without simulating combat itself. Per-item overrides exist
+// for the rare case where a specific effect's real timing is known and
+// worth being more precise about; everything else just follows the
+// universal default.
+const CONDITIONAL_ACTIVE_FROM_ROUND = 1;
+const CONDITIONAL_ACTIVE_UNTIL_ROUND = 5;
+
+// Generic primitive — takes already-resolved from/until values (or
+// undefined, falling back to the universal window) rather than reading
+// a specific field name off an item directly. This is what lets every
+// item type (Relics, Mounts/Artifacts, Equipment, Collectibles) share
+// one round-check, even though each type's own JSON schema uses
+// different field names for its round-window override.
+function isRoundInWindow(round, from, until) {
+  if (round == null) return true; // non-round-specific view: always active (ceiling behavior)
+  const resolvedFrom = from ?? CONDITIONAL_ACTIVE_FROM_ROUND;
+  const resolvedUntil = until ?? CONDITIONAL_ACTIVE_UNTIL_ROUND;
+  return round >= resolvedFrom && round <= resolvedUntil;
+}
+
+function aggregateFullStatsWithSources(round = null) {
+  const stats = {}; // label -> { total, sources: [{name, val, groupKey}] }
+  // groupKey is a stable identifier for "this exact source" across
+  // different round calls, separate from the human-readable name — needed
+  // because a stacking source's own display name changes per round (e.g.
+  // "3 stacks" at round 3 vs "1 stack" at round 1), so matching the same
+  // source across rounds by name text alone silently fails once the
+  // stack count in the name itself differs. Defaults to sourceName for
+  // every other call site, where the name is already round-stable.
+  const add = (label, val, sourceName, groupKey) => {
     if (typeof val !== 'number' || Number.isNaN(val) || val === 0) return;
     if (!stats[label]) stats[label] = { total: 0, sources: [] };
     stats[label].total += val;
-    stats[label].sources.push({ name: sourceName, val });
+    stats[label].sources.push({ name: sourceName, val, groupKey: groupKey || sourceName });
   };
 
   add('Crit DMG', 200, 'Base');
   add('Speed', 5, 'Base');
 
-  // Relics
-  DB.relics.forEach(r => {
-    if (!state.relicOwned[r.n]) return;
-    const star = state.relicStars[r.n] || 0;
-    Object.entries(r.star_stats || {}).forEach(([key, vals]) => {
-      const val = vals[star];
-      const label = RELIC_KEY_TO_LABEL[key];
-      if (label && val) add(label, val, `${r.n} (${star}★)`);
-    });
+// Relics — passive star_stats (Tenacity, Armor Break, ATK, etc.) apply
+// just from being owned, matching every other Collection-tab item.
+// flat_stats is different: that's the relic's own active, triggered
+// proc effect (e.g. Skythunder Vajra Pestle's Final Lightning DMG
+// bonus), which only actually fires in battle once the relic is
+// deployed in one of the 4 slots — so that part alone needs the
+// equipped check, not the relic's stats as a whole.
+const equippedRelicNames = new Set(Object.values(state.relicSlots).filter(Boolean));
+DB.relics.forEach(r => {
+  if (!state.relicOwned[r.n]) return;
+  const star = state.relicStars[r.n] || 0;
+  Object.entries(r.star_stats || {}).forEach(([key, vals]) => {
+    const val = vals[star];
+    const label = RELIC_KEY_TO_LABEL[key];
+    if (label && val) add(label, val, `${r.n} (${star}★)`);
+  });
+  
+if (!equippedRelicNames.has(r.n)) return;
+let flatStats = r.flat_stats_base;
+let activeFrom = r.flat_stats_base_active_from;
+let activeUntil = r.flat_stats_base_active_until;
+let stackingStats = r.stacking_stats_base;
+if (star >= 10) {
+  flatStats = r.flat_stats;
+  activeFrom = r.flat_stats_active_from;
+  activeUntil = r.flat_stats_active_until;
+  stackingStats = r.stacking_stats;
+} else if (star >= 5) {
+  flatStats = r.flat_stats_5star;
+  activeFrom = r.flat_stats_5star_active_from;
+  activeUntil = r.flat_stats_5star_active_until;
+  stackingStats = r.stacking_stats_5star;
+}
+if (isRoundInWindow(round, activeFrom, activeUntil)) {
+  Object.entries(flatStats || {}).forEach(([key, val]) => {
+    const label = RELIC_KEY_TO_LABEL[key];
+    if (label && val) add(label, val, `${r.n} (${star}★, effect)`);
+  });
+}
+Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
+  const startsRound = cfg.starts_round ?? CONDITIONAL_ACTIVE_FROM_ROUND;
+  if (round != null && round < startsRound) return;
+  const stacksElapsed = round == null ? cfg.max_stacks : (round - startsRound + 1);
+  const currentStacks = Math.max(0, Math.min(cfg.max_stacks, stacksElapsed));
+  const val = cfg.per_stack * currentStacks;
+  const label = RELIC_KEY_TO_LABEL[key];
+  if (label && val) add(label, val, `${r.n} (${star}★, ${currentStacks} stack${currentStacks === 1 ? '' : 's'})`, `${r.n}:stacking:${key}`);
+  });
   });
 
   // Collectibles
@@ -4107,6 +4362,15 @@ function aggregateFullStatsWithSources() {
     const val = c.star_vals[star];
     const label = RELIC_KEY_TO_LABEL[c.stat_key] || (c.is_percent ? c.stat_label : null);
     if (label && val) add(label, val, `${c.n} (${star}★)`);
+    // conditional_stats — same optional, separate-field pattern as
+    // Relics' flat_stats and Mounts/Artifacts' conditional_stats. Nothing
+    // populates this for any real Collectible yet.
+    if (c.conditional_stats && isRoundInWindow(round, c.conditional_active_from, c.conditional_active_until)) {
+      Object.entries(c.conditional_stats).forEach(([key, condVal]) => {
+        const condLabel = RELIC_KEY_TO_LABEL[key];
+        if (condLabel && condVal) add(condLabel, condVal, `${c.n} (effect)`);
+      });
+    }
   });
 
   // Mounts & Artifacts
@@ -4120,6 +4384,20 @@ function aggregateFullStatsWithSources() {
         const label = RELIC_KEY_TO_LABEL[key];
         if (label && val) add(label, val, `${item.n} (${s.stars}★/A${s.awaken})`);
       });
+      // conditional_stats — a separate, optional field for a proc/
+      // trigger-based bonus, same idea as Relics' flat_stats but kept as
+      // its own field rather than reusing that name, since Mount/
+      // Artifact's star_up/awaken deltas above are already a different,
+      // always-on shape. Nothing currently populates this for any real
+      // item — added so the capability exists the moment a Mount or
+      // Artifact with a genuinely conditional effect actually needs it,
+      // without requiring another aggregation-logic change at that point.
+      if (item.conditional_stats && isRoundInWindow(round, item.conditional_active_from, item.conditional_active_until)) {
+        Object.entries(item.conditional_stats).forEach(([key, val]) => {
+          const label = RELIC_KEY_TO_LABEL[key];
+          if (label && val) add(label, val, `${item.n} (effect)`);
+        });
+      }
     });
   });
 
@@ -4171,6 +4449,13 @@ function aggregateFullStatsWithSources() {
       // unconditionally once the arcana level is actually met.
       const arcanaFlatPart = (c.arcanaFlat != null && s.arcana >= c.arcanaFlatAt) ? c.arcanaFlat : 0;
       if (!c.qualD && !c.arcanaD && c.arcanaFlat == null) return;
+      // Round-gating only applies to a contribution that explicitly opts
+      // in via active_from/active_until — otherwise every existing,
+      // genuinely passive quality/surpass/arcana bonus stays exactly as
+      // it is now (always on), rather than silently becoming implicitly
+      // round-limited just because the capability exists.
+      const isConditional = c.active_from != null || c.active_until != null;
+      if (isConditional && !isRoundInWindow(round, c.active_from, c.active_until)) return;
       const total = (qualPart + surpassPart + arcanaPart + arcanaFlatPart) * 100;
       const key = `${c.calc}:${c.cond || ''}:${c.ty || ''}`;
       const label = EQUIP_CONTRIB_TO_LABEL[key];
@@ -4386,8 +4671,9 @@ function aggregateFullStatsWithSources() {
   // reimplemented, so this can never drift out of sync with what the
   // panel actually displays.
   Object.values(DB.relic_sets).flat().forEach(set => {
-    const members = set.items.map(name => DB.relics.find(r => r.n === name)).filter(Boolean);
-    if (!members.length || !members.every(r => state.relicOwned[r.n])) return;
+  if (set.tracked === false) return; // game hasn't named the missing relic yet
+  const members = set.items.map(name => DB.relics.find(r => r.n === name)).filter(Boolean);
+  if (members.length !== set.items.length) return; // at least one member is unreleased
     const minStar = Math.min(...members.map(r => state.relicStars[r.n] || 0));
     let tierIdx = 0;
     for (let i = RELIC_TIER_STARS.length - 1; i >= 0; i--) {
@@ -4397,9 +4683,11 @@ function aggregateFullStatsWithSources() {
     const label = SET_STAT_TO_LABEL[set.stat] || set.stat;
     if (val != null) add(label, val, `${set.set} (Set Bonus)`);
   });
+
   Object.values(DB.collectible_sets).flat().forEach(set => {
-    const members = set.items.map(name => DB.collectibles.find(c => c.n === name)).filter(Boolean);
-    if (!members.length || !members.every(c => state.collectibleOwned[c.n])) return;
+  if (set.tracked === false) return; // game hasn't named the missing item yet
+  const members = set.items.map(name => DB.collectibles.find(c => c.n === name)).filter(Boolean);
+  if (members.length !== set.items.length) return; // at least one member is unreleased
     const minStar = Math.min(...members.map(c => state.collectibleStars[c.n] || 0));
     let tierIdx = 0;
     for (let i = COLLECTIBLE_TIER_STARS.length - 1; i >= 0; i--) {
@@ -4418,13 +4706,13 @@ const CALC_TABLE_CATEGORIES = [
   // reduction stats, so they live in DMG Reduction rather than their own
   // category. PVP ATK%/DEF%/HP% are general stat boosts, closest in kind
   // to Global ATK, so they sit in Bonus Damage alongside it.
-  { title: 'Bonus Damage', labels: ['Global ATK', 'Crit DMG', 'Skill DMG', 'Basic ATK DMG', 'Combo DMG', 'Counter DMG', 'Lightning DMG', 'Dagger DMG', 'Sword Qi DMG', 'Light Spear DMG', 'DoT DMG', 'Fire DMG', 'Explosion DMG', 'Physical DMG', 'Pet DMG', 'PVP ATK%', 'PVP DEF%', 'PVP HP%'] },
-  { title: 'Final Damage', labels: ['General Final Damage', 'Final Skill Damage', 'Final Lightning DMG', 'Final Sword Qi DMG', 'Final Dagger DMG', 'Final Combo DMG', 'Final Counter DMG', 'Final Normal ATK DMG'] },
+  { title: 'Bonus Damage', labels: ['Global ATK', 'Crit DMG', 'Skill DMG', 'Skill Crit DMG', 'Basic ATK DMG', 'Combo DMG', 'Counter DMG', 'Lightning DMG', 'Dagger DMG', 'Dagger Crit DMG', 'Sword Qi DMG', 'Light Spear DMG', 'DoT DMG', 'Fire DMG', 'Explosion DMG', 'Physical DMG', 'Pet DMG', 'Bonus Damage', 'PVP ATK%', 'PVP DEF%', 'PVP HP%',] },
+  { title: 'Final Damage', labels: ['General Final Damage', 'Final Skill Damage', 'Final Lightning DMG', 'Final Sword Qi DMG', 'Final Dagger DMG', 'Final Combo DMG', 'Final Counter DMG', 'Final Normal ATK DMG', 'Final Damage to Shields'] },
   { title: 'Proc Rates', labels: ['Combo Rate', 'Counter Rate', 'Crit Rate (Generic)', 'Skill Crit Rate', 'Basic ATK Crit Rate', 'Weapon Crit Rate', 'Lightning Crit Rate', 'DoT Crit Rates', 'Dagger Crit Rate', 'Sword Qi Crit Rate', 'Light Spear Crit Rate'] },
   { title: 'Damage Coefficients', labels: ['General DMG Coef', 'Skill DMG Coef', 'Normal ATK DMG Coef', 'Combo DMG Coef', 'Counter DMG Coef', 'Lightning DMG Coef', 'Dagger DMG Coef', 'Sword Qi DMG Coef', 'Fire DMG Coef'] },
   { title: 'Speed', labels: ['Speed'] },
-  { title: 'DMG Reduction', labels: ['Generic DMG Reduction', 'Skill DMG Reduction', 'Basic ATK DMG Reduction', 'Combo DMG Reduction', 'Counter DMG Reduction', 'Lightning DMG Reduction', 'Dagger DMG Reduction', 'Sword Qi DMG Reduction', 'Light Spear DMG Red', 'Fire DMG Reduction', 'DoT DMG Reduction', 'Crit DMG Reduction', 'Skill Crit DMG Red', 'Basic ATK Crit DMG Red', 'DoT Crit DMG Red', 'PVP Damage Reduction', 'Mounted DMG Reduction'] },
-  { title: 'Final Damage Reduction', labels: ['General Final Damage Reduction', 'Skill Damage Final Damage Reduction', 'Basic Attack Final Damage Reduction', 'Conditional Final Damage Reduction', 'Adventurer Final Damage Reduction', 'Artifact Final Damage Reduction', 'Mount Final Damage Reduction', 'Pet Final Damage Reduction'] },
+  { title: 'DMG Reduction', labels: ['Generic DMG Reduction', 'Skill DMG Reduction', 'Basic ATK DMG Reduction', 'Combo DMG Reduction', 'Counter DMG Reduction', 'Lightning DMG Reduction', 'Dagger DMG Reduction', 'Sword Qi DMG Reduction', 'Light Spear DMG Red', 'Fire DMG Reduction', 'DoT DMG Reduction', 'Crit DMG Reduction', 'Skill Crit DMG Red', 'Basic ATK Crit DMG Red', 'DoT Crit DMG Red', 'PVP Damage Reduction', 'Mounted DMG Reduction', 'Conditional Damage Reduction'] },
+  { title: 'Final Damage Reduction', labels: ['General Final Damage Reduction', 'Skill Damage Final Damage Reduction', 'Basic Attack Final Damage Reduction', 'Adventurer Final Damage Reduction', 'Artifact Final Damage Reduction', 'Mount Final Damage Reduction', 'Pet Final Damage Reduction'] },
   { title: 'Tenacity & Armor Break', labels: ['Tenacity', 'Tenacity Resistance', 'Armor Break', 'Armor Break Resistance', 'Control Immunity Rate', 'Ignore Control Immunity Rate', 'Suppression'] },
   { title: 'Ignore Proc Rates', labels: ['Ignore Combo', 'Ignore Crit', 'Ignore Weapon Crit', 'Ignore Skill Crit', 'Ignore Normal ATK Crit', 'Ignore Lightning Crit', 'Ignore DoT Crit', 'Ignore Dagger Crit', 'Ignore Sword Qi Crit', 'Ignore Light Spear Crit', 'Ignore Counter', 'Ignore Suppression'] },
 ];
@@ -4453,7 +4741,15 @@ const CALC_NON_PERCENT_LABELS = new Set(['Tenacity', 'Tenacity Resistance', 'Arm
 
 function buildFullCalcTable() {
   const wrap = el('div', {});
+  const rounds = [1, 2, 3, 4, 5];
+  // Ceiling view (round=null) drives the stat row's own "Total" and the
+  // full list of sources that exist at all. Each round's own aggregation
+  // is only used to look up what a given source contributes AT that
+  // specific round — a source simply won't appear in a round's result
+  // at all if its conditional window isn't active yet, which is read
+  // back below as 0 for that round rather than as an error.
   const stats = aggregateFullStatsWithSources();
+  const statsByRound = rounds.map(r => aggregateFullStatsWithSources(r));
 
   const controls = el('div', { class: 'calc-full-table-controls' });
   let allExpanded = false;
@@ -4502,6 +4798,14 @@ function buildFullCalcTable() {
   CALC_TABLE_CATEGORIES.forEach((cat, catIdx) => {
     wrap.appendChild(el('div', { class: 'equip-section-title calc-category-title', id: `calc-cat-${catIdx}` }, cat.title));
     const table = el('table', { class: 'calc-full-table' });
+    // Sticky header carrying the R1-R5 column labels — stays visible
+    // while scrolling down a long category's source rows, so it's
+    // always clear which column is which round.
+    const thead = el('thead', {}, el('tr', {}, [
+      el('th', {}, 'Stat'),
+      ...rounds.map(r => el('th', { class: 'calc-full-table-total' }, `R${r}`)),
+    ]));
+    table.appendChild(thead);
     const tbody = el('tbody', {});
     cat.labels.forEach(label => {
       const entry = stats[label];
@@ -4513,14 +4817,30 @@ function buildFullCalcTable() {
       let emptyRow = null;
       if (hasSources) {
         entry.sources.forEach(s => {
+          // Looks up this exact source's own value at each of the 5
+          // rounds — not the stat's overall total, the individual
+          // source's contribution specifically, since that's what
+          // actually varies round to round (a still-owned-but-not-yet-
+          // triggered relic effect shows 0 in early rounds here, even
+          // though the stat's own ceiling total above stays constant).
+          // Matches by groupKey, not the display name — a stacking
+          // source's name text itself changes per round ("1 stack" vs
+          // "3 stacks"), so matching by name silently failed to find the
+          // same source across rounds whenever its own stack count
+          // differed from the ceiling view's.
+          const roundVals = statsByRound.map(roundStats => {
+            const roundEntry = roundStats[label];
+            const match = roundEntry && roundEntry.sources.find(rs => rs.groupKey === s.groupKey);
+            return match ? match.val : 0;
+          });
           sourceRows.push(el('tr', { class: 'calc-full-table-source-row collapsed' }, [
             el('td', {}, s.name),
-            el('td', { class: 'calc-full-table-total' }, `+${Math.round(s.val * 100) / 100}`),
+            ...roundVals.map(v => el('td', { class: 'calc-full-table-total' }, `${Math.round(v * 100) / 100}`)),
           ]));
         });
       } else {
         emptyRow = el('tr', { class: 'calc-full-table-source-row collapsed' }, [
-          el('td', {}, '\u2014'), el('td', {}, ''),
+          el('td', {}, '\u2014'), ...rounds.map(() => el('td', {}, '')),
         ]);
         sourceRows.push(emptyRow);
       }
@@ -4534,7 +4854,10 @@ function buildFullCalcTable() {
         } : null,
       }, [
         el('td', {}, [chevron, label]),
-        el('td', { class: 'calc-full-table-total' }, `${total}${suffix}`),
+        // One cell spanning all 5 round columns — the stat's own row
+        // keeps showing the ceiling total as a single number, same as
+        // before; only the source rows underneath break it out by round.
+        el('td', { class: 'calc-full-table-total', colspan: String(rounds.length) }, `Total: ${total}${suffix}`),
       ]);
       tbody.appendChild(statRow);
       sourceRows.forEach(r => tbody.appendChild(r));
@@ -4547,7 +4870,6 @@ function buildFullCalcTable() {
   return wrap;
 }
 
-// The fixed, curated list of PvP-relevant stats shown on the Calculator —
 // each pulls and sums whichever raw keys represent that stat across every
 // data source, since the same real-world stat often ended up with
 // different key names in relics vs. mounts/artifacts vs. collectibles.
@@ -4556,10 +4878,10 @@ const CALC_STAT_DEFS = [
   { label: 'Ignore Tenacity', keys: ['Tenacity Resistance'], notPct: true },
   { label: 'Armor Break', keys: ['Armor Break'], notPct: true },
   { label: 'Ignore Armor Break', keys: ['Armor Break Resistance'], notPct: true },
-  { label: 'Damage Reduction', keys: ['Generic DMG Reduction', 'Skill DMG Reduction', 'Basic ATK DMG Reduction', 'Combo DMG Reduction', 'Counter DMG Reduction', 'Lightning DMG Reduction', 'Dagger DMG Reduction', 'Sword Qi DMG Reduction', 'Light Spear DMG Red', 'Fire DMG Reduction', 'DoT DMG Reduction'] },
+  { label: 'Damage Reduction', keys: ['Generic DMG Reduction', 'Conditional Damage Reduction', 'Skill DMG Reduction', 'Basic ATK DMG Reduction', 'Combo DMG Reduction', 'Counter DMG Reduction', 'Lightning DMG Reduction', 'Dagger DMG Reduction', 'Sword Qi DMG Reduction', 'Light Spear DMG Red', 'Fire DMG Reduction', 'DoT DMG Reduction'] },
   { label: 'Final Damage Reduction', keys: ['General Final Damage Reduction', 'Skill Damage Final Damage Reduction', 'Basic Attack Final Damage Reduction', 'Conditional Final Damage Reduction', 'Adventurer Final Damage Reduction', 'Artifact Final Damage Reduction', 'Mount Final Damage Reduction', 'Pet Final Damage Reduction'], highlight: true },
-  { label: 'Damage Boost', keys: ['Global ATK', 'Skill DMG', 'Basic ATK DMG', 'Combo DMG', 'Counter DMG', 'Lightning DMG', 'Dagger DMG', 'Sword Qi DMG', 'Light Spear DMG', 'DoT DMG', 'Fire DMG', 'Explosion DMG', 'Physical DMG', 'Pet DMG'], caption: 'Affected by enemy tenacity' },
-  { label: 'Final Damage Boost', keys: ['General Final Damage', 'Final Skill Damage', 'Final Lightning DMG', 'Final Sword Qi DMG', 'Final Dagger DMG', 'Final Combo DMG', 'Final Counter DMG', 'Final Normal ATK DMG'], highlight: true },
+  { label: 'Damage Boost', keys: ['Conditional Damage Boost', 'Global ATK', 'Skill DMG', 'Basic ATK DMG', 'Combo DMG', 'Counter DMG', 'Lightning DMG', 'Dagger DMG', 'Sword Qi DMG', 'Light Spear DMG', 'DoT DMG', 'Fire DMG', 'Explosion DMG', 'Physical DMG', 'Pet DMG'], caption: 'Affected by enemy tenacity' },
+  { label: 'Final Damage Boost', keys: ['General Final Damage', 'Final Skill Damage', 'Final Lightning DMG', 'Final Sword Qi DMG', 'Final Dagger DMG', 'Final Combo DMG', 'Final Counter DMG', 'Final Normal ATK DMG','Conditional Final Damage'], highlight: true },
   { label: 'Final Basic Attack Damage', keys: ['Final Normal ATK DMG'] },
   { label: 'Final Basic Attack Damage Reduction', keys: ['Basic Attack Final Damage Reduction'] },
   { label: 'Final Skill Damage', keys: ['Final Skill Damage'] },
@@ -4600,7 +4922,13 @@ function renderCalculator() {
     renderCalcDataControls(),
   ]));
   wrap.appendChild(el('p', { class: 'section-desc' }, 'Values will auto populate as changes are made to the sheet'));
+  wrap.appendChild(el('p', { class: 'section-desc', style: 'font-style:italic;' },
+  'Some contributions come from conditional or proc-based effects (e.g. a relic bonus that only activates after a trigger, or a stat that applies "for 1 round" rather than the whole battle) — these are still counted as if fully active, so the numbers shown here represent the ceiling for what your build can reach, not a guaranteed constant.'
+));
 
+  /* ---- Quick Stats — commented out, not deleted, per her call that it
+     wasn't proving useful; trivial to restore by uncommenting if that
+     changes. ----
   const totals = aggregatePvpStats();
 
   // Final ATK / Final HP — base stat × (1 + %-bonuses), same pattern
@@ -4642,8 +4970,18 @@ function renderCalculator() {
   const remaining = Object.keys(cardsByLabel).filter(l => !QUICK_STATS_ORDER.includes(l)).map(l => cardsByLabel[l]);
 
   wrap.appendChild(renderAccordion('Quick Stats', el('div', { class: 'calc-stat-grid' }, [...orderedCards, ...remaining]), true, true));
+  ---- end Quick Stats ---- */
 
-  wrap.appendChild(renderAccordion('Full Stat Breakdown', buildFullCalcTable(), true, true));
+  const fullBreakdownAccordion = renderAccordion('Full Stat Breakdown', buildFullCalcTable(), true, true);
+  // The shared .accordion base class has overflow:hidden (used to clip
+  // its rounded corners), which breaks position:sticky on anything
+  // inside it — the sticky header needs its ancestor chain to actually
+  // allow overflow for the browser to track it against the real
+  // viewport. Scoped to just this one accordion instance rather than
+  // touching the shared class, since every other accordion in the app
+  // still relies on the clipping behavior.
+  fullBreakdownAccordion.classList.add('calc-breakdown-accordion');
+  wrap.appendChild(fullBreakdownAccordion);
 
   return wrap;
 }
