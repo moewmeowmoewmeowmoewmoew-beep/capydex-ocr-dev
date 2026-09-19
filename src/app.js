@@ -451,6 +451,33 @@ function statLabel(key) {
 
 /* Wrap [ Skill Name ] tags so they never break mid-bracket — if they don't
    fit on the current line, the whole tag moves down as one unit instead. */
+// Wraps every number-like substring that's actually a stat value (23.35%,
+// +15, -10%, but NOT plain turn counts like "3" in "every 3 turns" or
+// ordinals like "3rd") in its own span so it can be color-highlighted —
+// applied only to the plain prose portions of effect text, not the
+// [ Skill Name ] tags themselves, which get their own distinct highlight
+// treatment instead. A number only gets highlighted if it carries a %
+// sign (an actual stat magnitude, e.g. "300%") or a +/- sign (a flat
+// buff/debuff, e.g. "+10 Speed") — a bare, unsigned, non-percent number
+// is reliably just narrative context (turn timing, item name references
+// like "No.1", cooldowns) rather than a value the reader should treat as
+// a stat.
+function appendHighlightedNumbers(frag, text) {
+  const numberRegex = /[+-]\d+(?:\.\d+)?%?|\d+(?:\.\d+)?%/g;
+  let lastIndex = 0;
+  let match;
+  while ((match = numberRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+    // Reuses .stat-value-live rather than a new class — this is the same
+    // "accent-colored, bold number" treatment already used elsewhere in
+    // the app (stepper values, Calculator totals), so a highlighted
+    // number in effect text reads consistently with the rest of the UI.
+    frag.appendChild(el('span', { class: 'stat-value-live' }, match[0]));
+    lastIndex = match.index + match[0].length;
+  }
+  if (lastIndex < text.length) frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+}
+
 function renderTextWithSkillTags(text) {
   const frag = document.createDocumentFragment();
   if (!text) return frag;
@@ -458,7 +485,7 @@ function renderTextWithSkillTags(text) {
   let lastIndex = 0;
   let match;
   while ((match = regex.exec(text)) !== null) {
-    if (match.index > lastIndex) frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+    if (match.index > lastIndex) appendHighlightedNumbers(frag, text.slice(lastIndex, match.index));
     // Each [ Skill Name ] reference gets its own line rather than flowing
     // inline with the surrounding prose — easier to spot at a glance, and
     // the nowrap on .skill-tag means the bracket text itself never splits
@@ -466,7 +493,7 @@ function renderTextWithSkillTags(text) {
     frag.appendChild(el('span', { class: 'skill-tag' }, match[0]));
     lastIndex = match.index + match[0].length;
   }
-  if (lastIndex < text.length) frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+  if (lastIndex < text.length) appendHighlightedNumbers(frag, text.slice(lastIndex));
   return frag;
 }
 
@@ -2300,7 +2327,10 @@ function renderDeployCard(kind, mode, slotIndex) {
     if (item.star_up) {
       const resolved = resolveAwakenEffect(item, showAwaken ? itemState.awaken : 0);
       card.appendChild(equipFieldLabel('Awaken Skill'));
-      card.appendChild(el('div', { class: 'equip-writeup' }, resolved ? renderTextWithSkillTags(resolved.text) : '—'));
+      card.appendChild(el('div', { class: 'equip-writeup' }, [
+        resolved ? renderKeyAwakenBadge(resolved.level) : null,
+        resolved ? renderTextWithSkillTags(resolved.text) : '—',
+      ]));
     }
   } else {
     const showStars = hasStarProgression(item);
@@ -2982,9 +3012,8 @@ function renderSetCard({ kind, name, statLabel, tierLabels, vals, members, allOw
   if (!incomplete) {
     const tierGrid = el('div', { class: 'set-tier-grid' });
     vals.forEach((v, i) => {
-      const reached = allOwned && i <= tierIdx;
       const active = allOwned && i === tierIdx;
-      tierGrid.appendChild(el('div', { class: 'set-tier-pip2' + (reached ? ' reached' : '') + (active ? ' active' : '') }, [
+      tierGrid.appendChild(el('div', { class: 'set-tier-pip2' + (active ? ' active' : '') }, [
         el('span', { class: 'pip-star' }, tierLabels[i]),
         el('span', { class: 'pip-val' }, `${v}${typeof v === 'number' && v < 20 ? '%' : ''}`),
       ]));
@@ -3772,6 +3801,16 @@ function resolveAwakenEffect(item, awakenLevel) {
   return null;
 }
 
+// A0/A4/A10 are the awaken levels the game itself now highlights as the
+// meaningful skill milestones for every Artifact and Mount alike (not
+// per-item — confirmed this is a universal pattern, unlike the
+// min_awaken thresholds in flat_stats_awaken_tiers/stacking_stats_
+// awaken_tiers, which genuinely do vary per item).
+const KEY_AWAKEN_LEVELS = new Set([0, 4, 10]);
+function renderKeyAwakenBadge(level) {
+  return KEY_AWAKEN_LEVELS.has(level) ? el('span', { class: 'key-awaken-badge' }, 'Key') : null;
+}
+
 function hasStarProgression(item) {
   const deltas = item.star_up && item.star_up.deltas;
   if (!deltas) return false;
@@ -3785,11 +3824,14 @@ function hasAwakenProgression(item) {
   // Artifacts' awaken levels upgrade skill text, not flat stats, so their
   // awaken.deltas are always empty even when awakening is genuinely real —
   // confirmed against the user's own curated database (Artifacts
-  // StarUpAwakening sheet), which has this text for all 16 artifacts,
-  // including Sword of Victory Oath. That item is the one confirmed
-  // exception for STAR progression only (its star deltas are flat/
-  // identical, matching the sheet's own "—" dashes there) — but it does
-  // have real awaken text, so it isn't excluded here.
+  // StarUpAwakening sheet) for most artifacts. Sword of Victory Oath was
+  // originally thought to be included too, since the sheet had text for
+  // it — but confirmed directly against the actual in-game UI, this
+  // item's awaken progression never actually displays anything, so its
+  // awaken_effects were cleared to "No additional effect" strings
+  // specifically so this function correctly excludes it. The sheet
+  // itself wasn't wrong to have that text, it just doesn't reflect what
+  // the game actually shows for this one item.
   const textEffects = item.awaken_effects;
   if (!textEffects) return false;
   return Object.values(textEffects).some(t => t && !t.startsWith('No additional effect'));
@@ -3871,7 +3913,7 @@ function renderMountArtifactCard(item, bucket, isMount) {
   const resolved = resolveAwakenEffect(item, s.awaken);
   if (resolved) {
     infoLines.push(el('div', { class: 'item-effect', style: 'font-style:italic;' },
-      [`A${s.awaken}: `, renderTextWithSkillTags(resolved.text)]));
+      [renderKeyAwakenBadge(resolved.level), `A${s.awaken}: `, renderTextWithSkillTags(resolved.text)]));
   }
   card.appendChild(el('div', { class: 'card-info' }, infoLines));
 
@@ -4042,6 +4084,7 @@ const RELIC_KEY_TO_LABEL = {
   ignore_control_immunity: 'Ignore Control Immunity Rate',
 
   dot_crit_rate: 'DoT Crit Rates',
+  dot_dmg: 'DoT DMG',
   ignore_dot_crit_rate: 'Ignore DoT Crit', 
 
   block: 'Block',
@@ -4051,6 +4094,8 @@ const RELIC_KEY_TO_LABEL = {
   final_dagger_dmg: 'Final Dagger DMG',
 
   fire_dmg: 'Fire DMG',
+
+  light_spear_dmg: 'Light Spear DMG'
 };
 
 // Gem names carry their number baked in (e.g. "Combo Damage Boost +45%"),
@@ -4376,7 +4421,7 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
   });
 
   // Mounts & Artifacts
-  [['mounts', 'mountState'], ['artifacts', 'artifactState']].forEach(([kind, bucketKey]) => {
+  [['mounts', 'mountState', 'mountSlots'], ['artifacts', 'artifactState', 'artifactSlots']].forEach(([kind, bucketKey, slotsKey]) => {
     DB[kind].forEach(item => {
       if (item.n === 'None' || !item.star_up) return;
       const s = getMountOrArtifactState(bucketKey, item.idx);
@@ -4386,22 +4431,375 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
         const label = RELIC_KEY_TO_LABEL[key];
         if (label && val) add(label, val, `${item.n} (${s.stars}★/A${s.awaken})`);
       });
-      // conditional_stats — a separate, optional field for a proc/
-      // trigger-based bonus, same idea as Relics' flat_stats but kept as
-      // its own field rather than reusing that name, since Mount/
-      // Artifact's star_up/awaken deltas above are already a different,
-      // always-on shape. Nothing currently populates this for any real
-      // item — added so the capability exists the moment a Mount or
-      // Artifact with a genuinely conditional effect actually needs it,
-      // without requiring another aggregation-logic change at that point.
-      if (item.conditional_stats && isRoundInWindow(round, item.conditional_active_from, item.conditional_active_until)) {
-        Object.entries(item.conditional_stats).forEach(([key, val]) => {
-          const label = RELIC_KEY_TO_LABEL[key];
-          if (label && val) add(label, val, `${item.n} (effect)`);
+
+      // Every mechanism below this point derives from base_effect/
+      // star_effects text specifically, which is the item's Main-slot
+      // skill — it only actually applies while this exact item sits in
+      // mountMainSlot/artifactMainSlot, a separate single slot from
+      // sumBlockAtLevel() above (the item's own star_up/awaken numeric
+      // growth, which every owned item contributes regardless of Main/
+      // deployed status) and from the 3 deploy slots the awaken-tier
+      // mechanisms further below require instead. An owned-but-neither-
+      // Main-nor-deployed item contributes its own flat stats but none
+      // of its skill text — confirmed directly: Don Quixote Sugar merely
+      // owned (not Main) was incorrectly showing its decaying Ignore
+      // Crit Rate/Crit DMG Reduction alongside Catastrophe, the actual
+      // Main mount.
+      const isMain = state[kind === 'mounts' ? 'mountMainSlot' : 'artifactMainSlot'].itemIdx === item.idx;
+      if (isMain) {
+      // flat_stats_star_tiers — same {min_X, stats} shape as the awaken
+      // tiers below, but keyed to STAR level instead, and deliberately
+      // NOT gated behind isDeployed. This represents base_effect/
+      // star_effects text specifically (e.g. Transcendent mounts' "Ignore
+      // Crit Rate +10%" scaling up every star level) — a Main-slot-
+      // compatible passive, unlike the awaken skill tiers below, which
+      // only ever fire once deployed into one of the 3 rotation slots.
+      const pickStarTier = (tiers) => {
+        if (!tiers || !tiers.length) return null;
+        let picked = null;
+        tiers.forEach(tier => {
+          if (s.stars >= tier.min_star && (!picked || tier.min_star > picked.min_star)) picked = tier;
         });
+        return picked;
+      };
+      const starTier = pickStarTier(item.flat_stats_star_tiers);
+      if (starTier) {
+        // "Active" rather than a star-level/tier label — this comes from
+        // base_effect, which applies the moment the item is owned,
+        // whether it's the Main slot or actually deployed. Distinct from
+        // the awaken-tier version below, which genuinely does require
+        // deployment into one of the 3 rotation slots.
+        const kindLabel = kind === 'mounts' ? 'Active mount' : 'Active artifact';
+        Object.entries(starTier.stats || {}).forEach(([key, val]) => {
+          const label = RELIC_KEY_TO_LABEL[key];
+          // Star level moves into groupKey (invisible, matching-only)
+          // rather than the visible name — the description toggle in
+          // buildFullCalcTable still needs the actual level to show the
+          // right star_effects[level] text, it just no longer needs to
+          // be printed on the row itself now that the label reads
+          // "Active mount"/"Active artifact" instead.
+          if (label && val) add(label, val, `${item.n} (${kindLabel})`, `${item.n}:${s.stars}★`);
+        });
+      }
+
+      // decaying_stats — the inverse of stacking_stats: starts at a fixed
+      // value on the turn it activates and gets WORSE by a fixed amount
+      // every turn after that, floored at 0, expiring entirely once
+      // duration is exceeded (e.g. Don Quixote Sugar's Ignore Crit Rate
+      // starting at +20% and losing 4% per turn for 5 turns). Only
+      // per_turn is required to be negative — stacking_stats' per_stack
+      // building up from 0 can't represent "starts high, decays down."
+      // Same Main-slot-compatible, non-deploy-gated treatment as
+      // flat_stats_star_tiers above, since this also comes from
+      // base_effect text. The ceiling (round === null) view shows the
+      // starting value, since a decaying effect is strongest at the
+      // moment it first activates, never afterward.
+      Object.entries(item.decaying_stats || {}).forEach(([key, cfg]) => {
+        const turnsElapsed = round == null ? 0 : round - 1;
+        const expired = round != null && round > cfg.duration;
+        const val = expired ? 0 : Math.max(0, cfg.start + cfg.per_turn * turnsElapsed);
+        const label = RELIC_KEY_TO_LABEL[key];
+        const kindLabel = kind === 'mounts' ? 'Active mount' : 'Active artifact';
+        if (label && val) add(label, val, `${item.n} (${kindLabel})`);
+      });
+
+      // decaying_stats_star_tiers — same {min_star, stats} tier-picking
+      // shape as flat_stats_star_tiers/stacking_stats_star_tiers, but
+      // each tier holds a decaying config (start/per_turn/duration)
+      // instead of a flat value or stacking config — for effects whose
+      // decay itself scales at a star threshold (e.g. Don Quixote
+      // Sugar's Ignore Crit Rate starting at +20%/-4% per turn normally,
+      // but +30%/-6% per turn at 5★, same 5-turn duration either way).
+      const pickDecayStarTier = (tiers) => {
+        if (!tiers || !tiers.length) return null;
+        let picked = null;
+        tiers.forEach(tier => {
+          if (s.stars >= tier.min_star && (!picked || tier.min_star > picked.min_star)) picked = tier;
+        });
+        return picked;
+      };
+      const decayStarTier = pickDecayStarTier(item.decaying_stats_star_tiers);
+      if (decayStarTier) {
+        Object.entries(decayStarTier.stats || {}).forEach(([key, cfg]) => {
+          const turnsElapsed = round == null ? 0 : round - 1;
+          const expired = round != null && round > cfg.duration;
+          const val = expired ? 0 : Math.max(0, cfg.start + cfg.per_turn * turnsElapsed);
+          const label = RELIC_KEY_TO_LABEL[key];
+          const kindLabel = kind === 'mounts' ? 'Active mount' : 'Active artifact';
+          if (label && val) add(label, val, `${item.n} (${kindLabel})`, `${item.n}:${s.stars}★`);
+        });
+      }
+
+      // stacking_stats — same shape and math as Relics' own stacking_stats
+      // (per_stack/max_stacks/starts_round, one stack per round from
+      // starts_round onward), and like flat_stats_star_tiers/
+      // decaying_stats above, NOT deploy-gated, since this represents
+      // base_effect text (e.g. Diego's "+5% Combo Rate per turn, up to
+      // 20%" — a flat, always-on stacking effect that works as a Main
+      // mount too, unlike stacking_stats_awaken_tiers below, which
+      // requires being deployed into one of the 3 rotation slots.
+      Object.entries(item.stacking_stats || {}).forEach(([key, cfg]) => {
+        const startsRound = cfg.starts_round ?? CONDITIONAL_ACTIVE_FROM_ROUND;
+        if (round != null && round < startsRound) return;
+        const stacksElapsed = round == null ? cfg.max_stacks : (round - startsRound + 1);
+        const currentStacks = Math.max(0, Math.min(cfg.max_stacks, stacksElapsed));
+        const val = cfg.per_stack * currentStacks;
+        const label = RELIC_KEY_TO_LABEL[key];
+        const kindLabel = kind === 'mounts' ? 'Active mount' : 'Active artifact';
+        if (label && val) add(label, val, `${item.n} (${kindLabel})`, `${item.n}:stacking:${key}`);
+      });
+
+      // stacking_stats_star_tiers — same {min_star, stats} tier-picking
+      // shape as flat_stats_star_tiers, but each tier holds a stacking
+      // config (per_stack/max_stacks) instead of a flat value — for
+      // effects whose PER-STACK VALUE itself changes at a star threshold
+      // (e.g. King Kong's Counter DMG stacking staying capped at 10
+      // stacks the whole time, but going from +10%/stack to +15%/stack
+      // at 5★). Once the right tier is picked, the actual stack buildup
+      // uses the same conservative "1 stack per round from round 1"
+      // assumption as the plain stacking_stats above — the source text
+      // triggers stacks on landing a counterattack, not on a fixed
+      // per-round tick, but counterattack frequency depends on the
+      // Protagonist's own build, not a property of the mount itself, so
+      // this is the same approximation already used for Heaven's Mark.
+      const pickStackStarTier = (tiers) => {
+        if (!tiers || !tiers.length) return null;
+        let picked = null;
+        tiers.forEach(tier => {
+          if (s.stars >= tier.min_star && (!picked || tier.min_star > picked.min_star)) picked = tier;
+        });
+        return picked;
+      };
+      const stackStarTier = pickStackStarTier(item.stacking_stats_star_tiers);
+      if (stackStarTier) {
+        Object.entries(stackStarTier.stats || {}).forEach(([key, cfg]) => {
+          const startsRound = cfg.starts_round ?? CONDITIONAL_ACTIVE_FROM_ROUND;
+          if (round != null && round < startsRound) return;
+          const stacksElapsed = round == null ? cfg.max_stacks : (round - startsRound + 1);
+          const currentStacks = Math.max(0, Math.min(cfg.max_stacks, stacksElapsed));
+          const val = cfg.per_stack * currentStacks;
+          const label = RELIC_KEY_TO_LABEL[key];
+          const kindLabel = kind === 'mounts' ? 'Active mount' : 'Active artifact';
+          // groupKey still keys on stacking:key for per-round matching
+          // (the stack count itself changes per round), with the star
+          // level appended so the description toggle can still resolve
+          // the right star_effects[level] text — same reasoning as
+          // flat_stats_star_tiers's groupKey above.
+          if (label && val) add(label, val, `${item.n} (${kindLabel})`, `${item.n}:stacking:${key}:${s.stars}★`);
+        });
+      }
+
+      // phased_stats_star_tiers — same {min_star, ...} tier-picking shape
+      // as the others, but for effects that swap to a DIFFERENT set of
+      // stats after a turn threshold, rather than scaling one stat up
+      // (e.g. Flyer No. 1: Final DMG Reduction for turns 1-2, then Skill
+      // Crit Rate/Crit DMG from turn 3 onward — 2 entirely different stat
+      // categories, not one stat growing). phase_1_until_round marks the
+      // last turn phase_1_stats applies; every round after that uses
+      // phase_2_stats instead. The ceiling (round === null) view applies
+      // BOTH phases at once — safe to do since they never touch the same
+      // stat, so there's no double-counting risk, and each stat's own
+      // peak value only ever occurs during its own phase anyway.
+      const pickPhaseTier = (tiers) => {
+        if (!tiers || !tiers.length) return null;
+        let picked = null;
+        tiers.forEach(tier => {
+          if (s.stars >= tier.min_star && (!picked || tier.min_star > picked.min_star)) picked = tier;
+        });
+        return picked;
+      };
+      const phaseTier = pickPhaseTier(item.phased_stats_star_tiers);
+      if (phaseTier) {
+        const kindLabel = kind === 'mounts' ? 'Active mount' : 'Active artifact';
+        const applyPhase = (statsBlock) => {
+          Object.entries(statsBlock || {}).forEach(([key, val]) => {
+            const label = RELIC_KEY_TO_LABEL[key];
+            if (label && val) add(label, val, `${item.n} (${kindLabel})`, `${item.n}:${s.stars}★`);
+          });
+        };
+        if (round == null) {
+          applyPhase(phaseTier.phase_1_stats);
+          applyPhase(phaseTier.phase_2_stats);
+        } else if (round <= phaseTier.phase_1_until_round) {
+          applyPhase(phaseTier.phase_1_stats);
+        } else {
+          applyPhase(phaseTier.phase_2_stats);
+        }
+      }
+      } // end if (isMain)
+
+      // flat_stats_awaken_tiers / stacking_stats_awaken_tiers — same idea
+      // as Relics' flat_stats_base/5star/(10★), but shaped as a list of
+      // {min_awaken, stats} thresholds instead of 3 fixed tier names.
+      // Artifacts don't share Relics' clean 0/5/10★ breakpoints — their
+      // awaken_effects upgrade at whichever levels the item's own skill
+      // actually changes (A2/A4/A7/A10 is common but not universal), so
+      // the tier list itself defines its own breakpoints per item rather
+      // than assuming a fixed set. Picks the highest tier whose
+      // min_awaken is at or below the current awaken level.
+      //
+      // Both fields represent the item's AWAKEN skill specifically — and
+      // the awaken skill only ever fires while the item sits in one of
+      // the 3 deploy slots, cycling round-robin (slot 0 fires on turn 1,
+      // 4, 7...; slot 1 on turn 2, 5, 8...; slot 2 on turn 3, 6, 9...).
+      // The separate Main slot never triggers this at all — an item kept
+      // there only ever contributes its star_up/base_effect progression,
+      // confirmed directly. So both tiers are skipped outright unless
+      // this specific item is actually found in one of the 3 rotation
+      // slots right now.
+      const deploySlots = state[slotsKey] || [];
+      const deploySlotIdx = deploySlots.findIndex(slot => slot && slot.itemIdx === item.idx);
+      const isDeployed = deploySlotIdx !== -1;
+
+      const pickAwakenTier = (tiers) => {
+        if (!tiers || !tiers.length) return null;
+        let picked = null;
+        tiers.forEach(tier => {
+          if (s.awaken >= tier.min_awaken && (!picked || tier.min_awaken > picked.min_awaken)) picked = tier;
+        });
+        return picked;
+      };
+
+      if (isDeployed) {
+        const flatTier = pickAwakenTier(item.flat_stats_awaken_tiers);
+        if (flatTier && isRoundInWindow(round, flatTier.active_from, flatTier.active_until)) {
+          // "Deployed" rather than an awaken-level label — this only
+          // ever applies once the item is actually in one of the 3
+          // rotation slots, unlike the star-tier version above, which
+          // applies from base_effect regardless of deployment. Awaken
+          // level moves into groupKey (invisible) so the description
+          // toggle can still show the correct awaken_effects text for
+          // this exact level, same reasoning as the star-tier version.
+          const kindLabel = kind === 'mounts' ? 'Deployed mount' : 'Deployed artifact';
+          Object.entries(flatTier.stats || {}).forEach(([key, val]) => {
+            const label = RELIC_KEY_TO_LABEL[key];
+            if (label && val) add(label, val, `${item.n} (${kindLabel})`, `${item.n}:A${s.awaken}`);
+          });
+        }
+
+        const stackTier = pickAwakenTier(item.stacking_stats_awaken_tiers);
+        if (stackTier) {
+          // The item's own turn is (deploySlotIdx + 1), then every 3rd
+          // turn after that — this comes entirely from which of the 3
+          // slots it's deployed in, not any per-item starts_round value,
+          // since the real trigger cadence is a deployment mechanic, not
+          // an intrinsic item property.
+          const firstTurn = deploySlotIdx + 1;
+          const stackKindLabel = kind === 'mounts' ? 'Deployed mount' : 'Deployed artifact';
+          Object.entries(stackTier.stats || {}).forEach(([key, cfg]) => {
+            if (round != null && round < firstTurn) return;
+            const triggersElapsed = round == null ? cfg.max_stacks : Math.floor((round - firstTurn) / 3) + 1;
+            const currentStacks = Math.max(0, Math.min(cfg.max_stacks, triggersElapsed));
+            const val = cfg.per_stack * currentStacks;
+            const label = RELIC_KEY_TO_LABEL[key];
+            if (label && val) add(label, val, `${item.n} (${stackKindLabel})`, `${item.n}:stacking:${key}:A${s.awaken}`);
+          });
+        }
+
+        // decaying_stats_awaken_tiers — same deploy-slot trigger cadence
+        // as stacking_stats_awaken_tiers above (firstTurn = deploySlotIdx
+        // + 1), but the cadence's own INTERVAL is per-tier rather than a
+        // fixed "every 3rd turn", since some items' proc interval itself
+        // changes at a later awaken level (e.g. Capytti Veyron's [ Rapid
+        // Dash ] firing every 4 turns normally, every 3 turns from A7).
+        // And rather than accumulating stacks, each trigger RESETS the
+        // buff back to its start value, which then decays by per_turn
+        // every turn until either duration is exceeded or the next
+        // trigger resets it again — modeling a mount that (assuming it
+        // doesn't die) perpetually remains on the field and keeps
+        // re-triggering its proc, unlike a one-shot decaying_stats effect
+        // that fires once and never returns. The ceiling (round === null)
+        // view shows the reset/starting value, same reasoning as
+        // decaying_stats — that's the peak this ever reaches.
+        const decayAwakenTier = pickAwakenTier(item.decaying_stats_awaken_tiers);
+        if (decayAwakenTier) {
+          const firstTurn = deploySlotIdx + 1;
+          const interval = decayAwakenTier.interval;
+          const decayKindLabel = kind === 'mounts' ? 'Deployed mount' : 'Deployed artifact';
+          Object.entries(decayAwakenTier.stats || {}).forEach(([key, cfg]) => {
+            let val;
+            if (round == null) {
+              val = cfg.start;
+            } else if (round < firstTurn) {
+              val = 0;
+            } else {
+              const lastTrigger = firstTurn + interval * Math.floor((round - firstTurn) / interval);
+              const turnsSinceTrigger = round - lastTrigger;
+              val = turnsSinceTrigger < cfg.duration ? Math.max(0, cfg.start + cfg.per_turn * turnsSinceTrigger) : 0;
+            }
+            const label = RELIC_KEY_TO_LABEL[key];
+            if (label && val) add(label, val, `${item.n} (${decayKindLabel})`, `${item.n}:A${s.awaken}`);
+          });
+        }
+
+        // pulse_stats_awaken_tiers — same deploy-slot trigger cadence as
+        // stacking_stats_awaken_tiers (firstTurn = deploySlotIdx + 1,
+        // every 3rd turn BY DEFAULT), but for a buff that's temporary
+        // rather than accumulating: active for exactly `duration` turns
+        // starting on each trigger turn, then OFF again until the next
+        // one (e.g. Imperial Dragon-Armor Beast's "5% Final DMG
+        // Reduction for 2 turns" pulsing alongside its own every-3rd-
+        // turn Photon Annihilation cast). cfg.interval is an optional
+        // per-stat override for effects that only trigger every Nth
+        // release of the item's own proc rather than every release (e.g.
+        // Pan Gu Axe's A10 "every 2 releases" global DMG bonus firing
+        // every 6 turns, alongside its base "every release" DMG to
+        // Shields bonus still firing every 3 turns in the same tier) —
+        // defaults to 3 when omitted, matching every prior use of this
+        // mechanism. The ceiling (round === null) view shows the flat
+        // value, since that's the peak this ever reaches — it never
+        // stacks.
+        const pulseTier = pickAwakenTier(item.pulse_stats_awaken_tiers);
+        if (pulseTier) {
+          const firstTurn = deploySlotIdx + 1;
+          const pulseKindLabel = kind === 'mounts' ? 'Deployed mount' : 'Deployed artifact';
+          Object.entries(pulseTier.stats || {}).forEach(([key, cfg]) => {
+            const interval = cfg.interval ?? 3;
+            let active;
+            if (round == null) {
+              active = true;
+            } else if (round < firstTurn) {
+              active = false;
+            } else {
+              const turnsSinceTrigger = (round - firstTurn) % interval;
+              active = turnsSinceTrigger < cfg.duration;
+            }
+            const val = active ? cfg.val : 0;
+            const label = RELIC_KEY_TO_LABEL[key];
+            if (label && val) add(label, val, `${item.n} (${pulseKindLabel})`, `${item.n}:A${s.awaken}`);
+          });
+        }
+
+        // paired_stats_awaken_tiers — for effects that only activate when
+        // a SPECIFIC other named item is also deployed at the same time
+        // (e.g. Imperial Dragon-Armor Beast's awaken text explicitly
+        // referencing being deployed alongside Holy Sword, and vice
+        // versa). requires_paired_name is looked up across both Mounts
+        // and Artifacts, since the pair can span either kind — deployed
+        // status is checked against both state.mountSlots and
+        // state.artifactSlots rather than assuming which kind the named
+        // partner belongs to. Uses the same {min_awaken, stats} tier-
+        // picking shape as the other awaken-tier mechanisms.
+        const pairedTier = pickAwakenTier(item.paired_stats_awaken_tiers);
+        if (pairedTier) {
+          const partnerName = pairedTier.requires_paired_name;
+          const partner = DB.mounts.find(m => m.n === partnerName) || DB.artifacts.find(a => a.n === partnerName);
+          const partnerDeployed = partner && (
+            (state.mountSlots || []).some(slot => slot.itemIdx === partner.idx) ||
+            (state.artifactSlots || []).some(slot => slot.itemIdx === partner.idx)
+          );
+          if (partnerDeployed) {
+            Object.entries(pairedTier.stats || {}).forEach(([key, val]) => {
+              const label = RELIC_KEY_TO_LABEL[key];
+              if (label && val) add(label, val, `${item.n} (A${s.awaken}, paired with ${partnerName})`);
+            });
+          }
+        }
       }
     });
   });
+
+
 
   // Equipment Arcana — cumulative (selecting A4 activates A0-A4 together),
   // using only the "trackable" totals (excludes entries the source data
@@ -4676,6 +5074,13 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
   if (set.tracked === false) return; // game hasn't named the missing relic yet
   const members = set.items.map(name => DB.relics.find(r => r.n === name)).filter(Boolean);
   if (members.length !== set.items.length) return; // at least one member is unreleased
+    // Every member must actually be owned, not just default to a 0★
+    // fallback — both RELIC_TIER_STARS and COLLECTIBLE_TIER_STARS start
+    // at 0, so an unowned member (whose star value is undefined) and an
+    // owned-but-0★ member were indistinguishable here before this check,
+    // both incorrectly satisfying the lowest tier's threshold and
+    // granting the set bonus even when nothing was actually owned.
+    if (!members.every(r => state.relicOwned[r.n])) return;
     const minStar = Math.min(...members.map(r => state.relicStars[r.n] || 0));
     let tierIdx = 0;
     for (let i = RELIC_TIER_STARS.length - 1; i >= 0; i--) {
@@ -4690,6 +5095,8 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
   if (set.tracked === false) return; // game hasn't named the missing item yet
   const members = set.items.map(name => DB.collectibles.find(c => c.n === name)).filter(Boolean);
   if (members.length !== set.items.length) return; // at least one member is unreleased
+    // Same ownership guard as Relic Sets above — see that comment.
+    if (!members.every(c => state.collectibleOwned[c.n])) return;
     const minStar = Math.min(...members.map(c => state.collectibleStars[c.n] || 0));
     let tierIdx = 0;
     for (let i = COLLECTIBLE_TIER_STARS.length - 1; i >= 0; i--) {
@@ -4744,12 +5151,12 @@ const CALC_NON_PERCENT_LABELS = new Set(['Tenacity', 'Tenacity Resistance', 'Arm
 function buildFullCalcTable() {
   const wrap = el('div', {});
   const rounds = [1, 2, 3, 4, 5];
-  // Ceiling view (round=null) drives the stat row's own "Total" and the
-  // full list of sources that exist at all. Each round's own aggregation
-  // is only used to look up what a given source contributes AT that
-  // specific round — a source simply won't appear in a round's result
-  // at all if its conditional window isn't active yet, which is read
-  // back below as 0 for that round rather than as an error.
+  // Ceiling view (round=null) still drives the full list of sources that
+  // exist at all, so the expandable breakdown can show a source even if
+  // it contributes 0 by round 5 specifically. The stat row's own "Total"
+  // now comes from round 5's actual aggregation instead, so it matches
+  // what the round columns underneath actually add up to rather than a
+  // separate, hypothetical best-case number.
   const stats = aggregateFullStatsWithSources();
   const statsByRound = rounds.map(r => aggregateFullStatsWithSources(r));
 
@@ -4811,6 +5218,15 @@ function buildFullCalcTable() {
     const tbody = el('tbody', {});
     cat.labels.forEach(label => {
       const entry = stats[label];
+      // Back to the ceiling total (ignoring round 5 specifically) — the
+      // round-5-only version undersold items whose stacks/tiers genuinely
+      // need more than 5 rounds to reach their stated cap, which was its
+      // own kind of misleading in the other direction. The description
+      // toggle below each source row is the actual fix: it surfaces the
+      // item's own effect text so the person can see *why* the ceiling
+      // and the round-by-round numbers might not match up, rather than
+      // picking one single number that's honest in one direction and
+      // wrong in the other.
       const total = entry ? Math.round(entry.total * 100) / 100 : 0;
       const suffix = CALC_NON_PERCENT_LABELS.has(label) ? '' : '%';
       const hasSources = entry && entry.sources.length > 0;
@@ -4835,10 +5251,86 @@ function buildFullCalcTable() {
             const match = roundEntry && roundEntry.sources.find(rs => rs.groupKey === s.groupKey);
             return match ? match.val : 0;
           });
-          sourceRows.push(el('tr', { class: 'calc-full-table-source-row collapsed' }, [
-            el('td', {}, s.name),
+
+          // Every conditional-mechanism source name is written as
+          // "${item.n} (...)" — pulling the part before " (" and looking
+          // it up across every item DB recovers the actual item without
+          // needing to thread a description through every add() call
+          // site individually. Falls back to null (no toggle rendered)
+          // for sources this doesn't resolve — Set Bonuses and plain
+          // star_up/awaken numeric deltas have no single natural
+          // "description" sentence anyway, so silently skipping them is
+          // correct, not a gap to fill in later.
+          //
+          // Explicitly excludes the "★/A" pattern specifically — that's
+          // sumBlockAtLevel()'s own signature format (e.g. "King Kong
+          // (0★/A0)"), used for the item's flat, unconditional star_up/
+          // awaken stat deltas like Speed. base_effect describes the
+          // item's special conditional skill, which has nothing to do
+          // with a flat Speed bonus — showing it there was actively
+          // misleading, not just unhelpful. Every OTHER mechanism
+          // (flat_stats_star_tiers, stacking_stats, decaying_stats, the
+          // awaken-tier and phased variants) uses a different format and
+          // genuinely does derive from base_effect/awaken_base_effect
+          // text, so those still get the toggle.
+          const isFlatStarAwakenDelta = /★\/A\d+\)$/.test(s.name);
+          const itemName = s.name.split(' (')[0];
+          const sourceItem = isFlatStarAwakenDelta ? null : [DB.mounts, DB.artifacts, DB.relics, DB.collectibles]
+            .flatMap(list => list || [])
+            .find(it => it.n === itemName);
+          // base_effect is always the 0★/A0 text specifically — using it
+          // unconditionally was wrong for anything star- or awaken-tiered
+          // (e.g. Dapper Goose at 5★ showing its 0★ "+10%" wording while
+          // the actual applied number was 20%). Pull the star or awaken
+          // level out of whichever of name/groupKey actually carries it —
+          // most mechanisms still put it in the visible name ("King Kong
+          // (5★, 3 stacks)"), but flat_stats_star_tiers/
+          // flat_stats_awaken_tiers now show a plain "Active mount"/
+          // "Deployed mount" label instead and carry the level in
+          // groupKey (invisible) instead — and use star_effects/
+          // resolveAwakenEffect for that specific level, so the
+          // description always matches the number actually shown.
+          let description = null;
+          if (sourceItem) {
+            const searchText = `${s.name} ${s.groupKey}`;
+            const starMatch = searchText.match(/(\d+)★/);
+            const awakenMatch = searchText.match(/A(\d+)/);
+            if (starMatch && sourceItem.star_effects && sourceItem.star_effects[starMatch[1]]) {
+              description = sourceItem.star_effects[starMatch[1]];
+            } else if (awakenMatch) {
+              const resolved = resolveAwakenEffect(sourceItem, Number(awakenMatch[1]));
+              description = resolved ? resolved.text : sourceItem.base_effect;
+            } else {
+              description = sourceItem.base_effect;
+            }
+          }
+
+          const nameCell = el('td', {}, [s.name]);
+          let descRow = null;
+          if (description) {
+            const toggle = el('span', { class: 'calc-source-desc-toggle' }, ' ⓘ');
+            descRow = el('tr', { class: 'calc-full-table-desc-row collapsed calc-row-hidden' }, [
+              el('td', { colspan: String(rounds.length + 1), class: 'calc-full-table-desc-text' }, description),
+            ]);
+            toggle.addEventListener('click', (e) => {
+              e.stopPropagation();
+              descRow.classList.toggle('calc-row-hidden');
+            });
+            nameCell.appendChild(toggle);
+          }
+
+          sourceRows.push(el('tr', {
+            // The "has-desc" class drops this row's own border-bottom
+            // when it's immediately followed by its description row, so
+            // the 2 read as one continuous unit rather than the number
+            // row being visually closed off before the description
+            // starts underneath it.
+            class: 'calc-full-table-source-row collapsed' + (descRow ? ' has-desc' : ''),
+          }, [
+            nameCell,
             ...roundVals.map(v => el('td', { class: 'calc-full-table-total' }, `${Math.round(v * 100) / 100}`)),
           ]));
+          if (descRow) sourceRows.push(descRow);
         });
       } else {
         emptyRow = el('tr', { class: 'calc-full-table-source-row collapsed' }, [

@@ -42,6 +42,7 @@
   --tier-uncommon-text: #8DB15C;
   --tier-immortal-text: #CF84A9;
   --tier-transcendent-text: #B797DE;
+  --skill-tag-text: #5FD9CB;
 
   --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif;
@@ -73,6 +74,7 @@
   --tier-uncommon-text: #376000;
   --tier-immortal-text: #902E5F;
   --tier-transcendent-text: #65458B;
+  --skill-tag-text: #0F7A6E;
 }
 
 html { scroll-behavior: smooth; }
@@ -508,7 +510,7 @@ textarea::placeholder {
   background: var(--bg-card);
   border: 1px solid var(--hairline);
   border-radius: 4px;
-  padding: 16px;
+  padding: 12px;
   position: relative;
   min-width: 0; /* prevents a grid item's own content (long chip rows,
                    stepper controls, etc) from forcing it wider than its
@@ -612,6 +614,19 @@ textarea::placeholder {
   font-weight: 400;
   line-height: 1;
 }
+.key-awaken-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  margin-right: 6px;
+  border-radius: 9px;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.4;
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  color: var(--accent);
+  vertical-align: middle;
+}
 .rarity-tag.tag-Rare { background: color-mix(in srgb, var(--rarity-rare) 10%, transparent); color: var(--rarity-rare-text); }
 .rarity-tag.tag-Epic { background: color-mix(in srgb, var(--rarity-epic) 10%, transparent); color: var(--rarity-epic-text); }
 .rarity-tag.tag-Legendary { background: color-mix(in srgb, var(--rarity-legendary) 10%, transparent); color: var(--rarity-legendary-text); }
@@ -623,17 +638,29 @@ textarea::placeholder {
   font-size: 12px;
   color: var(--text-secondary);
   line-height: 1.5;
+  margin-top: 8px;
+  margin-bottom: 10px;
 }
 .item-effect.placeholder { font-style: italic; color: var(--text-tertiary); }
 
 .stat-value-live { color: var(--accent); font-weight: 600; }
 
-.skill-tag { white-space: nowrap; display: inline; }
+/* Dedicated color, not borrowed from any rarity/tier — chosen specifically
+   so a skill-tag can never coincidentally match an item's own rarity tag
+   color (unlike reusing --rarity-epic or --rarity-rare, which would look
+   identical to that item's own tag whenever it happens to be that
+   rarity). Text color only, no background pill. */
+.skill-tag {
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--skill-tag-text);
+}
 
 .stepper {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: 10px;
 }
 .stepper button {
   width: 32px; height: 32px;
@@ -785,8 +812,6 @@ textarea::placeholder {
 }
 .set-tier-pip2 .pip-star { display: block; font-size: 11.5px; color: var(--text-secondary); font-family: var(--font-mono); }
 .set-tier-pip2 .pip-val { display: block; font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
-.set-tier-pip2.reached { background: rgba(46,201,192,0.15); }
-.set-tier-pip2.reached .pip-star, .set-tier-pip2.reached .pip-val { color: var(--accent); }
 .set-tier-pip2.active { background: var(--accent); }
 .set-tier-pip2.active .pip-star, .set-tier-pip2.active .pip-val { color: var(--bg-deep); font-weight: 700; }
 
@@ -848,11 +873,11 @@ textarea::placeholder {
 .item-card { position: relative; }
 .select-checkbox {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 24px;
-  height: 24px;
-  border-radius: 4px;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
   border: 1px solid var(--accent);
   background: var(--bg-panel-2);
   color: var(--bg-deep);
@@ -1513,7 +1538,7 @@ textarea::placeholder {
 .calc-full-table thead th:first-child { text-align: left; width: 40%; }
 .calc-full-table td:not(:first-child) { width: 12%; }
 .calc-full-table td {
-  padding: 6px 10px;
+  padding: 4px 22px;
   border-bottom: 1px solid var(--hairline);
   color: var(--text-secondary);
   vertical-align: top;
@@ -1533,14 +1558,35 @@ textarea::placeholder {
   display: inline-block;
   color: var(--text-tertiary);
   font-size: 10px;
-  margin-right: 6px;
+  margin-right: 4px;
   transition: transform 0.15s ease;
   transform: rotate(-90deg);
 }
 .calc-full-table-chevron.expanded { transform: rotate(0deg); }
 .calc-full-table-source-row td:first-child { padding-left: 22px; color: var(--text-tertiary); font-size: 11.5px; }
 .calc-full-table-source-row.collapsed { display: none; }
+.calc-full-table-source-row.has-desc td { border-bottom: none; }
 .calc-full-table-total { font-family: var(--font-mono); text-align: right; white-space: nowrap; }
+
+/* Per-source description toggle in the Full Stat Breakdown table — shows
+   the item's own effect text so a ceiling total that a 5-round window
+   can't fully reach (e.g. a 10-stack cap) is explained, rather than
+   silently picking one number that's honest in one direction only. */
+.calc-source-desc-toggle {
+  cursor: pointer;
+  opacity: 0.6;
+  margin-left: 4px;
+}
+.calc-source-desc-toggle:hover { opacity: 1; color: var(--accent); }
+.calc-full-table-desc-row.collapsed { display: none; }
+.calc-full-table-desc-text {
+  padding: 4px 12px 10px 22px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--text-tertiary);
+  font-style: italic;
+  white-space: normal;
+}
 
 .calc-stat-grid {
   display: grid;
@@ -1599,6 +1645,13 @@ textarea::placeholder {
   grid-template-columns: repeat(2, 1fr);
   gap: 30px;
   margin-bottom: 30px;
+  /* Grid items default to stretch — without this, every card in a row
+     is forced to match the height of its tallest sibling (e.g. the
+     Weapon card growing tall once Psionic Attributes/Gems sections
+     expand), which in turn stretches any position:absolute-relative
+     child (.search-combo) far past where its actual input sits,
+     misplacing its dropdown by however much taller the sibling grew. */
+  align-items: start;
 }
 .equip-grid-single { grid-template-columns: 1fr; }
 @media (max-width: 844px) {
@@ -1697,13 +1750,14 @@ textarea::placeholder {
 .equip-combo-input {
   flex: 1;
   min-width: 0;
+  height: 35px;
   background: var(--bg-panel-2);
   border: 1px solid var(--hairline);
   border-radius: 5px;
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 13.5px;
-  padding: 10px 12px;
+  padding: 0 12px;
 }
 .equip-combo-input:focus { outline: none; border-color: var(--accent); }
 
