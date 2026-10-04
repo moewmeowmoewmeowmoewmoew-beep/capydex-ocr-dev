@@ -713,20 +713,23 @@ function renderArcanaSection() {
   wrap.appendChild(groupsWrap);
 
   // Two fixed top-level sections (Equipment, Pets) rather than tier-only
-  // groups, matching the sidebar's own sub-nav slugs (arcana-equipment /
-  // arcana-pets) — tier grouping still happens WITHIN each section, same
-  // as the rest of the app's collection pages, just nested one level in.
+  // groups. Slugs here are bare ('equipment' / 'pets') because the sidebar
+  // itself prefixes them with the section id ('arcana-') when building the
+  // sub-nav anchor href — matching every other COLLECTION_SECTIONS entry's
+  // sub() convention (see renderSectionShell). Tier grouping still happens
+  // WITHIN each section, same as the rest of the app's collection pages,
+  // just nested one level in.
   const renderGroups = () => {
     groupsWrap.innerHTML = '';
     const q = search.value.trim().toLowerCase();
     const allItems = getAllArcanaItems().filter(e => !q || e.name.toLowerCase().includes(q));
 
     [
-      { kind: 'equipment', label: 'Equipment', slug: 'arcana-equipment' },
-      { kind: 'pet', label: 'Pets', slug: 'arcana-pets' },
+      { kind: 'equipment', label: 'Equipment', slug: 'equipment' },
+      { kind: 'pet', label: 'Pets', slug: 'pets' },
     ].forEach(section => {
       const items = allItems.filter(e => e.kind === section.kind);
-      groupsWrap.appendChild(el('div', { class: 'tier-group-title', id: section.slug }, section.label));
+      groupsWrap.appendChild(el('div', { class: 'tier-group-title', id: `arcana-${section.slug}` }, section.label));
       if (!items.length) {
         groupsWrap.appendChild(el('p', { class: 'section-desc' }, 'No matching items.'));
         return;
@@ -749,7 +752,7 @@ function renderArcanaSection() {
 const COLLECTION_SECTIONS = [
   { id: 'collectibles', label: 'Collectibles', build: renderCollectibles, sub: () => [...buildTierGroups(DB.collectibles, 'rarity'), { tier: 'Sets', slug: 'sets' }], clearAll: () => clearAllCollectibles() },
   { id: 'relics', label: 'Relics', build: renderRelics, sub: () => [...buildTierGroups(DB.relics, 'rarity'), { tier: 'Sets', slug: 'sets' }], clearAll: () => clearAllRelics() },
-  { id: 'arcana', label: 'Arcana', build: renderArcanaSection, sub: () => [{ tier: 'Equipment', slug: 'arcana-equipment' }, { tier: 'Pets', slug: 'arcana-pets' }], clearAll: () => { state.arcana = {}; saveState(); render(); } },
+  { id: 'arcana', label: 'Arcana', build: renderArcanaSection, sub: () => [{ tier: 'Equipment', slug: 'equipment' }, { tier: 'Pets', slug: 'pets' }], clearAll: () => { state.arcana = {}; saveState(); render(); } },
   { id: 'mounts', label: 'Mounts', build: () => renderMountsOrArtifacts('mounts'), sub: () => buildTierGroups(DB.mounts.filter(x => x.n !== 'None')), clearAll: () => clearAllMountsOrArtifacts('mounts') },
   { id: 'artifacts', label: 'Artifacts', build: () => renderMountsOrArtifacts('artifacts'), sub: () => buildTierGroups(DB.artifacts.filter(x => x.n !== 'None')), clearAll: () => clearAllMountsOrArtifacts('artifacts') },
   { id: 'fashion', label: 'Fashion Level', build: buildFashionSectionContent, clearAll: () => { state.fashionLevel = 0; saveState(); render(); } },
