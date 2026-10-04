@@ -4633,7 +4633,7 @@ const PSIONIC_NAME_TO_LABEL = {
 // a few use "X Rate" where the category drops "Rate", or "Boost"/"Final"
 // wording that doesn't line up character-for-character.
 const SET_STAT_TO_LABEL = {
-  'Final DMG Boost': 'General Final Damage', 'Final DMG Reduction': 'General Final Damage Reduction',
+  'Final DMG Boost': 'General Final Damage', 'Final Damage Boost': 'General Final Damage', 'Final DMG Reduction': 'General Final Damage Reduction',
   'Ignore Combo Rate': 'Ignore Combo', 'Ignore Counter Rate': 'Ignore Counter',
   'Ignore Skill Crit Rate': 'Ignore Skill Crit', 'Ignore Normal Attack Crit Rate': 'Ignore Normal ATK Crit',
 };

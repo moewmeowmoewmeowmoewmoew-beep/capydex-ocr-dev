@@ -7325,6 +7325,70 @@
         "dagger_crit_rate": 10
       },
       "deploy_type": "totem"
+    },
+    {
+      "id": "1376024",
+      "n": "Skythunder Vajra Pestle",
+      "type": "",
+      "effect": "After accumulating 5 Lightning CRITs, Protagonist Final Lightning DMG +10% and Lightning CRIT Rate +5% until the battle ends",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Mythic",
+      "star_stats": {
+        "final_skill_dmg": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11.5,
+          13,
+          14.5,
+          16,
+          17.5
+        ],
+        "armor_break": [
+          1000,
+          1200,
+          1400,
+          1600,
+          1800,
+          2000,
+          2300,
+          2600,
+          2900,
+          3200,
+          3500
+        ],
+        "atk": [
+          20000,
+          24000,
+          28000,
+          32000,
+          36000,
+          40000,
+          46000,
+          52000,
+          58000,
+          64000,
+          70000
+        ]
+      },
+      "effect_base": "Upon a Lightning CRIT, Protagonist Final Lightning DMG +5% for 1 round",
+      "flat_stats_base": {
+        "final_lightning_dmg": 5
+      },
+      "effect_5star": "After accumulating 3 Lightning CRITs, Protagonist Final Lightning DMG +5% and Lightning CRIT Rate +5% until the battle ends",
+      "flat_stats_5star": {
+        "final_lightning_dmg": 5,
+        "lightning_crit_rate": 5
+      },
+      "flat_stats": {
+        "final_lightning_dmg": 10,
+        "lightning_crit_rate": 5
+      },
+      "deploy_type": "totem"
     }
   ],
   "relic_sets": {
@@ -7857,7 +7921,7 @@
       },
       {
         "set": "Pact of Rock and Blazing Sun",
-        "stat": "Final Damage Boost",
+        "stat": "Final DMG Boost",
         "vals": [
           3.0,
           3.0,
@@ -7871,6 +7935,23 @@
           "Sekhmet's Aegis"
         ],
         "tracked": false
+      },
+      {
+        "set": "Vajra Wrath Lightning",
+        "stat": "Final DMG Boost",
+        "vals": [
+          3.0,
+          3.0,
+          4.0,
+          4.0,
+          5.0,
+          5.0
+        ],
+        "items": [
+          "Skythunder Vajra Pestle",
+          "Twin-Eared Dagger"
+        ],
+        "tracked": true
       }
     ]
   }
