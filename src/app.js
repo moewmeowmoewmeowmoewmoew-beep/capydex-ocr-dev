@@ -696,7 +696,7 @@ function renderArcanaCard(entry) {
 
   if (currentLevel != null) {
     card.appendChild(el('div', { class: 'section-desc', style: 'margin-top:8px;font-style:italic;' },
-      'Applies automatically whenever this is equipped — the Equipment/Pet page no longer needs its own Arcana picker for this item.'));
+      'Applies automatically when the equipment/pet is set as equipped in the Equipment tab.'));
   }
   return card;
 }
@@ -2973,7 +2973,7 @@ function openPsionicInfoModal() {
   openTutorialModal(
     'Reading Psionic Attributes',
     'Tap on the equipment and ensure that all the stats are in view before taking a screenshot.',
-    'assets/images/psionic-tutorial.webp',
+    'assets/tutorial/psionic-tutorial.webp',
     'Upload the image into their corresponding equipment type.'
   );
 }
@@ -2982,7 +2982,7 @@ function openPetSkillInfoModal() {
   openTutorialModal(
     'Reading Pet Skills',
     'Tap on your pet and ensure that you are viewing your "Original Stats".',
-    'assets/images/pet-original-tutorial.webp',
+    'assets/tutorial/pet-original-tutorial.webp',
     'Upload the image into their corresponding pet type.'
   );
 }

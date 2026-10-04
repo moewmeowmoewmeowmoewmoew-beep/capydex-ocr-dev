@@ -7,15 +7,15 @@
       "linked_kind": "weapons",
       "tier": "SS",
       "arcana_descs": [
-        "Breath of Airolein DMG coefficient +30% (not tracked)",
-        "Blood Shadow•Ailoren Sword ATK +6% (not tracked)",
-        "Blood Shadow•Ailoren Sword basic ATK damage coefficient +10% (not tracked)",
-        "Blood Shadow•Ailoren Sword ATK +8% (not tracked)",
+        "Breath of Airolein DMG coefficient +30%",
+        "Blood Shadow•Ailoren Sword ATK +6%",
+        "Blood Shadow•Ailoren Sword basic ATK damage coefficient +10%",
+        "Blood Shadow•Ailoren Sword ATK +8%",
         "Blood Shadow•Ailoren Sword Combo Rate +6%",
         "Rage skill adds 2 Ailoren's Breath",
-        "Blood Shadow•Ailoren Sword ATK +10% (not tracked)",
+        "Blood Shadow•Ailoren Sword ATK +10%",
         "When equipped with Blood Shadow•Ailoren Sword, global Sword Qi DMG +15%",
-        "Blood Shadow•Ailoren Sword ATK +15% (not tracked)",
+        "Blood Shadow•Ailoren Sword ATK +15%",
         "When equipped with Blood Shadow•Ailoren Sword, global Sword Qi DMG +20%",
         "Blood Shadow•Ailoren Sword Transcendent skill deals additional true DMG equal to 5% of the target's current HP and 5% Sword Qi DMG, up to 9 times the Protagonist's ATK."
       ],
@@ -37,16 +37,16 @@
       "tier": "SS",
       "arcana_descs": [
         "Lightning DMG coefficient +6%",
-        "Nashir Scepter ATK +6% (not tracked)",
-        "Electric Shield value +10% (not tracked)",
-        "Nashir Scepter ATK +8% (not tracked)",
+        "Nashir Scepter ATK +6%",
+        "Electric Shield value +10%",
+        "Nashir Scepter ATK +8%",
         "Skill DMG +20%",
-        "Divine Thunder stack count +3 per cast (not tracked)",
-        "Nashir Scepter ATK +10% (not tracked)",
+        "Divine Thunder stack count +3 per cast",
+        "Nashir Scepter ATK +10%",
         "Global Lightning DMG +15%",
-        "Nashir Scepter ATK +15% (not tracked)",
+        "Nashir Scepter ATK +15%",
         "Global Lightning DMG +20%",
-        "70% chance lightning becomes Nashir Divine Thunder (not tracked)"
+        "70% chance lightning becomes Nashir Divine Thunder"
       ],
       "quality_contributions": [
         {
@@ -76,16 +76,16 @@
       "tier": "SS",
       "arcana_descs": [
         "Rage DMG coefficient +30%",
-        "Gale Elres ATK +6% (not tracked)",
+        "Gale Elres ATK +6%",
         "Basic ATK damage coefficient +10%",
-        "Gale Elres ATK +8% (not tracked)",
+        "Gale Elres ATK +8%",
         "Weapon Crit Rate +6%",
         "Dagger Crit Rate +12%",
-        "Gale Elres ATK +10% (not tracked)",
+        "Gale Elres ATK +10%",
         "Global Dagger DMG +15%",
-        "Gale Elres ATK +15% (not tracked)",
+        "Gale Elres ATK +15%",
         "Global Dagger DMG +20%",
-        "Dagger Crit Rate +20%, Crit DMG +40% (Crit DMG not tracked)"
+        "Dagger Crit Rate +20%, Crit DMG +40%"
       ],
       "quality_contributions": [
         {
@@ -118,16 +118,16 @@
       "tier": "SS",
       "arcana_descs": [
         "Rage DMG coefficient +30%",
-        "Helos Warblade ATK +6% (not tracked)",
+        "Helos Warblade ATK +6%",
         "Basic ATK damage coefficient +10%",
-        "Helos Warblade ATK +8% (not tracked)",
+        "Helos Warblade ATK +8%",
         "Combo Rate +6%",
         "Basic ATK Crit Rate +30%",
-        "Helos Warblade ATK +10% (not tracked)",
+        "Helos Warblade ATK +10%",
         "Global Combo DMG +15%",
-        "Helos Warblade ATK +15% (not tracked)",
+        "Helos Warblade ATK +15%",
         "Global Combo DMG +20%",
-        "Combo Rate +12%, Basic ATK Crit +12%, Crit DMG +60% (not tracked)"
+        "Combo Rate +12%, Basic ATK Crit +12%, Crit DMG +60%"
       ],
       "quality_contributions": [
         {
@@ -147,16 +147,16 @@
       "tier": "SS",
       "arcana_descs": [
         "Rage DMG coefficient +30%",
-        "ATK +6% (not tracked)",
+        "ATK +6%",
         "Angel Dagger damage coefficient +8%",
-        "ATK +8% (not tracked)",
+        "ATK +8%",
         "Dagger DMG +20%",
         "Dagger Crit Rate +12%",
-        "ATK +10% (not tracked)",
+        "ATK +10%",
         "Global Dagger DMG +15%",
-        "ATK +15% (not tracked)",
+        "ATK +15%",
         "Global Dagger DMG +20%",
-        "Dagger Crit Rate +30%, Angel Dagger Coefficient +30% (Coefficient not tracked)"
+        "Dagger Crit Rate +30%, Angel Dagger Coefficient +30%"
       ],
       "quality_contributions": [
         {
@@ -185,16 +185,16 @@
       "tier": "SS",
       "arcana_descs": [
         "Rage DMG coefficient +30%",
-        "Thorn-Seles ATK +6% (not tracked)",
+        "Thorn-Seles ATK +6%",
         "Basic ATK damage coefficient +10%",
-        "Thorn-Seles ATK +8% (not tracked)",
+        "Thorn-Seles ATK +8%",
         "Counter Rate +6%",
-        "When countering, gain 6% shield (not tracked)",
-        "Thorn-Seles ATK +10% (not tracked)",
+        "When countering, gain 6% shield",
+        "Thorn-Seles ATK +10%",
         "Global Counter DMG +15%",
-        "Thorn-Seles ATK +15% (not tracked)",
+        "Thorn-Seles ATK +15%",
         "Global Counter DMG +20%",
-        "Thorn shield damage +3% per counter (not tracked)"
+        "Thorn shield damage +3% per counter"
       ],
       "quality_contributions": [
         {
@@ -286,17 +286,17 @@
       "linked_kind": "weapons",
       "tier": "S",
       "arcana_descs": [
-        "Blade of Justice rage skill DMG coefficient +30% (not tracked: rage skill)",
-        "ATK +6% (not tracked)",
+        "Blade of Justice rage skill DMG coefficient +30%",
+        "ATK +6%",
         "Basic ATK DMG coefficient +10%",
-        "ATK +6% (not tracked)",
+        "ATK +6%",
         "Combo Rate +5%",
         "Additional Basic Attack Critical Rate +25% for judgment targets when equipped with Legendary Judgment Blade",
-        "ATK +8% (not tracked)",
+        "ATK +8%",
         "Global Combo DMG +10%",
-        "ATK +10% (not tracked)",
+        "ATK +10%",
         "Global Combo DMG +15%",
-        "Combo Rate +10%, Basic ATK Crit Rate +10%, +50% Crit DMG (Crit DMG not tracked)"
+        "Combo Rate +10%, Basic ATK Crit Rate +10%, +50% Crit DMG"
       ],
       "quality_contributions": [
         {
@@ -316,17 +316,17 @@
       "linked_kind": "weapons",
       "tier": "S",
       "arcana_descs": [
-        "Durian Hammer rage skill DMG coefficient +30% (not tracked: rage skill)",
-        "ATK +6% (not tracked)",
+        "Durian Hammer rage skill DMG coefficient +30%",
+        "ATK +6%",
         "Basic ATK DMG coefficient +10%",
-        "ATK +6% (not tracked)",
+        "ATK +6%",
         "Counter Rate +5%",
-        "Counter adds an extra 5% shield (not tracked: shield)",
-        "ATK +8% (not tracked)",
+        "Counter adds an extra 5% shield",
+        "ATK +8%",
         "Global Counter DMG +10%",
-        "ATK +10% (not tracked)",
+        "ATK +10%",
         "Global Counter DMG +15%",
-        "Durian Hammer shield reflects +150% of ATK (not tracked: shield reflect)"
+        "Durian Hammer shield reflects +150% of ATK"
       ],
       "quality_contributions": [
         {
@@ -346,15 +346,15 @@
       "linked_kind": "weapons",
       "tier": "S",
       "arcana_descs": [
-        "Mushroom Hammer rage skill DMG coefficient +30% (not tracked: rage skill)",
-        "ATK +6% (not tracked)",
+        "Mushroom Hammer rage skill DMG coefficient +30%",
+        "ATK +6%",
         "Basic ATK DMG coefficient +10%",
-        "ATK +6% (not tracked)",
+        "ATK +6%",
         "Counter Rate +5%",
-        "Counter deals an extra 5% of max HP as DMG (not tracked: % HP DMG)",
-        "ATK +8% (not tracked)",
+        "Counter deals an extra 5% of max HP as DMG",
+        "ATK +8%",
         "Global Counter DMG +10%",
-        "ATK +10% (not tracked)",
+        "ATK +10%",
         "Global Counter DMG +15%",
         "Extra 15% global DMG reduction with shield"
       ],
@@ -377,16 +377,16 @@
       "tier": "S",
       "arcana_descs": [
         "Lightning DMG coefficient +6%",
-        "ATK +6% (not tracked)",
+        "ATK +6%",
         "Death Lightning DMG coefficient +8%",
-        "ATK +6% (not tracked)",
+        "ATK +6%",
         "Skill DMG +15%",
-        "Death Lightning stack cap +3 (not tracked)",
-        "ATK +8% (not tracked)",
+        "Death Lightning stack cap +3",
+        "ATK +8%",
         "Global Lightning DMG +10%",
-        "ATK +10% (not tracked)",
+        "ATK +10%",
         "Global Lightning DMG +15%",
-        "Probability of lightning becoming Death Lightning increased (not tracked)"
+        "Probability of lightning becoming Death Lightning increased"
       ],
       "quality_contributions": [
         {
@@ -407,17 +407,17 @@
       "linked_kind": "weapons",
       "tier": "S",
       "arcana_descs": [
-        "Poison chance increased to 100% (not tracked: proc)",
-        "ATK +6% (not tracked)",
+        "Poison chance increased to 100%",
+        "ATK +6%",
         "Basic ATK DMG coefficient +10%",
-        "ATK +6% (not tracked)",
+        "ATK +6%",
         "Counter Rate +5%",
-        "25% lifesteal vs poisoned targets (not tracked: lifesteal/conditional)",
-        "ATK +8% (not tracked)",
+        "25% lifesteal vs poisoned targets",
+        "ATK +8%",
         "Global Poison DMG +10%",
-        "ATK +10% (not tracked)",
+        "ATK +10%",
         "Global Poison DMG +15%",
-        "Poison DMG +40%, max poison stacks +6 (DMG +40% not tracked: applies to existing poison DOT separately; stack cap not tracked)"
+        "Poison DMG +40%, max poison stacks +6"
       ],
       "quality_contributions": [
         {
@@ -437,17 +437,17 @@
       "linked_kind": "weapons",
       "tier": "S",
       "arcana_descs": [
-        "Skysplitter rage skill DMG coefficient +30% (not tracked: rage skill)",
-        "ATK +6% (not tracked)",
+        "Skysplitter rage skill DMG coefficient +30%",
+        "ATK +6%",
         "Basic ATK DMG coefficient +10%",
-        "ATK +6% (not tracked)",
+        "ATK +6%",
         "Combo Rate +5%",
-        "Chance for Sword Qi to become Super Sword Qi (not tracked: proc)",
-        "ATK +8% (not tracked)",
+        "Chance for Sword Qi to become Super Sword Qi",
+        "ATK +8%",
         "Global Sword Qi DMG +10%",
-        "ATK +10% (not tracked)",
+        "ATK +10%",
         "Global Sword Qi DMG +15%",
-        "Sword Qi deals true DMG = 7% of target's current HP, capped at 11× ATK (not tracked: % HP)"
+        "Sword Qi deals true DMG = 7% of target's current HP, capped at 11× ATK"
       ],
       "quality_contributions": [
         {
@@ -548,17 +548,17 @@
       "linked_kind": "armors",
       "tier": "SS",
       "arcana_descs": [
-        "Recover +10% health every 2 turns (not tracked)",
-        "HP +6% (not tracked)",
-        "Damage Reduction +10% (not tracked)",
-        "HP +6% (not tracked)",
+        "Recover +10% health every 2 turns",
+        "HP +6%",
+        "Damage Reduction +10%",
+        "HP +6%",
         "Ignore Crit Rate +5%",
         "Final Damage Reduction +10%",
-        "HP +8% (not tracked)",
-        "HP Recovery effect +10% (not tracked)",
-        "HP +10% (not tracked)",
-        "HP Recovery effect +15% (not tracked)",
-        "100% overflow healing converts to shield (not tracked)"
+        "HP +8%",
+        "HP Recovery effect +10%",
+        "HP +10%",
+        "HP Recovery effect +15%",
+        "100% overflow healing converts to shield"
       ],
       "quality_contributions": [
         {
@@ -580,17 +580,17 @@
       "linked_kind": "armors",
       "tier": "SS",
       "arcana_descs": [
-        "Resurrection HP bonus +10% (not tracked)",
-        "HP +6% (not tracked)",
-        "Damage Reduction +5% (not tracked)",
-        "HP +6% (not tracked)",
+        "Resurrection HP bonus +10%",
+        "HP +6%",
+        "Damage Reduction +5%",
+        "HP +6%",
         "Ignore Crit Rate +5%",
-        "Gain shield equal to 35% HP after resurrection (not tracked)",
-        "HP +8% (not tracked)",
-        "Global HP +10% (not tracked)",
-        "HP +10% (not tracked)",
-        "Global HP +15% (not tracked)",
-        "Resurrection count +1 (not tracked)"
+        "Gain shield equal to 35% HP after resurrection",
+        "HP +8%",
+        "Global HP +10%",
+        "HP +10%",
+        "Global HP +15%",
+        "Resurrection count +1"
       ],
       "quality_contributions": [
         {
@@ -628,17 +628,17 @@
       "linked_kind": "armors",
       "tier": "S",
       "arcana_descs": [
-        "Recover +10% health every 2 turns (not tracked)",
-        "HP +6% (not tracked)",
-        "Damage Reduction +10% (not tracked)",
-        "HP +6% (not tracked)",
+        "Recover +10% health every 2 turns",
+        "HP +6%",
+        "Damage Reduction +10%",
+        "HP +6%",
         "Ignore Crit Rate +5%",
-        "Gain additional 5% shield per round (not tracked)",
-        "HP +8% (not tracked)",
-        "HP Recovery effect +10% (not tracked)",
-        "HP +10% (not tracked)",
-        "HP Recovery effect +15% (not tracked)",
-        "Gain 5% ATK and DEF after healing, stacking up to 10 times (not tracked)"
+        "Gain additional 5% shield per round",
+        "HP +8%",
+        "HP Recovery effect +10%",
+        "HP +10%",
+        "HP Recovery effect +15%",
+        "Gain 5% ATK and DEF after healing, stacking up to 10 times"
       ],
       "stacking_stats": {
         "min_arcana": 10,
@@ -661,17 +661,17 @@
       "linked_kind": "armors",
       "tier": "S",
       "arcana_descs": [
-        "Resurrection HP bonus +10% (not tracked)",
-        "HP +6% (not tracked)",
-        "Damage Reduction +5% (not tracked)",
-        "HP +6% (not tracked)",
+        "Resurrection HP bonus +10%",
+        "HP +6%",
+        "Damage Reduction +5%",
+        "HP +6%",
         "Ignore Crit Rate +5%",
-        "Gain shield equal to 25% HP after resurrection (not tracked)",
-        "HP +8% (not tracked)",
-        "Global HP +10% (not tracked)",
-        "HP +10% (not tracked)",
-        "Global HP +15% (not tracked)",
-        "Resurrection count +1 (not tracked)"
+        "Gain shield equal to 25% HP after resurrection",
+        "HP +8%",
+        "Global HP +10%",
+        "HP +10%",
+        "Global HP +15%",
+        "Resurrection count +1"
       ]
     },
     {
@@ -681,17 +681,17 @@
       "linked_kind": "rings",
       "tier": "SS",
       "arcana_descs": [
-        "Max stack of Final Counterattack bonus +2 after Light Spear (not tracked)",
-        "ATK +6%, DEF +6% (not tracked)",
-        "Global ATK +5% (not tracked)",
-        "ATK +8%, DEF +8% (not tracked)",
+        "Max stack of Final Counterattack bonus +2 after Light Spear",
+        "ATK +6%, DEF +6%",
+        "Global ATK +5%",
+        "ATK +8%, DEF +8%",
         "Global Counter DMG +6%",
         "Conditional Final Damage Reduction +10%",
-        "ATK +10%, DEF +10% (not tracked)",
+        "ATK +10%, DEF +10%",
         "Global Counter DMG +9%",
-        "ATK +15%, DEF +15% (not tracked)",
+        "ATK +15%, DEF +15%",
         "Global Counter DMG +12%",
-        "Shield +10% max HP, each Forbidden Spear hit increases hero ability (not tracked)"
+        "Shield +10% max HP, each Forbidden Spear hit increases hero ability"
       ],
       "quality_contributions": [
         {
@@ -739,16 +739,16 @@
       "tier": "SS",
       "arcana_descs": [
         "Combo Rate +5%",
-        "ATK +6%, DEF +6% (not tracked)",
-        "Global ATK +5% (not tracked)",
-        "ATK +8%, DEF +8% (not tracked)",
+        "ATK +6%, DEF +6%",
+        "Global ATK +5%",
+        "ATK +8%, DEF +8%",
         "Global Combo DMG +6%",
         "Basic ATK Crit Rate +15%",
-        "ATK +10%, DEF +10% (not tracked)",
+        "ATK +10%, DEF +10%",
         "Global Combo DMG +9%",
-        "ATK +15%, DEF +15% (not tracked)",
+        "ATK +15%, DEF +15%",
         "Global Combo DMG +12%",
-        "Final Basic ATK DMG +20%, Smash coefficient +100% (coefficient not tracked)"
+        "Final Basic ATK DMG +20%, Smash coefficient +100%"
       ],
       "quality_contributions": [
         {
@@ -792,17 +792,17 @@
       "linked_kind": "rings",
       "tier": "SS",
       "arcana_descs": [
-        "Heavenly Punishment cooldown -1 turn (not tracked)",
-        "ATK +6%, DEF +6% (not tracked)",
-        "Global ATK +5% (not tracked)",
-        "ATK +8%, DEF +8% (not tracked)",
-        "Global Basic ATK DMG Reduction +6% (not tracked)",
+        "Heavenly Punishment cooldown -1 turn",
+        "ATK +6%, DEF +6%",
+        "Global ATK +5%",
+        "ATK +8%, DEF +8%",
+        "Global Basic ATK DMG Reduction +6%",
         "Basic ATK Crit Rate +18%",
-        "ATK +10%, DEF +10% (not tracked)",
+        "ATK +10%, DEF +10%",
         "Global Basic ATK DMG +9%",
-        "ATK +15%, DEF +15% (not tracked)",
+        "ATK +15%, DEF +15%",
         "Global Basic ATK DMG +12%",
-        "For every 1% Basic ATK Crit Rate, Global Basic ATK DMG +% (not tracked directly)"
+        "For every 1% Basic ATK Crit Rate, Global Basic ATK DMG +%"
       ],
       "quality_contributions": [
         {
@@ -869,14 +869,14 @@
       "tier": "SS",
       "arcana_descs": [
         "Final Dagger DMG +10%",
-        "ATK +6%, DEF +6% (not tracked)",
-        "Global ATK +5% (not tracked)",
-        "ATK +8%, DEF +8% (not tracked)",
+        "ATK +6%, DEF +6%",
+        "Global ATK +5%",
+        "ATK +8%, DEF +8%",
         "Global Dagger DMG +6%",
         "Dagger Crit Rate +15%",
-        "ATK +10%, DEF +10% (not tracked)",
+        "ATK +10%, DEF +10%",
         "Global Dagger DMG +9%",
-        "ATK +15%, DEF +15% (not tracked)",
+        "ATK +15%, DEF +15%",
         "Global Dagger DMG +12%",
         "Final Dagger DMG +20% (Rage recovery +10 also)"
       ],
@@ -904,16 +904,16 @@
       "tier": "SS",
       "arcana_descs": [
         "Final Sword Qi DMG +10%",
-        "ATK +6%, DEF +6% (not tracked)",
-        "Global ATK +5% (not tracked)",
-        "ATK +8%, DEF +8% (not tracked)",
+        "ATK +6%, DEF +6%",
+        "Global ATK +5%",
+        "ATK +8%, DEF +8%",
         "Global Sword Qi DMG +6%",
         "Sword Qi Crit Rate +15%",
-        "ATK +10%, DEF +10% (not tracked)",
+        "ATK +10%, DEF +10%",
         "Global Sword Qi DMG +9%",
-        "ATK +15%, DEF +15% (not tracked)",
+        "ATK +15%, DEF +15%",
         "Global Sword Qi DMG +12%",
-        "[Unique Passive] Enhances the Mythic-quality skill of Skybreaker Elenos' Creed, increasing Void Slash Sword Qi coefficient by +100% (coefficient not tracked), and raising the final sword energy damage bonus on hit to 30%"
+        "[Unique Passive] Enhances the Mythic-quality skill of Skybreaker Elenos' Creed, increasing Void Slash Sword Qi coefficient by +100%, and raising the final sword energy damage bonus on hit to 30%"
       ],
       "quality_contributions": [
         {
@@ -939,16 +939,16 @@
       "tier": "SS",
       "arcana_descs": [
         "Final Lightning DMG +10%",
-        "ATK +6%, DEF +6% (not tracked)",
-        "Global ATK +5% (not tracked)",
-        "ATK +8%, DEF +8% (not tracked)",
+        "ATK +6%, DEF +6%",
+        "Global ATK +5%",
+        "ATK +8%, DEF +8%",
         "Global Lightning DMG +6%",
         "Lightning Crit Rate +15%",
-        "ATK +10%, DEF +10% (not tracked)",
+        "ATK +10%, DEF +10%",
         "Global Lightning DMG +9%",
-        "ATK +15%, DEF +15% (not tracked)",
+        "ATK +15%, DEF +15%",
         "Global Lightning DMG +12%",
-        "[Unique Passive] Mythic-grade Thunder Roar: Ezra's End skill enhanced, Ezra's lightning coefficient +100% (coefficient not tracked), Final Damage Reduction increased to 30%"
+        "[Unique Passive] Mythic-grade Thunder Roar: Ezra's End skill enhanced, Ezra's lightning coefficient +100%, Final Damage Reduction increased to 30%"
       ],
       "quality_contributions": [
         {
@@ -978,17 +978,17 @@
       "linked_kind": "rings",
       "tier": "SS",
       "arcana_descs": [
-        "Frozen Shadow coefficient +50% (not tracked)",
-        "ATK +6%, DEF +6% (not tracked)",
-        "Global ATK +5% (not tracked)",
-        "ATK +8%, DEF +8% (not tracked)",
-        "Global Electric/Ice/Fire/Poison DMG +6% (not tracked)",
-        "Frozen Shadow — enemies take skill DMG +50% for 2 turns (not tracked)",
-        "ATK +10%, DEF +10% (not tracked)",
-        "Global Electric/Ice/Fire/Poison DMG +15% (not tracked)",
-        "ATK +15%, DEF +15% (not tracked)",
-        "Global Electric/Ice/Fire/Poison DMG +20% (not tracked)",
-        "Each icy spike reduces enemy control immunity -4%, up to 5 stacks (not tracked)"
+        "Frozen Shadow coefficient +50%",
+        "ATK +6%, DEF +6%",
+        "Global ATK +5%",
+        "ATK +8%, DEF +8%",
+        "Global Electric/Ice/Fire/Poison DMG +6%",
+        "Frozen Shadow — enemies take skill DMG +50% for 2 turns",
+        "ATK +10%, DEF +10%",
+        "Global Electric/Ice/Fire/Poison DMG +15%",
+        "ATK +15%, DEF +15%",
+        "Global Electric/Ice/Fire/Poison DMG +20%",
+        "Each icy spike reduces enemy control immunity -4%, up to 5 stacks"
       ]
     },
     {
@@ -998,17 +998,17 @@
       "linked_kind": "rings",
       "tier": "SS",
       "arcana_descs": [
-        "Divine Might Cooldown -1 turn (not tracked)",
-        "ATK +6%, DEF +6% (not tracked)",
-        "Global ATK +5% (not tracked)",
-        "ATK +8%, DEF +8% (not tracked)",
-        "Global Skill DMG vs shielded targets +12% (not tracked)",
+        "Divine Might Cooldown -1 turn",
+        "ATK +6%, DEF +6%",
+        "Global ATK +5%",
+        "ATK +8%, DEF +8%",
+        "Global Skill DMG vs shielded targets +12%",
         "Skill Crit Rate +12%",
-        "ATK +10%, DEF +10% (not tracked)",
+        "ATK +10%, DEF +10%",
         "Global Skill DMG +9%",
-        "ATK +15%, DEF +15% (not tracked)",
+        "ATK +15%, DEF +15%",
         "Global Skill DMG +12%",
-        "For every 1% Skill Crit Rate, Global Skill DMG +% (not tracked directly)"
+        "For every 1% Skill Crit Rate, Global Skill DMG +%"
       ],
       "quality_contributions": [
         {
