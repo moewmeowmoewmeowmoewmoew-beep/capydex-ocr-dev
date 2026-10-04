@@ -1,0 +1,1727 @@
+{
+  "arcanas": [
+    {
+      "idx": 0,
+      "n": "Blood Shadow•Ailoren Sword",
+      "linked_item": "Blood Shadow Ailoren Sword",
+      "linked_kind": "weapons",
+      "tier": "SS",
+      "arcana_descs": [
+        "Breath of Airolein DMG coefficient +30% (not tracked)",
+        "Blood Shadow•Ailoren Sword ATK +6% (not tracked)",
+        "Blood Shadow•Ailoren Sword basic ATK damage coefficient +10% (not tracked)",
+        "Blood Shadow•Ailoren Sword ATK +8% (not tracked)",
+        "Blood Shadow•Ailoren Sword Combo Rate +6%",
+        "Rage skill adds 2 Ailoren's Breath",
+        "Blood Shadow•Ailoren Sword ATK +10% (not tracked)",
+        "When equipped with Blood Shadow•Ailoren Sword, global Sword Qi DMG +15%",
+        "Blood Shadow•Ailoren Sword ATK +15% (not tracked)",
+        "When equipped with Blood Shadow•Ailoren Sword, global Sword Qi DMG +20%",
+        "Blood Shadow•Ailoren Sword Transcendent skill deals additional true DMG equal to 5% of the target's current HP and 5% Sword Qi DMG, up to 9 times the Protagonist's ATK."
+      ],
+      "quality_contributions": [
+        {
+          "calc": "combo",
+          "qualD": [
+            0.25,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "idx": 1,
+      "n": "Divine Thunder Nashir's Scepter",
+      "linked_item": "Divine Thunder Nashir's Scepter",
+      "linked_kind": "weapons",
+      "tier": "SS",
+      "arcana_descs": [
+        "Lightning DMG coefficient +6%",
+        "Nashir Scepter ATK +6% (not tracked)",
+        "Electric Shield value +10% (not tracked)",
+        "Nashir Scepter ATK +8% (not tracked)",
+        "Skill DMG +20%",
+        "Divine Thunder stack count +3 per cast (not tracked)",
+        "Nashir Scepter ATK +10% (not tracked)",
+        "Global Lightning DMG +15%",
+        "Nashir Scepter ATK +15% (not tracked)",
+        "Global Lightning DMG +20%",
+        "70% chance lightning becomes Nashir Divine Thunder (not tracked)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "skilldmg",
+          "qualD": [
+            0.25,
+            0.5
+          ],
+          "surpassBonus": 0.05
+        },
+        {
+          "calc": "fdr",
+          "cond": "skill",
+          "qualD": [
+            0,
+            0.1
+          ],
+          "surpassBonus": 0
+        }
+      ]
+    },
+    {
+      "idx": 2,
+      "n": "Gale Elres' Whisper",
+      "linked_item": "Gale Elres' Whisper",
+      "linked_kind": "weapons",
+      "tier": "SS",
+      "arcana_descs": [
+        "Rage DMG coefficient +30%",
+        "Gale Elres ATK +6% (not tracked)",
+        "Basic ATK damage coefficient +10%",
+        "Gale Elres ATK +8% (not tracked)",
+        "Weapon Crit Rate +6%",
+        "Dagger Crit Rate +12%",
+        "Gale Elres ATK +10% (not tracked)",
+        "Global Dagger DMG +15%",
+        "Gale Elres ATK +15% (not tracked)",
+        "Global Dagger DMG +20%",
+        "Dagger Crit Rate +20%, Crit DMG +40% (Crit DMG not tracked)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "weapcrit",
+          "qualD": [
+            0.25,
+            0.5
+          ]
+        }
+      ],
+      "stacking_stats": {
+        "min_arcana": 10,
+        "stats": {
+          "dagger_crit_rate": {
+            "per_stack": 2,
+            "max_stacks": 10
+          },
+          "dagger_crit_dmg": {
+            "per_stack": 4,
+            "max_stacks": 10
+          }
+        }
+      }
+    },
+    {
+      "idx": 3,
+      "n": "Helos Warblade",
+      "linked_item": "Helos Warblade",
+      "linked_kind": "weapons",
+      "tier": "SS",
+      "arcana_descs": [
+        "Rage DMG coefficient +30%",
+        "Helos Warblade ATK +6% (not tracked)",
+        "Basic ATK damage coefficient +10%",
+        "Helos Warblade ATK +8% (not tracked)",
+        "Combo Rate +6%",
+        "Basic ATK Crit Rate +30%",
+        "Helos Warblade ATK +10% (not tracked)",
+        "Global Combo DMG +15%",
+        "Helos Warblade ATK +15% (not tracked)",
+        "Global Combo DMG +20%",
+        "Combo Rate +12%, Basic ATK Crit +12%, Crit DMG +60% (not tracked)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "combo",
+          "qualD": [
+            0.25,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "idx": 4,
+      "n": "St. Mung's Elven Bow",
+      "linked_item": "St. Mung's Elven Bow",
+      "linked_kind": "weapons",
+      "tier": "SS",
+      "arcana_descs": [
+        "Rage DMG coefficient +30%",
+        "ATK +6% (not tracked)",
+        "Angel Dagger damage coefficient +8%",
+        "ATK +8% (not tracked)",
+        "Dagger DMG +20%",
+        "Dagger Crit Rate +12%",
+        "ATK +10% (not tracked)",
+        "Global Dagger DMG +15%",
+        "ATK +15% (not tracked)",
+        "Global Dagger DMG +20%",
+        "Dagger Crit Rate +30%, Angel Dagger Coefficient +30% (Coefficient not tracked)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "weapcrit",
+          "qualD": [
+            0.25,
+            0.5
+          ]
+        }
+      ],
+      "stacking_stats": {
+        "min_arcana": 10,
+        "stats": {
+          "dagger_crit_rate": {
+            "per_stack": 3,
+            "max_stacks": 10
+          }
+        }
+      }
+    },
+    {
+      "idx": 5,
+      "n": "Thorn-Seles Suffering",
+      "linked_item": "Thorn-Seles Suffering",
+      "linked_kind": "weapons",
+      "tier": "SS",
+      "arcana_descs": [
+        "Rage DMG coefficient +30%",
+        "Thorn-Seles ATK +6% (not tracked)",
+        "Basic ATK damage coefficient +10%",
+        "Thorn-Seles ATK +8% (not tracked)",
+        "Counter Rate +6%",
+        "When countering, gain 6% shield (not tracked)",
+        "Thorn-Seles ATK +10% (not tracked)",
+        "Global Counter DMG +15%",
+        "Thorn-Seles ATK +15% (not tracked)",
+        "Global Counter DMG +20%",
+        "Thorn shield damage +3% per counter (not tracked)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "fdr",
+          "cond": "basic",
+          "qualD": [
+            0,
+            0.1
+          ],
+          "surpassBonus": 0
+        },
+        {
+          "calc": "counter",
+          "qualD": [
+            0.25,
+            0.5
+          ],
+          "surpassBonus": 0.05
+        }
+      ]
+    },
+    {
+      "idx": 6,
+      "n": "Angel Bow",
+      "linked_item": "Angel Bow",
+      "linked_kind": "weapons",
+      "tier": "S",
+      "arcana_descs": [
+        "Angel Bow Fury Skill Damage Coefficient +30%",
+        "Angel Bow Attack +6%",
+        "Angel Bow Basic ATK DMG Coefficient +10%",
+        "Angel Bow Attack +6%",
+        "Angel Bow Weapon Crit Rate +5%",
+        "The Legendary skill of the Angel Bow increases the probability of Angel Daggers",
+        "Angel Bow Attack +8%",
+        "Angel Bow Global Dagger DMG +10%",
+        "Angel Bow Attack +10%",
+        "Angel Bow Global Dagger DMG +15%",
+        "Angel Bow Mythic Skill: Global DMG +15%"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "basiccrit",
+          "qualD": [
+            0.125,
+            0.25,
+            0.5
+          ],
+          "arcanaFlat": 0.05,
+          "arcanaFlatAt": 1
+        }
+      ]
+    },
+    {
+      "idx": 7,
+      "n": "Bishop Staff",
+      "linked_item": "Bishop Staff",
+      "linked_kind": "weapons",
+      "tier": "S",
+      "arcana_descs": [
+        "Bishop Staff Rage Skill DMG Coefficient +30%",
+        "Bishop Staff ATK +6%",
+        "Bishop Staff Rage Skill DMG +15%",
+        "Bishop Staff ATK +6%",
+        "Rage Skill CRIT Rate +5% when Bishop Staff is equipped",
+        "Legendary Bishop Staff: Initial Rage +100",
+        "Bishop Staff ATK +8%",
+        "Global Rage Skill DMG +10% when Bishop Staff is equipped",
+        "Bishop Staff ATK +10%",
+        "Global Rage Skill DMG +15% when Bishop Staff is equipped",
+        "Mythic Bishop Staff: Initial Skill [ Rage Skill Combo ]"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "dmgbonus",
+          "ty": "skill",
+          "qualD": [
+            0.125,
+            0.25,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "idx": 8,
+      "n": "Blade of Justice",
+      "linked_item": "Blade of Justice",
+      "linked_kind": "weapons",
+      "tier": "S",
+      "arcana_descs": [
+        "Blade of Justice rage skill DMG coefficient +30% (not tracked: rage skill)",
+        "ATK +6% (not tracked)",
+        "Basic ATK DMG coefficient +10%",
+        "ATK +6% (not tracked)",
+        "Combo Rate +5%",
+        "Additional Basic Attack Critical Rate +25% for judgment targets when equipped with Legendary Judgment Blade",
+        "ATK +8% (not tracked)",
+        "Global Combo DMG +10%",
+        "ATK +10% (not tracked)",
+        "Global Combo DMG +15%",
+        "Combo Rate +10%, Basic ATK Crit Rate +10%, +50% Crit DMG (Crit DMG not tracked)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "combo",
+          "qualD": [
+            0.125,
+            0.25,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "idx": 9,
+      "n": "Durian Hammer",
+      "linked_item": "Durian Hammer",
+      "linked_kind": "weapons",
+      "tier": "S",
+      "arcana_descs": [
+        "Durian Hammer rage skill DMG coefficient +30% (not tracked: rage skill)",
+        "ATK +6% (not tracked)",
+        "Basic ATK DMG coefficient +10%",
+        "ATK +6% (not tracked)",
+        "Counter Rate +5%",
+        "Counter adds an extra 5% shield (not tracked: shield)",
+        "ATK +8% (not tracked)",
+        "Global Counter DMG +10%",
+        "ATK +10% (not tracked)",
+        "Global Counter DMG +15%",
+        "Durian Hammer shield reflects +150% of ATK (not tracked: shield reflect)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "counter",
+          "qualD": [
+            0.125,
+            0.25,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "idx": 10,
+      "n": "Mushroom Hammer",
+      "linked_item": "Mushroom Hammer",
+      "linked_kind": "weapons",
+      "tier": "S",
+      "arcana_descs": [
+        "Mushroom Hammer rage skill DMG coefficient +30% (not tracked: rage skill)",
+        "ATK +6% (not tracked)",
+        "Basic ATK DMG coefficient +10%",
+        "ATK +6% (not tracked)",
+        "Counter Rate +5%",
+        "Counter deals an extra 5% of max HP as DMG (not tracked: % HP DMG)",
+        "ATK +8% (not tracked)",
+        "Global Counter DMG +10%",
+        "ATK +10% (not tracked)",
+        "Global Counter DMG +15%",
+        "Extra 15% global DMG reduction with shield"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "counter",
+          "qualD": [
+            0.125,
+            0.25,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "idx": 11,
+      "n": "Reaper Staff",
+      "linked_item": "Reaper Staff",
+      "linked_kind": "weapons",
+      "tier": "S",
+      "arcana_descs": [
+        "Lightning DMG coefficient +6%",
+        "ATK +6% (not tracked)",
+        "Death Lightning DMG coefficient +8%",
+        "ATK +6% (not tracked)",
+        "Skill DMG +15%",
+        "Death Lightning stack cap +3 (not tracked)",
+        "ATK +8% (not tracked)",
+        "Global Lightning DMG +10%",
+        "ATK +10% (not tracked)",
+        "Global Lightning DMG +15%",
+        "Probability of lightning becoming Death Lightning increased (not tracked)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "dmgbonus",
+          "ty": "skill",
+          "qualD": [
+            0.125,
+            0.25,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "idx": 12,
+      "n": "Shadow Lance",
+      "linked_item": "Shadow Lance",
+      "linked_kind": "weapons",
+      "tier": "S",
+      "arcana_descs": [
+        "Poison chance increased to 100% (not tracked: proc)",
+        "ATK +6% (not tracked)",
+        "Basic ATK DMG coefficient +10%",
+        "ATK +6% (not tracked)",
+        "Counter Rate +5%",
+        "25% lifesteal vs poisoned targets (not tracked: lifesteal/conditional)",
+        "ATK +8% (not tracked)",
+        "Global Poison DMG +10%",
+        "ATK +10% (not tracked)",
+        "Global Poison DMG +15%",
+        "Poison DMG +40%, max poison stacks +6 (DMG +40% not tracked: applies to existing poison DOT separately; stack cap not tracked)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "counter",
+          "qualD": [
+            0.125,
+            0.25,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "idx": 13,
+      "n": "Skysplitter",
+      "linked_item": "Skysplitter",
+      "linked_kind": "weapons",
+      "tier": "S",
+      "arcana_descs": [
+        "Skysplitter rage skill DMG coefficient +30% (not tracked: rage skill)",
+        "ATK +6% (not tracked)",
+        "Basic ATK DMG coefficient +10%",
+        "ATK +6% (not tracked)",
+        "Combo Rate +5%",
+        "Chance for Sword Qi to become Super Sword Qi (not tracked: proc)",
+        "ATK +8% (not tracked)",
+        "Global Sword Qi DMG +10%",
+        "ATK +10% (not tracked)",
+        "Global Sword Qi DMG +15%",
+        "Sword Qi deals true DMG = 7% of target's current HP, capped at 11× ATK (not tracked: % HP)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "combo",
+          "qualD": [
+            0.125,
+            0.25,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "idx": 14,
+      "n": "Star Staff",
+      "linked_item": "Star Staff",
+      "linked_kind": "weapons",
+      "tier": "S",
+      "arcana_descs": [
+        "Star Staff Skill DMG Coefficient +30%",
+        "Star Staff Attack +6%",
+        "Star Staff Burn DMG +25%",
+        "Star Staff Attack +6%",
+        "Star Staff Burn DMG +30%",
+        "Star Staff Legendary Burn Stack Limit +6",
+        "Star Staff Attack +8%",
+        "Star Staff Global Fire DMG +10%",
+        "Star Staff Attack +10%",
+        "Star Staff Global Fire DMG +15%",
+        "Mythic Star Staff: Flame Wave triggers 2 Burn stacks, Burn duration +1"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "dmgbonus",
+          "ty": "skill",
+          "qualD": [
+            0.125,
+            0.25,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "idx": 15,
+      "n": "Whisperer",
+      "linked_item": "Whisperer",
+      "linked_kind": "weapons",
+      "tier": "S",
+      "arcana_descs": [
+        "Whisperer Rage Skill DMG Coefficient +30%",
+        "Whisperer ATK +6%",
+        "Whisperer Basic Attack DMG Coefficient +10%",
+        "Whisperer ATK +6%",
+        "Weapon CRIT Rate +5% when Whisperer is equipped",
+        "When wearing the Legendary Wind Whisperer, Dagger Crit Rate +10%",
+        "Whisperer ATK +8%",
+        "Global Dagger DMG +10% when Whisperer is equipped",
+        "Whisperer ATK +10%",
+        "Global Dagger DMG +15% when Whisperer is equipped",
+        "Mythic Wind Whisperer skill enhancement, each time the dagger hits, increases 2% dagger crit rate and 3% dagger crit damage, up to 10 stacks"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "weapcrit",
+          "qualD": [
+            0.125,
+            0.25,
+            0.7
+          ],
+          "arcanaFlat": 0.05,
+          "arcanaFlatAt": 1
+        },
+        {
+          "calc": "daggercrit",
+          "arcanaFlat": 0.1,
+          "arcanaFlatAt": 2
+        }
+      ],
+      "stacking_stats": {
+        "min_arcana": 10,
+        "stats": {
+          "dagger_crit_rate": {
+            "per_stack": 2,
+            "max_stacks": 10
+          },
+          "dagger_crit_dmg": {
+            "per_stack": 3,
+            "max_stacks": 10
+          }
+        }
+      }
+    },
+    {
+      "idx": 16,
+      "n": "Crimson Dracula Chestplate",
+      "linked_item": "Crimson Dracula Chestplate",
+      "linked_kind": "armors",
+      "tier": "SS",
+      "arcana_descs": [
+        "Recover +10% health every 2 turns (not tracked)",
+        "HP +6% (not tracked)",
+        "Damage Reduction +10% (not tracked)",
+        "HP +6% (not tracked)",
+        "Ignore Crit Rate +5%",
+        "Final Damage Reduction +10%",
+        "HP +8% (not tracked)",
+        "HP Recovery effect +10% (not tracked)",
+        "HP +10% (not tracked)",
+        "HP Recovery effect +15% (not tracked)",
+        "100% overflow healing converts to shield (not tracked)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "fdr",
+          "cond": "general",
+          "qualD": [
+            0.3,
+            0.4
+          ],
+          "surpassBonus": 0.01,
+          "legendaryNoArcana": true
+        }
+      ]
+    },
+    {
+      "idx": 17,
+      "n": "Reinhardt's Resolve",
+      "linked_item": "Reinhardt's Resolve",
+      "linked_kind": "armors",
+      "tier": "SS",
+      "arcana_descs": [
+        "Resurrection HP bonus +10% (not tracked)",
+        "HP +6% (not tracked)",
+        "Damage Reduction +5% (not tracked)",
+        "HP +6% (not tracked)",
+        "Ignore Crit Rate +5%",
+        "Gain shield equal to 35% HP after resurrection (not tracked)",
+        "HP +8% (not tracked)",
+        "Global HP +10% (not tracked)",
+        "HP +10% (not tracked)",
+        "Global HP +15% (not tracked)",
+        "Resurrection count +1 (not tracked)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "fdr",
+          "cond": "general",
+          "qualV5": [
+            [
+              0.4,
+              0.4,
+              0.4,
+              0.1,
+              0.1
+            ],
+            [
+              0.4,
+              0.4,
+              0.4,
+              0.1,
+              0.1
+            ]
+          ],
+          "surpassBonus": 0.01
+        },
+        {
+          "calc": "fd",
+          "ty": "general",
+          "flat": 0.1
+        }
+      ]
+    },
+    {
+      "idx": 18,
+      "n": "Eternal Dragon's Breath Armor",
+      "linked_item": "Eternal Dragon's Breath Armor",
+      "linked_kind": "armors",
+      "tier": "S",
+      "arcana_descs": [
+        "Recover +10% health every 2 turns (not tracked)",
+        "HP +6% (not tracked)",
+        "Damage Reduction +10% (not tracked)",
+        "HP +6% (not tracked)",
+        "Ignore Crit Rate +5%",
+        "Gain additional 5% shield per round (not tracked)",
+        "HP +8% (not tracked)",
+        "HP Recovery effect +10% (not tracked)",
+        "HP +10% (not tracked)",
+        "HP Recovery effect +15% (not tracked)",
+        "Gain 5% ATK and DEF after healing, stacking up to 10 times (not tracked)"
+      ],
+      "stacking_stats": {
+        "min_arcana": 10,
+        "stats": {
+          "atk_pct": {
+            "per_stack": 5,
+            "max_stacks": 10
+          },
+          "def_pct": {
+            "per_stack": 5,
+            "max_stacks": 10
+          }
+        }
+      }
+    },
+    {
+      "idx": 19,
+      "n": "Revival Cape",
+      "linked_item": "Revival Cape",
+      "linked_kind": "armors",
+      "tier": "S",
+      "arcana_descs": [
+        "Resurrection HP bonus +10% (not tracked)",
+        "HP +6% (not tracked)",
+        "Damage Reduction +5% (not tracked)",
+        "HP +6% (not tracked)",
+        "Ignore Crit Rate +5%",
+        "Gain shield equal to 25% HP after resurrection (not tracked)",
+        "HP +8% (not tracked)",
+        "Global HP +10% (not tracked)",
+        "HP +10% (not tracked)",
+        "Global HP +15% (not tracked)",
+        "Resurrection count +1 (not tracked)"
+      ]
+    },
+    {
+      "idx": 20,
+      "n": "Forbidden Julian's Inquisition",
+      "linked_item": "Forbidden Julian's Inquisition",
+      "linked_kind": "rings",
+      "tier": "SS",
+      "arcana_descs": [
+        "Max stack of Final Counterattack bonus +2 after Light Spear (not tracked)",
+        "ATK +6%, DEF +6% (not tracked)",
+        "Global ATK +5% (not tracked)",
+        "ATK +8%, DEF +8% (not tracked)",
+        "Global Counter DMG +6%",
+        "Conditional Final Damage Reduction +10%",
+        "ATK +10%, DEF +10% (not tracked)",
+        "Global Counter DMG +9%",
+        "ATK +15%, DEF +15% (not tracked)",
+        "Global Counter DMG +12%",
+        "Shield +10% max HP, each Forbidden Spear hit increases hero ability (not tracked)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "fdr",
+          "cond": "conditional",
+          "qualD": [
+            0.1,
+            0.15
+          ]
+        },
+        {
+          "calc": "fd",
+          "ty": "counter",
+          "arcanaV5": [
+            [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            [
+              0.1,
+              0.2,
+              0.2,
+              0.2,
+              0.2
+            ],
+            [
+              0.4,
+              0.65,
+              0.65,
+              0.65,
+              0.65
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "idx": 21,
+      "n": "Ruin Tyr's Smash",
+      "linked_item": "Ruin Tyr's Smash",
+      "linked_kind": "rings",
+      "tier": "SS",
+      "arcana_descs": [
+        "Combo Rate +5%",
+        "ATK +6%, DEF +6% (not tracked)",
+        "Global ATK +5% (not tracked)",
+        "ATK +8%, DEF +8% (not tracked)",
+        "Global Combo DMG +6%",
+        "Basic ATK Crit Rate +15%",
+        "ATK +10%, DEF +10% (not tracked)",
+        "Global Combo DMG +9%",
+        "ATK +15%, DEF +15% (not tracked)",
+        "Global Combo DMG +12%",
+        "Final Basic ATK DMG +20%, Smash coefficient +100% (coefficient not tracked)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "fd",
+          "ty": "normal",
+          "qualD": [
+            0.1,
+            0.2
+          ]
+        },
+        {
+          "calc": "basiccrit",
+          "arcanaFlat": 0.15,
+          "arcanaFlatAt": 2
+        },
+        {
+          "calc": "combo",
+          "qualV5_0arc": [
+            [
+              0,
+              0.05,
+              0.05,
+              0.05,
+              0.05
+            ],
+            [
+              0,
+              0.05,
+              0.05,
+              0.05,
+              0.05
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "idx": 22,
+      "n": "Salama Dragon Pearl Ring",
+      "linked_item": "Salama Dragon Pearl Ring",
+      "linked_kind": "rings",
+      "tier": "SS",
+      "arcana_descs": [
+        "Heavenly Punishment cooldown -1 turn (not tracked)",
+        "ATK +6%, DEF +6% (not tracked)",
+        "Global ATK +5% (not tracked)",
+        "ATK +8%, DEF +8% (not tracked)",
+        "Global Basic ATK DMG Reduction +6% (not tracked)",
+        "Basic ATK Crit Rate +18%",
+        "ATK +10%, DEF +10% (not tracked)",
+        "Global Basic ATK DMG +9%",
+        "ATK +15%, DEF +15% (not tracked)",
+        "Global Basic ATK DMG +12%",
+        "For every 1% Basic ATK Crit Rate, Global Basic ATK DMG +% (not tracked directly)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "basiccrit",
+          "qualArcanaV5": {
+            "0,0": [
+              0.25,
+              0.25,
+              0,
+              0.25,
+              0.25
+            ],
+            "0,1": [
+              0.25,
+              0.25,
+              0.25,
+              0.25,
+              0.25
+            ],
+            "1,0": [
+              0.25,
+              0.25,
+              0,
+              0.25,
+              0.25
+            ],
+            "1,1": [
+              0.25,
+              0.25,
+              0.25,
+              0.25,
+              0.25
+            ],
+            "2,0": [
+              0.25,
+              0.25,
+              0,
+              0.25,
+              0.25
+            ],
+            "2,1": [
+              0.25,
+              0.25,
+              0.25,
+              0.25,
+              0.25
+            ]
+          }
+        }
+      ],
+      "conversion_stats": {
+        "min_arcana": 10,
+        "source": "basic_atk_crit_rate",
+        "target": "basic_atk_dmg",
+        "ratio": 0.5,
+        "cap": 50
+      }
+    },
+    {
+      "idx": 23,
+      "n": "Shadowblade Sivira's Fang",
+      "linked_item": "Shadowblade Sivira's Fang",
+      "linked_kind": "rings",
+      "tier": "SS",
+      "arcana_descs": [
+        "Final Dagger DMG +10%",
+        "ATK +6%, DEF +6% (not tracked)",
+        "Global ATK +5% (not tracked)",
+        "ATK +8%, DEF +8% (not tracked)",
+        "Global Dagger DMG +6%",
+        "Dagger Crit Rate +15%",
+        "ATK +10%, DEF +10% (not tracked)",
+        "Global Dagger DMG +9%",
+        "ATK +15%, DEF +15% (not tracked)",
+        "Global Dagger DMG +12%",
+        "Final Dagger DMG +20% (Rage recovery +10 also)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "fd",
+          "ty": "dagger",
+          "qualD": [
+            0.1,
+            0.2
+          ]
+        },
+        {
+          "calc": "skillcrit",
+          "arcanaFlat": 0.15,
+          "arcanaFlatAt": 1
+        }
+      ]
+    },
+    {
+      "idx": 24,
+      "n": "Skybreaker Elenos' Creed",
+      "linked_item": "Skybreaker Elenos' Creed",
+      "linked_kind": "rings",
+      "tier": "SS",
+      "arcana_descs": [
+        "Final Sword Qi DMG +10%",
+        "ATK +6%, DEF +6% (not tracked)",
+        "Global ATK +5% (not tracked)",
+        "ATK +8%, DEF +8% (not tracked)",
+        "Global Sword Qi DMG +6%",
+        "Sword Qi Crit Rate +15%",
+        "ATK +10%, DEF +10% (not tracked)",
+        "Global Sword Qi DMG +9%",
+        "ATK +15%, DEF +15% (not tracked)",
+        "Global Sword Qi DMG +12%",
+        "[Unique Passive] Enhances the Mythic-quality skill of Skybreaker Elenos' Creed, increasing Void Slash Sword Qi coefficient by +100% (coefficient not tracked), and raising the final sword energy damage bonus on hit to 30%"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "fd",
+          "ty": "swordqi",
+          "qualD": [
+            0.1,
+            0.3
+          ]
+        },
+        {
+          "calc": "skillcrit",
+          "arcanaFlat": 0.15,
+          "arcanaFlatAt": 1
+        }
+      ]
+    },
+    {
+      "idx": 25,
+      "n": "Thunderous Ezra's End",
+      "linked_item": "Thunderous Ezra's End",
+      "linked_kind": "rings",
+      "tier": "SS",
+      "arcana_descs": [
+        "Final Lightning DMG +10%",
+        "ATK +6%, DEF +6% (not tracked)",
+        "Global ATK +5% (not tracked)",
+        "ATK +8%, DEF +8% (not tracked)",
+        "Global Lightning DMG +6%",
+        "Lightning Crit Rate +15%",
+        "ATK +10%, DEF +10% (not tracked)",
+        "Global Lightning DMG +9%",
+        "ATK +15%, DEF +15% (not tracked)",
+        "Global Lightning DMG +12%",
+        "[Unique Passive] Mythic-grade Thunder Roar: Ezra's End skill enhanced, Ezra's lightning coefficient +100% (coefficient not tracked), Final Damage Reduction increased to 30%"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "fd",
+          "ty": "lightning",
+          "qualD": [
+            0.1,
+            0.1
+          ]
+        },
+        {
+          "calc": "fdr",
+          "cond": "general",
+          "qualD": [
+            0,
+            0.15
+          ],
+          "arcanaFlat": 0.15,
+          "arcanaFlatAt": 10
+        }
+      ]
+    },
+    {
+      "idx": 26,
+      "n": "Ursol Shadow Ring",
+      "linked_item": "Ursol Shadow Ring",
+      "linked_kind": "rings",
+      "tier": "SS",
+      "arcana_descs": [
+        "Frozen Shadow coefficient +50% (not tracked)",
+        "ATK +6%, DEF +6% (not tracked)",
+        "Global ATK +5% (not tracked)",
+        "ATK +8%, DEF +8% (not tracked)",
+        "Global Electric/Ice/Fire/Poison DMG +6% (not tracked)",
+        "Frozen Shadow — enemies take skill DMG +50% for 2 turns (not tracked)",
+        "ATK +10%, DEF +10% (not tracked)",
+        "Global Electric/Ice/Fire/Poison DMG +15% (not tracked)",
+        "ATK +15%, DEF +15% (not tracked)",
+        "Global Electric/Ice/Fire/Poison DMG +20% (not tracked)",
+        "Each icy spike reduces enemy control immunity -4%, up to 5 stacks (not tracked)"
+      ]
+    },
+    {
+      "idx": 27,
+      "n": "Verdan Ring of Judgement",
+      "linked_item": "Verdan Ring of Judgement",
+      "linked_kind": "rings",
+      "tier": "SS",
+      "arcana_descs": [
+        "Divine Might Cooldown -1 turn (not tracked)",
+        "ATK +6%, DEF +6% (not tracked)",
+        "Global ATK +5% (not tracked)",
+        "ATK +8%, DEF +8% (not tracked)",
+        "Global Skill DMG vs shielded targets +12% (not tracked)",
+        "Skill Crit Rate +12%",
+        "ATK +10%, DEF +10% (not tracked)",
+        "Global Skill DMG +9%",
+        "ATK +15%, DEF +15% (not tracked)",
+        "Global Skill DMG +12%",
+        "For every 1% Skill Crit Rate, Global Skill DMG +% (not tracked directly)"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "skillcrit",
+          "qualArcanaV5": {
+            "0,0": [
+              0.25,
+              0.25,
+              0,
+              0.25,
+              0.25
+            ],
+            "0,1": [
+              0.25,
+              0.25,
+              0.25,
+              0.25,
+              0.25
+            ],
+            "1,0": [
+              0.25,
+              0.25,
+              0,
+              0.25,
+              0.25
+            ],
+            "1,1": [
+              0.25,
+              0.25,
+              0.25,
+              0.25,
+              0.25
+            ]
+          }
+        }
+      ],
+      "conversion_stats": {
+        "min_arcana": 10,
+        "source": "skill_crit_rate",
+        "target": "skill_dmg",
+        "ratio": 0.5,
+        "cap": 50
+      }
+    },
+    {
+      "idx": 28,
+      "n": "Dragon Ball Ring",
+      "linked_item": "Dragon Ball Ring",
+      "linked_kind": "rings",
+      "tier": "S",
+      "arcana_descs": [
+        "[ Unique Passive ] Rare skill of Dragon Ball Ring: Cooldown - 1.",
+        "Dragon Ball Ring ATK and DEF +6%.",
+        "[ Unique Passive ] Global ATK +5% when equipped with Dragon Ball Ring.",
+        "Dragon Ball Ring ATK and DEF +6%.",
+        "[ Unique Passive ] Global Basic Attack damage reduction +5% when equipped with Dragon Ball Ring.",
+        "[ Unique Passive ] Basic Attack CRIT rate +15% when equipped with a Legendary-quality Dragon Ball Ring.",
+        "Dragon Ball Ring ATK and DEF +8%.",
+        "[ Unique Passive ] Global Basic Attack DMG +7% when equipped with Dragon Ball Ring.",
+        "Dragon Ball Ring ATK and DEF +10%.",
+        "[ Unique Passive ] Global Basic Attack DMG +8% when equipped with Dragon Ball Ring.",
+        "Mythic-quality Dragon Ball Ring enhances skills: every 1% Basic Attack CRIT rate grants an additional 0.4% Global Basic Attack DMG (max 40%)."
+      ],
+      "quality_contributions": [
+        {
+          "calc": "basiccrit",
+          "qualArcanaV5": {
+            "0,0": [
+              0.1,
+              0.1,
+              0,
+              0.1,
+              0.1
+            ],
+            "0,1": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "0,2": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "1,0": [
+              0.2,
+              0.2,
+              0,
+              0.2,
+              0.2
+            ],
+            "1,1": [
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2
+            ],
+            "1,2": [
+              0.35,
+              0.35,
+              0.35,
+              0.35,
+              0.35
+            ],
+            "2,0": [
+              0.2,
+              0.2,
+              0,
+              0.2,
+              0.2
+            ],
+            "2,1": [
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2
+            ],
+            "2,2": [
+              0.35,
+              0.35,
+              0.35,
+              0.35,
+              0.35
+            ]
+          }
+        }
+      ],
+      "conversion_stats": {
+        "min_arcana": 10,
+        "source": "basic_atk_crit_rate",
+        "target": "basic_atk_dmg",
+        "ratio": 0.4,
+        "cap": 40
+      }
+    },
+    {
+      "idx": 29,
+      "n": "Judgement Ring",
+      "linked_item": "Judgement Ring",
+      "linked_kind": "rings",
+      "tier": "S",
+      "arcana_descs": [
+        "Rare skill enhancement of Judgment Ring, cooldown -1 round",
+        "Judgment Ring ATK, DEF +6%",
+        "[Unique Passive) When equipping the Judgment Ring, global ATK +5%",
+        "Judgment Ring ATK, DEF +6%",
+        "[ Unique Passive ] Equipping Judgment Ring increases Global Skill DMG +10% against shielded targets.",
+        "[ Unique Passive ] Equipping a Legendary-quality Judgment Ring increases skill CRIT rate by +10%.",
+        "Judgment Ring ATK and DEF +8%.",
+        "[ Unique Passive ] Global Skill DMG +7% when equipped with Judgment Ring.",
+        "Judgment Ring ATK and DEF+10%.",
+        "[ Unique Passive ] Global Skill DMG +8% when equipped with Judgment Ring.",
+        "[ Unique Passive ] Mythic-quality Judgment Ring enhances skills: every 1% skill CRIT rate grants an additional 0.4% Global Skill DMG (max 40%)."
+      ],
+      "quality_contributions": [
+        {
+          "calc": "skillcrit",
+          "qualArcanaV5": {
+            "0,0": [
+              0.1,
+              0.1,
+              0,
+              0.1,
+              0.1
+            ],
+            "0,1": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "0,2": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "1,0": [
+              0.2,
+              0.2,
+              0,
+              0.2,
+              0.2
+            ],
+            "1,1": [
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2
+            ],
+            "1,2": [
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3
+            ],
+            "2,0": [
+              0.2,
+              0.2,
+              0,
+              0.2,
+              0.2
+            ],
+            "2,1": [
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2
+            ],
+            "2,2": [
+              0.3,
+              0.3,
+              0.3,
+              0.3,
+              0.3
+            ]
+          }
+        }
+      ],
+      "conversion_stats": {
+        "min_arcana": 10,
+        "source": "skill_crit_rate",
+        "target": "skill_dmg",
+        "ratio": 0.4,
+        "cap": 40
+      }
+    },
+    {
+      "idx": 30,
+      "n": "Shadow Ring",
+      "linked_item": "Shadow Ring",
+      "linked_kind": "rings",
+      "tier": "S",
+      "arcana_descs": [
+        "Rare skill of Shadow Ring enhanced, cooldown time -1 turn.",
+        "Shadow Ring ATK and DEF +6%.",
+        "[ Unique Passive ] Global ATK +5% when equipped with Shadow Ring.",
+        "Shadow Ring ATK and DEF +6%.",
+        "[ Unique Passive ] Global Lightning, Ice, Fire, and Poison DMG +5% when equipped with Shadow Ring.",
+        "[ Unique Passive ] Equipping a Legendary-quality Shadow Ring grants Ice Spikes a chance to trigger Ice Storm, dealing Ice DMG equal to 100% of the main character's ATK.",
+        "Shadow Ring ATK and DEF+8%.",
+        "[ Unique Passive ] Global Lightning, Ice, Fire, and Poison DMG +10% when equipped with Shadow Ring.",
+        "Shadow Ring ATK and DEF +10%",
+        "[ Unique Passive ] Global Lightning, Ice, Fire, and Poison DMG +15%",
+        "[Unique Passive) When equipping the Mythic Shadow Ring, each Ice Spike reduces enemy control resistance by -3%, stacking up to 5 times"
+      ]
+    },
+    {
+      "idx": 31,
+      "n": "Sky Flame Ring",
+      "linked_item": "Sky Flame Ring",
+      "linked_kind": "rings",
+      "tier": "S",
+      "arcana_descs": [
+        "Skyflame Ring's rare skill triggers Flame Wave from turn 3, and from turn 2 at Mythic quality.",
+        "Skyflame Ring ATK and DEF+6%.",
+        "[ Unique Passive ] Global ATK +5% when equipped with Skyflame Ring.",
+        "Skyflame Ring ATK and DEF +6%.",
+        "[ Unique Passive ] Global Fire and Poison DMG +5% when equipped with Skyflame Ring.",
+        "[ Unique Passive ] Wearing a Legendary-quality Skyflame Ring greatly increases the chance of Flame Wave causing Burn.",
+        "Skyflame Ring ATK and DEF +8%.",
+        "[ Unique Passive ] Global Fire and Poison DMG +7% when equipped with Skyflame Ring.",
+        "Skyflame Ring ATK and DEF+10%.",
+        "[ Unique Passive ] Global Fire and Poison DMG +8% when equipped with Skyflame Ring.",
+        "[ Unique Passive ] Wearing a Mythic-quality Skyflame Ring adds +1% extra damage to Flame Wave."
+      ]
+    },
+    {
+      "idx": 32,
+      "n": "Battle Will Grande's Wrath",
+      "linked_item": "Battle Will Grande's Wrath",
+      "linked_kind": "accessories",
+      "tier": "SS",
+      "arcana_descs": [
+        "Battle Will: Wrath of Grande double damage trigger chance +5%",
+        "Battle Will: Wrath of Grande HP, Defense +6%",
+        "When equipped with Battle Will: Wrath of Grande, global HP +5%",
+        "Battle Will: Wrath of Grande HP, Defense +8%",
+        "When equipped with Battle Will: Wrath of Grande, global skill damage reduction +6%",
+        "When wearing Legendary Battle Will: Wrath of Grande, Lifesteal Rate +10%, Lifesteal Effect +20%",
+        "Battle Will: Wrath of Grande HP, Defense +10%",
+        "When equipped with Battle Will: Wrath of Grande, global normal attack damage +9%",
+        "Battle Will: Wrath of Grande HP, Defense +15%",
+        "When equipped with Battle Will: Wrath of Grande, global normal attack damage +12%",
+        "Mythic quality skill enhancement of Battle Will: Wrath of Grande, triple damage trigger chance +5%"
+      ]
+    },
+    {
+      "idx": 33,
+      "n": "Demonseed Crimson Chalice",
+      "linked_item": "Demonseed Crimson Chalice",
+      "linked_kind": "accessories",
+      "tier": "SS",
+      "arcana_descs": [
+        "When equipped with Demonseed: Bloodstained Grail, Critical Rate +5%",
+        "Demonseed: Bloodstained Grail HP, Defense +6%",
+        "When equipped with Demonseed: Bloodstained Grail, global HP +5%",
+        "Demonseed: Bloodstained Grail HP, Defense +8%",
+        "When equipped with Demonseed: Bloodstained Grail, Ignore Counter Rate +6%",
+        "When wearing Legendary Demonseed: Bloodstained Grail, Vulnerability additionally makes the target take +30% more damage",
+        "Demonseed: Bloodstained Grail HP, Defense +10%",
+        "When equipped with Demonseed: Bloodstained Grail, Critical Damage +20%",
+        "Demonseed: Bloodstained Grail HP, Defense +15%",
+        "When equipped with Demonseed: Bloodstained Grail, Critical Damage +30%",
+        "When wearing Mythic Demonseed: Bloodstained Grail, against Vulnerable targets there is a 50% chance to deal True Damage equal to 5% of the target's Max HP, up to 3 times per turn"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "skillcrit",
+          "arcanaFlat": 0.05,
+          "arcanaFlatAt": 1
+        },
+        {
+          "calc": "basiccrit",
+          "arcanaFlat": 0.05,
+          "arcanaFlatAt": 1
+        },
+        {
+          "calc": "icounter",
+          "arcanaFlat": 0.06,
+          "arcanaFlatAt": 2
+        }
+      ]
+    },
+    {
+      "idx": 34,
+      "n": "Justice Emblem of Verdict",
+      "linked_item": "Justice Emblem of Verdict",
+      "linked_kind": "accessories",
+      "tier": "SS",
+      "arcana_descs": [
+        "When equipped with Justice: Judgement Emblem, skills against shielded targets deal global damage +10%",
+        "Justice: Judgement Emblem HP, Defense +6%",
+        "When equipped with Justice: Judgement Emblem, global HP +5%",
+        "Justice: Judgement Emblem HP, Defense +8%",
+        "When equipped with Justice: Judgement Emblem, Ignore Combo Rate +6%",
+        "When wearing Legendary Justice: Judgement Emblem, Damage Increase effect is additional +25% (Legendary), +40% (Mythic)",
+        "Justice: Judgement Emblem HP, Defense +10%",
+        "When equipped with Justice: Judgement Emblem, global skill damage +9%",
+        "Justice: Judgement Emblem HP, Defense +15%",
+        "When equipped with Justice: Judgement Emblem, global skill damage +12%",
+        "When wearing Mythic Justice: Judgement Emblem, against targets with HP above 35%, Skill Critical Rate +12%, Skill Critical Damage +50%"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "fdr",
+          "cond": "general",
+          "qualD": [
+            0,
+            0.1
+          ]
+        },
+        {
+          "calc": "skillcrit",
+          "arcanaFlat": 0.12,
+          "arcanaFlatAt": 2
+        },
+        {
+          "calc": "icombo",
+          "arcanaFlat": 0.06,
+          "arcanaFlatAt": 1
+        }
+      ]
+    },
+    {
+      "idx": 35,
+      "n": "Winter Ice Soul Guard",
+      "linked_item": "Winter Ice Soul Guard",
+      "linked_kind": "accessories",
+      "tier": "SS",
+      "arcana_descs": [
+        "When equipped with Winter: Frostsoul Guardian, when Frozen gain a shield equal to 30% of Max HP",
+        "Winter: Frostsoul Guardian HP, Defense +6%",
+        "When equipped with Winter: Frostsoul Guardian, global HP +5%",
+        "Winter: Frostsoul Guardian HP, Defense +8%",
+        "When equipped with Winter: Frostsoul Guardian, Ignore Critical Rate +6%",
+        "When wearing Legendary Winter: Frostsoul Guardian, immune to Freeze duration +1, after effect ends Ignore Freeze Rate additional +20%",
+        "Winter: Frostsoul Guardian HP, Defense +10%",
+        "When equipped with Winter: Frostsoul Guardian, global damage +7%",
+        "Winter: Frostsoul Guardian HP, Defense +15%",
+        "When equipped with Winter: Frostsoul Guardian, global damage +9%",
+        "When wearing Mythic Winter: Frostsoul Guardian, Final Damage Increase +10%, Final Damage Reduction +10%, when Controlled Final Damage Reduction additional +10%"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "fdr",
+          "cond": "general",
+          "qualD": [
+            0,
+            0.1
+          ],
+          "arcanaD": [
+            0,
+            0,
+            0,
+            0.1
+          ]
+        },
+        {
+          "calc": "fd",
+          "ty": "general",
+          "arcanaD": [
+            0,
+            0,
+            0,
+            0.1
+          ]
+        },
+        {
+          "calc": "icrit",
+          "arcanaD": [
+            0,
+            0.06,
+            0.06,
+            0.06
+          ]
+        }
+      ]
+    },
+    {
+      "idx": 36,
+      "n": "Bloody Grail",
+      "linked_item": "Bloody Grail",
+      "linked_kind": "accessories",
+      "tier": "S",
+      "arcana_descs": [
+        "When equipped with Bloody Grail, Critical Rate +5%",
+        "Bloody Grail HP, Defense +6%",
+        "When equipped with Bloody Grail, global HP +5%",
+        "Bloody Grail HP, Defense +6%",
+        "When equipped with Bloody Grail, Ignore Counter Rate +5%",
+        "When wearing Legendary Bloody Grail, Vulnerability additionally makes the target take +25% more damage",
+        "Bloody Grail HP, Defense +8%",
+        "When equipped with Bloody Grail, Critical Damage +15%",
+        "Bloody Grail HP, Defense +10%",
+        "When equipped with Bloody Grail, Critical Damage +25%",
+        "When wearing Mythic Bloody Grail, against Vulnerable targets there is a chance to deal True Damage equal to 5% of the target's Max HP, up to 2 times per turn"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "skillcrit",
+          "arcanaFlat": 0.05,
+          "arcanaFlatAt": 1
+        },
+        {
+          "calc": "basiccrit",
+          "arcanaFlat": 0.05,
+          "arcanaFlatAt": 1
+        },
+        {
+          "calc": "icounter",
+          "arcanaFlat": 0.05,
+          "arcanaFlatAt": 2
+        }
+      ]
+    },
+    {
+      "idx": 37,
+      "n": "Proof of Glory",
+      "linked_item": "Proof of Glory",
+      "linked_kind": "accessories",
+      "tier": "S",
+      "arcana_descs": [
+        "Rare skill enhancement for Glorious Proof: Normal attacks deal additional damage equal to 3% (Epic) or 4% (Legendary) of current HP",
+        "Proof of Glory HP and DEF +6%.",
+        "[ Unique Passive ] Global HP +5% when equipped with Proof of Glory.",
+        "Proof of Glory HP and DEF+6%.",
+        "[ Unique Passive ] Global Skill DMG reduction +5% when equipped with Proof of Glory.",
+        "When wearing a Legendary Glorious Proof, additional normal attack damage is based on 4% and 6% of max HP (Legendary)",
+        "Proof of Glory HP and DEF +8%.",
+        "[ Unique Passive ] Global Basic Attack DMG +7% when equipped with Proof of Glory.",
+        "Proof of Glory HP and DEF+10%.",
+        "[ Unique Passive ] Global Basic Attack DMG +8% when equipped with Proof of Glory.",
+        "[ Unique Passive ] When wearing Mythic-quality Proof of Glory, Lifesteal Rate +15% and Lifesteal Effect +25%."
+      ]
+    },
+    {
+      "idx": 38,
+      "n": "Reckoning Badge",
+      "linked_item": "Reckoning Badge",
+      "linked_kind": "accessories",
+      "tier": "S",
+      "arcana_descs": [
+        "[ Unique Passive ] Skill DMG to shielded targets +10% when equipped with Reckoning Badge.",
+        "Reckoning Badge HP and DEF +6%.",
+        "[ Unique Passive ] Global HP +5% when equipped with Reckoning Badge.",
+        "Reckoning Badge HP and DEF +6%.",
+        "[ Unique Passive ] Ignore Combo Rate +5% when equipped with Reckoning Badge.",
+        "[Unique Passive) When equipping Legendary Reckoning Badge, bonus damage effect +25% (Legendary), +40% (Mythic)",
+        "Reckoning Badge HP and DEF +8%.",
+        "[ Unique Passive ] Global Skill DMG +7% when equipped with Reckoning Badge.",
+        "Reckoning Badge HP and DEF+10%.",
+        "[ Unique Passive ] Global Skill DMG +8% when equipped with Reckoning Badge.",
+        "[Unique Passive) When equipping Mythic Reckoning Badge, against targets with less than 70% HP: Skill Crit Rate +10%, Skill Crit Damage +40%"
+      ],
+      "quality_contributions": [
+        {
+          "calc": "skillcrit",
+          "arcanaFlat": 0.1,
+          "arcanaFlatAt": 2
+        },
+        {
+          "calc": "icombo",
+          "arcanaFlat": 0.05,
+          "arcanaFlatAt": 1
+        }
+      ]
+    },
+    {
+      "idx": 39,
+      "n": "Flash",
+      "linked_item": "Flash",
+      "linked_kind": "pets",
+      "tier": "Mythic",
+      "arcana_effects": {
+        "A0": "Flash's skill bolt DMG has a chance to trigger 2 times.",
+        "A1": "Pet stats increase 15%",
+        "A2": "Pet stats increase 15%",
+        "A3": "Pet stats increase 15%",
+        "A4": "Additional skill DMG is based on the target's max HP.",
+        "A5": "Pet stats increase 15%",
+        "A6": "Pet stats increase 15%",
+        "A7": "Pet stats increase 15%",
+        "A8": "Pet stats increase 15%",
+        "A9": "Flash's DMG has a chance to trigger 2–3 times.",
+        "A10": "Pet stats increase 15%"
+      }
+    },
+    {
+      "idx": 40,
+      "n": "Unicorn",
+      "linked_item": "Unicorn",
+      "linked_kind": "pets",
+      "tier": "Mythic",
+      "arcana_effects": {
+        "A0": "Unicorn's skill deals an extra 100% of hero's Crit DMG.",
+        "A1": "Pet stats increase 15%",
+        "A2": "Pet stats increase 15%",
+        "A3": "Pet stats increase 15%",
+        "A4": "After casting skill, increases hero's Crit DMG by 25%.",
+        "A5": "Pet stats increase 15%",
+        "A6": "Pet stats increase 15%",
+        "A7": "Pet stats increase 15%",
+        "A8": "Pet stats increase 15%",
+        "A9": "Extra DMG changes to 150% of hero's Crit DMG.",
+        "A10": "Pet stats increase 15%"
+      }
+    },
+    {
+      "idx": 41,
+      "n": "Baby Dragon",
+      "linked_item": "Baby Dragon",
+      "linked_kind": "pets",
+      "tier": "Mythic",
+      "arcana_effects": {
+        "A0": "For each Burn stack on the target, Baby Dragon's skill DMG increases by 5%.",
+        "A1": "Pet stats increase 15%",
+        "A2": "Pet stats increase 15%",
+        "A3": "Pet stats increase 15%",
+        "A4": "After casting skill, increases hero's Burn DMG by 30% (max 3 stacks, until battle ends).",
+        "A5": "Pet stats increase 15%",
+        "A6": "Pet stats increase 15%",
+        "A7": "Pet stats increase 15%",
+        "A8": "Pet stats increase 15%",
+        "A9": "For every Burn stack on the target, Baby Dragon's skill DMG increases by 10%.",
+        "A10": "Pet stats increase 15%"
+      }
+    },
+    {
+      "idx": 42,
+      "n": "Slime King",
+      "linked_item": "Slime King",
+      "linked_kind": "pets",
+      "tier": "Mythic",
+      "arcana_effects": {
+        "A0": "After Slime King uses a skill, Sword Chi DMG increases by 50%.",
+        "A1": "Pet stats increase 15%",
+        "A2": "Pet stats increase 15%",
+        "A3": "Pet stats increase 15%",
+        "A4": "After casting skill, increases hero's Combo DMG and Counter DMG by 30%.",
+        "A5": "Pet stats increase 15%",
+        "A6": "Pet stats increase 15%",
+        "A7": "Pet stats increase 15%",
+        "A8": "Pet stats increase 15%",
+        "A9": "Sword Chi DMG increase changes to 100%.",
+        "A10": "Pet stats increase 15%"
+      }
+    },
+    {
+      "idx": 43,
+      "n": "Purple Demon Fox",
+      "linked_item": "Purple Demon Fox",
+      "linked_kind": "pets",
+      "tier": "Mythic",
+      "arcana_effects": {
+        "A0": "At battle start, inflict 1 Poison stack on all enemies. Reapplied every 2 rounds.",
+        "A1": "Pet stats increase 15%",
+        "A2": "Pet stats increase 15%",
+        "A3": "Pet stats increase 15%",
+        "A4": "DMG increase duration +1 round.",
+        "A5": "Pet stats increase 15%",
+        "A6": "Pet stats increase 15%",
+        "A7": "Pet stats increase 15%",
+        "A8": "Pet stats increase 15%",
+        "A9": "Poison applied each time changes to 2 stacks.",
+        "A10": "Pet stats increase 15%"
+      }
+    },
+    {
+      "idx": 44,
+      "n": "Elsa",
+      "linked_item": "Elsa",
+      "linked_kind": "pets",
+      "tier": "Immortal",
+      "arcana_effects": {
+        "A0": "Elsa's damage greatly increases, with a chance to freeze enemies for 1 turn. Debuff stack limit increases to 5 layers.",
+        "A1": "Pet stats increase 15%",
+        "A2": "Pet stats increase 15%",
+        "A3": "Pet stats increase 15%",
+        "A4": "Elsa's skill increases hero's DMG by 10% (max 3 stacks, until battle ends).",
+        "A5": "Pet stats increase 15%",
+        "A6": "Pet stats increase 15%",
+        "A7": "Pet stats increase 15%",
+        "A8": "Pet stats increase 15%",
+        "A9": "Elsa ignores control immunity rate +40%.",
+        "A10": "Pet stats increase 15%"
+      },
+      "stacking_stats": {
+        "min_arcana": 4,
+        "stats": {
+          "dmg_bonus": {
+            "per_stack": 10,
+            "max_stacks": 3
+          }
+        }
+      }
+    },
+    {
+      "idx": 45,
+      "n": "Freya",
+      "linked_item": "Freya",
+      "linked_kind": "pets",
+      "tier": "Immortal",
+      "arcana_effects": {
+        "A0": "Each skill crit adds 1 Magic Mark (max 3/round). At 4 marks: magic explosion (100% ATK as skill DMG). At 6 marks: skill DMG coeff +200%. At 10 marks: each skill crit adds +8% skill DMG (max 10 stacks, resets on skill cast).",
+        "A1": "Pet stats increase 15%",
+        "A2": "Pet stats increase 15%",
+        "A3": "Pet stats increase 15%",
+        "A4": "Freya's skill increases hero's Skill Crit Effect by 2% and Skill DMG by 10%.",
+        "A5": "Pet stats increase 15%",
+        "A6": "Pet stats increase 15%",
+        "A7": "Pet stats increase 15%",
+        "A8": "Pet stats increase 15%",
+        "A9": "After Freya's skill crits, hero's Global DMG +25% for 2 turns.",
+        "A10": "Pet stats increase 15%"
+      }
+    },
+    {
+      "idx": 46,
+      "n": "Piggy",
+      "linked_item": "Piggy",
+      "linked_kind": "pets",
+      "tier": "Immortal",
+      "arcana_effects": {
+        "A0": "Jufu Caishen accumulates wealth energy. Starts with 1 gold coin. Every 2 hero combo hits: +1 coin (max 4). Each coin deals 1 instance of damage and increases hero's Combo Rate by 7.5%. Up to 4 coins. When reaching the limit, Jufu Caishen's skill evolved into the ultimate mode, dealing extra Combo damage equal to 10% of the enemy's Max HP (up to 50x hero ATK). Each time Piggy casts a skill, the hero's weapon crit rate increases by 12%, stacking up to 3 times.",
+        "A1": "Pet stats increase 15%",
+        "A2": "Pet stats increase 15%",
+        "A3": "Pet stats increase 15%",
+        "A4": "The bounty additionally incrases the hero's global combo damage by +20%, lasting until the end of the battle",
+        "A5": "Pet stats increase 15%",
+        "A6": "Pet stats increase 15%",
+        "A7": "Pet stats increase 15%",
+        "A8": "Pet stats increase 15%",
+        "A9": "After the Jufu Caishen's Ultimate Mode skill is activated, the hero's global basic attack damage increases by +25% for 2 turns.",
+        "A10": "Pet stats increase 15%"
+      },
+      "flat_stats": {
+        "min_arcana": 4,
+        "stats": {
+          "combo_dmg": 20
+        }
+      }
+    },
+    {
+      "idx": 47,
+      "n": "Pingu",
+      "linked_item": "Pingu",
+      "linked_kind": "pets",
+      "tier": "Transcendent",
+      "arcana_effects": {
+        "A0": "Casts a skill every 2 rounds. At max [ Frostbite ] stacks, 50% chance to freeze for 1 round (1 per 2 rounds). After [ Frostbite ] is fully stacked, enemy Final DMG Bonus -20%, and Pingu's DMG gains Ignore Control Immunity +50%.\n\n[ Frostbite ]: DMG Bonus -10%, Ignore CRIT Rate -1%, ATK -4%, Final DMG Reduction -2%; deals Ice DMG equal to 100% of ATK per round. Stacks up to 10.",
+        "A1": "Pingu's DMG coefficient increased to 100%, and the chance to inflict [ Frostbite ] is increased to 100%.",
+        "A2": "No additional effect",
+        "A3": "No additional effect",
+        "A4": "Each of Pingu's hits inflicts +1 stack of [ Frostbite ].",
+        "A5": "No additional effect",
+        "A6": "No additional effect",
+        "A7": "Pingu's DMG coefficient increased to 150%.",
+        "A8": "No additional effect",
+        "A9": "No additional effect",
+        "A10": "The enemy DMG Bonus reduction per stack of [ Frostbite ] is increased to 20%."
+      }
+    }
+  ]
+}

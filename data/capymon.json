@@ -1,0 +1,51 @@
+{
+  "capymon": [
+    {
+      "n": "Ollie",
+      "fd_by_star": [0.01, 0.02, 0.04, 0.06, 0.08, 0.10],
+      "fdr_by_star": [0, 0, 0, 0, 0, 0]
+    },
+    {
+      "n": "Garfield",
+      "fd_by_star": [0, 0, 0, 0, 0, 0],
+      "fdr_by_star": [0.01, 0.02, 0.04, 0.06, 0.08, 0.10],
+      "deploy_fd_by_star": [0, 0, 0.05, 0.05, 0.10, 0.10],
+      "deploy_fdr_by_star": [0, 0, 0, 0, 0, 0],
+      "deploy_desc": "Deployed (2★+): +0.25%/stack Final DMG, max +5%; 4★+: +0.5%/stack, max +10%. Tracked at full stacks."
+    },
+    {
+      "n": "Maxwell",
+      "fd_by_star": [0.01, 0.02, 0.04, 0.06, 0.08, 0.10],
+      "fdr_by_star": [0, 0, 0, 0, 0, 0]
+    },
+    {
+      "n": "List",
+      "fd_by_star": [0, 0, 0, 0, 0, 0],
+      "fdr_by_star": [0.01, 0.02, 0.04, 0.06, 0.08, 0.10],
+      "deploy_fd_by_star": [0, 0, 0.05, 0.05, 0.15, 0.15],
+      "deploy_fdr_by_star": [0, 0, 0, 0, 0, 0],
+      "deploy_desc": "Deployed (2★+): +0.25%/stack Final DMG, max +5%; 4★+: +0.75%/stack, max +15%. Tracked at full stacks."
+    },
+    {
+      "n": "Alduin",
+      "fd_by_star": [0.01, 0.02, 0.04, 0.06, 0.08, 0.10],
+      "fdr_by_star": [0, 0, 0, 0, 0, 0],
+      "deploy_fd_by_star": [0, 0, 0.05, 0.05, 0.15, 0.15],
+      "deploy_fdr_by_star": [0, 0, 0, 0, 0, 0],
+      "deploy_desc": "Deployed (2★+): +0.25%/stack Final DMG, max +5%; 4★+: +0.75%/stack, max +15%. Tracked at full stacks."
+    },
+    {
+      "n": "Gryffindor",
+      "fd_by_star": [0, 0, 0, 0, 0, 0],
+      "fdr_by_star": [0.01, 0.02, 0.04, 0.06, 0.08, 0.10],
+      "deploy_fd_by_star": [0, 0, 0, 0, 0, 0],
+      "deploy_fdr_by_star": [0, 0, 0.05, 0.05, 0.15, 0.15],
+      "deploy_desc": "Deployed (2★+): +0.5%/stack Final DMG Reduction, max +5%; 4★+: +15% incl. the full-stack bonus. Tracked at full stacks."
+    },
+    {
+      "n": "Cerberus",
+      "fd_by_star": [0.01, 0.02, 0.04, 0.06, 0.08, 0.10],
+      "fdr_by_star": [0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

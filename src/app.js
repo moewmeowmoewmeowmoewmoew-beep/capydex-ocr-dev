@@ -12,8 +12,12 @@ function defaultState() {
     mountState: {},         // idx -> { owned, stars(0-5), awaken(0-10) }
     artifactState: {},      // idx -> { owned, stars(0-5), awaken(0-10) }
     fashionLevel: 0,
+    capymon: {},             // cardName -> { owned, stars(0-5), deployed }
     homestead: {},           // buildingId -> level (0 = not owned)
     equipment: {},           // slotId -> { itemName, quality, surpass, arcana, psionics[4], gems[5] }
+    arcana: {},              // itemName -> arcana level (0-10) — the Collection-tracked record, matched
+                             // by name against whatever's currently equipped/petted; independent of
+                             // any specific equipment slot or pet slot.
     petSlots: [
       { itemName: '', arcana: -1, level: 0, armament: '', armamentLevel: 1, skills: [{ stat: '', val: 0 }, { stat: '', val: 0 }, { stat: '', val: 0 }, { stat: '', val: 0 }, { stat: '', val: 0 }] },
       { itemName: '', arcana: -1, level: 0, armament: '', armamentLevel: 1, skills: [{ stat: '', val: 0 }, { stat: '', val: 0 }, { stat: '', val: 0 }, { stat: '', val: 0 }, { stat: '', val: 0 }] },
@@ -40,6 +44,30 @@ function defaultState() {
 }
 
 let state = loadState();
+
+// One-time migration: copy any arcana level already set on an equipment
+// or pet slot into the new, name-keyed state.arcana record, so existing
+// players don't lose progress when this feature ships. Runs exactly
+// once (guarded by state._arcanaMigrated) and never overwrites an
+// existing state.arcana entry — once the Collection tab is someone's
+// source of truth, a stale per-slot value should never silently stomp
+// a deliberate edit made there.
+function migrateArcanaToCollection() {
+  if (state._arcanaMigrated) return;
+  Object.values(state.equipment || {}).forEach(s => {
+    if (s && s.itemName && s.arcana != null && s.arcana >= 0 && state.arcana[s.itemName] == null) {
+      state.arcana[s.itemName] = s.arcana;
+    }
+  });
+  (state.petSlots || []).forEach(p => {
+    if (p && p.itemName && p.arcana != null && p.arcana >= 0 && state.arcana[p.itemName] == null) {
+      state.arcana[p.itemName] = p.arcana;
+    }
+  });
+  state._arcanaMigrated = true;
+  saveState();
+}
+migrateArcanaToCollection();
 
 function loadState() {
   try {
@@ -395,6 +423,18 @@ function restorePendingFocus() {
    − back to "unowned" would be an easy way to lose data through a click
    that didn't feel deliberate. Un-owning stays a separate, deliberate
    action (the Owned badge itself), not something the stepper does. */
+// Whether a collectible's stat is a percentage — inferred directly from
+// its own stat_label ending in "%", rather than a separate is_percent/
+// is_percent2 field. That field used to exist but was never actually
+// populated for any of the 58 existing collectibles, so the "%" suffix
+// this drives had silently never shown up in the UI at all; the label
+// text itself already carried this information reliably (57 of 58
+// labels already ended in "%" correctly), so there was nothing this
+// separate field did that the label couldn't already tell us.
+function isPercentLabel(label) {
+  return !!label && label.trim().endsWith('%');
+}
+
 function renderStepper(key, value, min, max, onChange, format) {
   format = format || (v => String(v));
   const isUnset = value === null;
@@ -582,12 +622,138 @@ function buildTierGroups(items, field = 'tier') {
   return ordered.map(tier => ({ tier, slug: tierSlug(tier), items: grouped[tier] }));
 }
 
+// Every Arcana entry, resolved against its linked item for display (name,
+// image, tier) — reads exclusively from DB.arcanas now, the standalone
+// source of truth, rather than embedded arcana_descs/awaken_effects
+// fields on the equipment/pet items themselves (those were migrated out
+// once arcanas.json existed). Each entry's own maxLevel comes from
+// whichever data shape that entry actually uses: arcana_descs.length for
+// equipment (a plain list), or the highest "AN" key actually present in
+// arcana_effects for pets (an object) — never a single global max, since
+// that both undersells items with fewer tiers and overstates ones with
+// more.
+function getAllArcanaItems() {
+  const out = [];
+  (DB.arcanas || []).forEach(entry => {
+    const linkedList = DB[entry.linked_kind] || [];
+    const linkedItem = linkedList.find(it => it.n === entry.linked_item);
+    if (!linkedItem) return; // linked item no longer exists in its DB — skip rather than show a broken card
+    let maxLevel;
+    if (entry.arcana_descs) {
+      maxLevel = entry.arcana_descs.length - 1;
+    } else if (entry.arcana_effects) {
+      const levels = [];
+      for (let i = 0; i <= 10; i++) if (entry.arcana_effects[`A${i}`]) levels.push(i);
+      maxLevel = levels.length ? Math.max(...levels) : 0;
+    } else {
+      maxLevel = 0;
+    }
+    const imgKind = entry.linked_kind === 'pets' ? 'pets' : (EQUIPMENT_SLOTS.find(s => s.dataKey === entry.linked_kind) || {}).imgKind || entry.linked_kind;
+    out.push({ name: entry.linked_item, kind: entry.linked_kind === 'pets' ? 'pet' : 'equipment', imgKind, tier: linkedItem.tier || '(Untiered)', maxLevel, item: linkedItem, arcanaEntry: entry });
+  });
+  return out;
+}
+
+// Looks up the Arcana record for a given item name, matched via
+// linked_item — the one place this lookup happens, so every reader
+// (equipment card, pet card, Calculator) stays in sync automatically if
+// the matching logic here ever needs to change.
+function getArcanaEntry(itemName) {
+  return (DB.arcanas || []).find(e => e.linked_item === itemName) || null;
+}
+
+// Resolves the arcana effect TEXT for a given entry + level, handling
+// both storage shapes: equipment's arcana_descs (a flat, cumulative list
+// — level N shows itself only, since callers that want the full
+// cumulative text use collateArcanaEffects separately) and pets'
+// arcana_effects (an "AN" keyed object, same shape as mount/artifact
+// awaken text).
+function getArcanaEffectText(entry, level) {
+  if (!entry) return null;
+  if (entry.arcana_descs) return entry.arcana_descs[level] || null;
+  if (entry.arcana_effects) return entry.arcana_effects[`A${level}`] || null;
+  return null;
+}
+
+function renderArcanaCard(entry) {
+  const currentLevel = state.arcana[entry.name];
+  const card = el('div', { class: 'item-card' });
+  card.appendChild(renderCardTitleRow(entry.kind === 'pet' ? 'pets' : entry.imgKind, entry.item, entry.tier));
+
+  const select = el('select', { class: 'equip-select' }, [
+    el('option', { value: '-1', selected: currentLevel == null ? 'true' : null }, 'No Arcana'),
+    ...Array.from({ length: entry.maxLevel + 1 }, (_, i) => i).map(lvl =>
+      el('option', { value: String(lvl), selected: currentLevel === lvl ? 'true' : null }, `A${lvl}`)),
+  ]);
+  select.addEventListener('change', (e) => {
+    const val = parseInt(e.target.value, 10);
+    if (val < 0) delete state.arcana[entry.name];
+    else state.arcana[entry.name] = val;
+    saveState();
+    render();
+  });
+  card.appendChild(select);
+
+  if (currentLevel != null) {
+    card.appendChild(el('div', { class: 'section-desc', style: 'margin-top:8px;font-style:italic;' },
+      'Applies automatically whenever this is equipped — the Equipment/Pet page no longer needs its own Arcana picker for this item.'));
+  }
+  return card;
+}
+
+function renderArcanaSection() {
+  const wrap = el('div', {});
+  wrap.appendChild(el('p', { class: 'section-desc' },
+    'Set an item\u2019s Arcana level here once, independent of whether it\u2019s currently equipped — it\u2019s matched by name to whatever\u2019s equipped or petted, the same way Mounts/Artifacts track stars separately from being deployed.'));
+
+  const search = el('input', { class: 'search-input', type: 'text', placeholder: 'Search arcana items…' });
+  wrap.appendChild(el('div', { class: 'toolbar toolbar-stacked' }, [el('div', { class: 'toolbar-row' }, [search])]));
+
+  const groupsWrap = el('div', {});
+  wrap.appendChild(groupsWrap);
+
+  // Two fixed top-level sections (Equipment, Pets) rather than tier-only
+  // groups, matching the sidebar's own sub-nav slugs (arcana-equipment /
+  // arcana-pets) — tier grouping still happens WITHIN each section, same
+  // as the rest of the app's collection pages, just nested one level in.
+  const renderGroups = () => {
+    groupsWrap.innerHTML = '';
+    const q = search.value.trim().toLowerCase();
+    const allItems = getAllArcanaItems().filter(e => !q || e.name.toLowerCase().includes(q));
+
+    [
+      { kind: 'equipment', label: 'Equipment', slug: 'arcana-equipment' },
+      { kind: 'pet', label: 'Pets', slug: 'arcana-pets' },
+    ].forEach(section => {
+      const items = allItems.filter(e => e.kind === section.kind);
+      groupsWrap.appendChild(el('div', { class: 'tier-group-title', id: section.slug }, section.label));
+      if (!items.length) {
+        groupsWrap.appendChild(el('p', { class: 'section-desc' }, 'No matching items.'));
+        return;
+      }
+      const tierGroups = buildTierGroups(items);
+      tierGroups.forEach(g => {
+        groupsWrap.appendChild(el('div', { class: 'tier-group-title', style: 'font-size:14px;opacity:0.8;' }, g.tier));
+        const grid = el('div', { class: 'card-grid cols-2' });
+        g.items.forEach(entry => grid.appendChild(renderArcanaCard(entry)));
+        groupsWrap.appendChild(grid);
+      });
+    });
+  };
+  search.addEventListener('input', renderGroups);
+  renderGroups();
+
+  return wrap;
+}
+
 const COLLECTION_SECTIONS = [
   { id: 'collectibles', label: 'Collectibles', build: renderCollectibles, sub: () => [...buildTierGroups(DB.collectibles, 'rarity'), { tier: 'Sets', slug: 'sets' }], clearAll: () => clearAllCollectibles() },
   { id: 'relics', label: 'Relics', build: renderRelics, sub: () => [...buildTierGroups(DB.relics, 'rarity'), { tier: 'Sets', slug: 'sets' }], clearAll: () => clearAllRelics() },
+  { id: 'arcana', label: 'Arcana', build: renderArcanaSection, sub: () => [{ tier: 'Equipment', slug: 'arcana-equipment' }, { tier: 'Pets', slug: 'arcana-pets' }], clearAll: () => { state.arcana = {}; saveState(); render(); } },
   { id: 'mounts', label: 'Mounts', build: () => renderMountsOrArtifacts('mounts'), sub: () => buildTierGroups(DB.mounts.filter(x => x.n !== 'None')), clearAll: () => clearAllMountsOrArtifacts('mounts') },
   { id: 'artifacts', label: 'Artifacts', build: () => renderMountsOrArtifacts('artifacts'), sub: () => buildTierGroups(DB.artifacts.filter(x => x.n !== 'None')), clearAll: () => clearAllMountsOrArtifacts('artifacts') },
   { id: 'fashion', label: 'Fashion Level', build: buildFashionSectionContent, clearAll: () => { state.fashionLevel = 0; saveState(); render(); } },
+  { id: 'capymon', label: 'Capymon Cards', build: buildCapymonSectionContent, clearAll: () => { state.capymon = {}; saveState(); render(); } },
   { id: 'homestead', label: 'Homestead', build: buildHomesteadSectionContent, clearAll: () => { state.homestead = {}; saveState(); render(); } },
 ];
 
@@ -641,6 +807,145 @@ function buildFashionSectionContent() {
     wrap.appendChild(equipFieldLabel('Totals at this level'));
     wrap.appendChild(el('div', { class: 'equip-writeup' }, parts.join(' · ')));
   }
+
+  return wrap;
+}
+
+/* ============================================================
+   Capymon Cards
+   ============================================================
+   Mythic collectibles that grant a passive Final DMG or Final DMG
+   Reduction bonus just for being owned, scaling 0-5★ (fd_by_star /
+   fdr_by_star — only one of the two is ever nonzero for a given card,
+   per its game design, but both arrays are always present so the code
+   doesn't need a card.calc branch). A few also grant a second, separate
+   stacking buff while deployed (deploy_fd_by_star / deploy_fdr_by_star,
+   capped differently at 2★ vs 4★ — tracked here at full stacks). Data:
+   DB.capymon, from data/capymon.json. Art: assets/images/capymon/<slug>.webp
+   via the same itemImagePath()/renderThumb() convention as every other
+   item kind (weapons, arcana, etc).
+   ============================================================ */
+
+function capymonState(name) {
+  if (!state.capymon || typeof state.capymon !== 'object') state.capymon = {};
+  if (!state.capymon[name]) state.capymon[name] = { owned: false, stars: 0, deployed: false };
+  return state.capymon[name];
+}
+
+// Sums every owned/deployed card's Final DMG and Final DMG Reduction
+// contribution. Returns { fd, fdr, breakdown } — fd/fdr are fractions
+// (0.05 = 5%); breakdown is per-card for source tracking.
+function computeCapymonStats() {
+  const cards = DB.capymon || [];
+  let fd = 0, fdr = 0;
+  const breakdown = [];
+
+  cards.forEach(card => {
+    const st = capymonState(card.n);
+    if (!st.owned) return;
+    const stars = Math.min(Math.max(st.stars || 0, 0), 5);
+    let cardFd = (card.fd_by_star || [])[stars] || 0;
+    let cardFdr = (card.fdr_by_star || [])[stars] || 0;
+
+    if (st.deployed && stars >= 2) {
+      cardFd += (card.deploy_fd_by_star || [])[stars] || 0;
+      cardFdr += (card.deploy_fdr_by_star || [])[stars] || 0;
+    }
+
+    fd += cardFd;
+    fdr += cardFdr;
+    if (cardFd || cardFdr) breakdown.push({ name: card.n, fd: cardFd, fdr: cardFdr });
+  });
+
+  return { fd, fdr, breakdown };
+}
+
+function buildCapymonSectionContent() {
+  const wrap = el('div', {});
+  wrap.appendChild(el('p', { class: 'section-desc' },
+    'Mythic cards grant passive Final DMG / Final DMG Reduction just for being owned, scaling with star level. A few also buff you while deployed, at a separate stacking rate — tracked here at full stacks.'));
+
+  const grid = el('div', { class: 'cpm-grid' });
+  (DB.capymon || []).forEach(card => {
+    const st = capymonState(card.n);
+    const stars = Math.min(Math.max(st.stars || 0, 0), 5);
+    const hasDeploy = (card.deploy_fd_by_star && card.deploy_fd_by_star.some(v => v)) ||
+                       (card.deploy_fdr_by_star && card.deploy_fdr_by_star.some(v => v));
+    const passiveFd = (card.fd_by_star || [])[stars] || 0;
+    const passiveFdr = (card.fdr_by_star || [])[stars] || 0;
+
+    const cardEl = el('div', { class: 'cpm-card' + (st.owned ? ' owned' : '') });
+
+    if (st.owned) {
+      const removeBtn = el('button', { class: 'cpm-remove', title: `Remove ${card.n}` }, '✕');
+      removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        st.owned = false;
+        st.deployed = false;
+        saveState();
+        render();
+      });
+      cardEl.appendChild(removeBtn);
+    } else {
+      cardEl.title = `Click to add ${card.n}`;
+      cardEl.addEventListener('click', () => {
+        st.owned = true;
+        saveState();
+        render();
+      });
+    }
+
+    cardEl.appendChild(el('div', { class: 'cpm-head' }, [renderThumb('capymon', card), el('div', { class: 'cpm-name' }, card.n)]));
+
+    const tagParts = [];
+    if (passiveFd) tagParts.push(el('span', { class: 'cpm-tag' }, `Final DMG +${(passiveFd * 100).toFixed(0)}%`));
+    if (passiveFdr) tagParts.push(el('span', { class: 'cpm-tag' }, `Final DMG Red. +${(passiveFdr * 100).toFixed(0)}%`));
+    cardEl.appendChild(el('div', { class: 'cpm-row' }, tagParts));
+
+    const starRow = el('div', { class: 'cpm-row' }, 'Stars ');
+    const starSelect = el('select', { disabled: st.owned ? null : 'disabled' });
+    for (let s = 0; s <= 5; s++) {
+      const sFd = (card.fd_by_star || [])[s] || 0;
+      const sFdr = (card.fdr_by_star || [])[s] || 0;
+      const pct = sFd || sFdr;
+      const opt = el('option', { value: String(s) }, `${s}★ (+${(pct * 100).toFixed(0)}%)`);
+      if (s === stars) opt.selected = true;
+      starSelect.appendChild(opt);
+    }
+    starSelect.addEventListener('click', (e) => e.stopPropagation());
+    starSelect.addEventListener('change', (e) => {
+      st.stars = parseInt(e.target.value, 10) || 0;
+      if (st.stars < 2) st.deployed = false;
+      saveState();
+      render();
+    });
+    starRow.appendChild(starSelect);
+    cardEl.appendChild(starRow);
+
+    if (hasDeploy) {
+      const dFd = (card.deploy_fd_by_star || [])[stars] || 0;
+      const dFdr = (card.deploy_fdr_by_star || [])[stars] || 0;
+      const dLabel = dFd ? `+${(dFd * 100).toFixed(0)}% Final DMG` : dFdr ? `+${(dFdr * 100).toFixed(0)}% Final DMG Red.` : '';
+      const canDeploy = st.owned && stars >= 2;
+      const deployRow = el('div', { class: 'cpm-row cpm-deploy', title: card.deploy_desc || '' });
+      const deploySelect = el('select', { disabled: canDeploy ? null : 'disabled' });
+      deploySelect.appendChild(el('option', { value: '0', selected: (!st.deployed || !canDeploy) ? 'selected' : null }, 'Not deployed'));
+      deploySelect.appendChild(el('option', { value: '1', selected: (st.deployed && canDeploy) ? 'selected' : null },
+        `Deployed${dLabel ? ` (${dLabel})` : ''}`));
+      deploySelect.addEventListener('click', (e) => e.stopPropagation());
+      deploySelect.addEventListener('change', (e) => {
+        st.deployed = e.target.value === '1';
+        saveState();
+        render();
+      });
+      deployRow.appendChild(deploySelect);
+      if (!canDeploy) deployRow.appendChild(el('span', { class: 'cpm-dep-val' }, '2★+'));
+      cardEl.appendChild(deployRow);
+    }
+
+    grid.appendChild(cardEl);
+  });
+  wrap.appendChild(grid);
 
   return wrap;
 }
@@ -745,10 +1050,11 @@ function buildHomesteadSectionContent() {
 }
 
 
-function renderPlaceholder(label) {
-  return el('div', {}, [
+function renderPlaceholder(label, desc) {
+  return el('div', { class: 'placeholder-page' }, [
     el('div', { class: 'section-title' }, label),
-    el('p', { class: 'section-desc' }, `${label} is being built next.`),
+    el('p', { class: 'section-desc placeholder-coming-soon' }, '✨ Coming soon'),
+    el('p', { class: 'section-desc' }, desc || `${label} is being built next.`),
   ]);
 }
 
@@ -2062,20 +2368,19 @@ function renderEquipPetCard(petIndex) {
 
   if (!pet) return card;
 
-  const hasAwaken = pet.awaken_effects && Object.keys(pet.awaken_effects).length > 0;
-  if (hasAwaken) {
+  // Always read-only now, per the updated design — same reasoning and
+  // getArcanaEntry() lookup as the equipment card's Arcana section.
+  const arcanaEntry = getArcanaEntry(pet.n);
+  if (arcanaEntry) {
     card.appendChild(equipFieldLabel('Arcana'));
-    const levels = [];
-    for (let i = 0; i <= 10; i++) if (pet.awaken_effects[`A${i}`]) levels.push(i);
-    const arcanaSelect = el('select', { class: 'equip-select' }, [
-      el('option', { value: '-1', selected: s.arcana === -1 ? 'true' : null }, 'No Arcana'),
-      ...levels.map(i => el('option', { value: String(i), selected: i === s.arcana ? 'true' : null }, `A${i}`)),
-    ]);
-    arcanaSelect.addEventListener('change', (e) => { s.arcana = parseInt(e.target.value, 10); saveState(); render(); });
-    card.appendChild(arcanaSelect);
-
-    if (s.arcana >= 0) {
-      card.appendChild(el('div', { class: 'equip-writeup' }, `A${s.arcana}: ${pet.awaken_effects[`A${s.arcana}`]}`));
+    const matchedArcana = state.arcana[pet.n];
+    if (matchedArcana != null) {
+      card.appendChild(el('div', { class: 'equip-readonly-value' }, `A${matchedArcana}`));
+      const effectText = getArcanaEffectText(arcanaEntry, matchedArcana);
+      if (effectText) card.appendChild(el('div', { class: 'equip-readonly-caption' }, effectText));
+    } else {
+      card.appendChild(el('div', { class: 'equip-readonly-value' }, '\u2014'));
+      card.appendChild(el('div', { class: 'equip-readonly-caption' }, 'Not yet set \u2014 head to Collection \u2192 Arcana.'));
     }
   }
 
@@ -2178,7 +2483,12 @@ function renderEquipPetCard(petIndex) {
   }
 
   // ---- 5 Skill Slots ----
-  card.appendChild(el('div', { class: 'equip-section-title' }, 'Pet Skills'));
+  const petInfoIcon = el('span', { class: 'psi-info-icon' }, 'ⓘ');
+  petInfoIcon.addEventListener('click', (e) => { e.stopPropagation(); openPetSkillInfoModal(); });
+  card.appendChild(el('div', { class: 'equip-section-title psi-section-title-row' }, [
+    el('span', {}, 'Pet Skills'),
+    petInfoIcon,
+  ]));
   const allAttrs = DB.pet_attrs || [];
   const fixedTierSkills = new Set(DB.pet_fixed_tier_skills || []);
   card.appendChild(renderPetSkillDropZone(s, allAttrs, fixedTierSkills));
@@ -2396,6 +2706,41 @@ function collateArcanaEffects(descs, upToIndex) {
   return [...parts, ...raw].join(', ');
 }
 
+// Surpass's actual level cap is now a fixed rule by QUALITY alone, the
+// same across every item that has Surpass at all: Epic +2, Legendary
+// +3, Mythic and Transcendent +4 (Common/Uncommon/Rare get none). The
+// item's own surpass_max field still gates whether Surpass exists on
+// this item AT ALL (13 base-tier items — Warrior's Blade, Eagle Ring,
+// etc. — have no surpass_max and correctly get 0 regardless of
+// quality), but once an item has it, the actual per-quality number
+// comes from this table, not from surpass_max's own stored value — so
+// an S-grade item's Mythic cap is now +4 same as SS-grade, even though
+// its surpass_max is still stored as 3 from before this rule existed.
+// Shared by the Equipment card's dropdown/quality-switch clamping and
+// the Calculator's own aggregation, so a stale saved state (e.g. a
+// Legendary item saved at +4 before the Legendary-specific cap existed)
+// can't silently keep counting a Surpass level that quality no longer
+// allows.
+const SURPASS_MAX_BY_QUALITY = { Epic: 2, Legendary: 3, Mythic: 4, Transcendent: 4 };
+function getEffectiveSurpassMax(item, quality) {
+  if (!item.surpass_max) return 0;
+  return SURPASS_MAX_BY_QUALITY[quality] || 0;
+}
+
+// Resolves a single surpass_stats entry's level array against the
+// item's CURRENT quality — a stat's value can be either a flat array
+// (same regardless of quality) or a {quality: [...]} object (for the
+// handful of SS-grade items whose Surpass bonus itself differs between
+// Legendary and Mythic). Shared by both the Calculator's aggregation and
+// the Equipment card's helper caption, so the two can never silently
+// disagree about which array applies to a given quality. Returns null
+// if the stat is quality-keyed but has no entry for this item's current
+// quality (e.g. data only covers Mythic so far).
+function resolveSurpassLevels(statValue, quality) {
+  if (Array.isArray(statValue)) return statValue;
+  return statValue[quality] || null;
+}
+
 function renderEquipCard(slotDef) {
   const s = getEquipState(slotDef.id);
   // Items with no tier assigned aren't real equippable gear — confirmed
@@ -2452,37 +2797,82 @@ function renderEquipCard(slotDef) {
     qualOpts.length
       ? qualOpts.map(q => el('option', { value: q, selected: q === s.quality ? 'true' : null }, q))
       : [el('option', { value: '' }, '—')]);
-  qualitySelect.addEventListener('change', (e) => { s.quality = e.target.value; saveState(); render(); });
+  qualitySelect.addEventListener('change', (e) => {
+    s.quality = e.target.value;
+    // Legendary quality caps at +3 Surpass regardless of the item's own
+    // surpass_max (which represents the Mythic-level cap — +4 for
+    // SS-grade, +3 for S-grade, where it's already the same number so
+    // this only actually changes anything for SS-grade items). Clamp
+    // here so switching FROM Mythic-at-+4 DOWN TO Legendary can't leave
+    // the stored surpass value silently out of range for the new
+    // quality's own, lower cap.
+    s.surpass = Math.min(s.surpass, getEffectiveSurpassMax(item, s.quality));
+    saveState(); render();
+  });
   card.appendChild(qualitySelect);
 
   // ---- Surpass ----
   card.appendChild(equipFieldLabel('Surpass'));
-  const surpassMax = item.surpass_max || 0;
+  const surpassMax = getEffectiveSurpassMax(item, s.quality);
   const surpassOpts = Array.from({ length: surpassMax + 1 }, (_, i) => i);
   const surpassSelect = el('select', { class: 'equip-select' },
     surpassOpts.map(n => el('option', { value: String(n), selected: n === s.surpass ? 'true' : null }, `+${n}`)));
   surpassSelect.addEventListener('change', (e) => { s.surpass = parseInt(e.target.value, 10); saveState(); render(); });
   card.appendChild(surpassSelect);
 
-  // ---- Arcana ----
-  card.appendChild(equipFieldLabel('Arcana'));
-  const arcanaDescs = item.arcana_descs || [];
-  const arcanaSelect = el('select', { class: 'equip-select', disabled: arcanaDescs.length ? null : 'true' }, [
-    el('option', { value: '-1', selected: s.arcana === -1 ? 'true' : null }, 'No Arcana'),
-    ...arcanaDescs.map((_, i) => el('option', { value: String(i), selected: i === s.arcana ? 'true' : null }, `A${i}`)),
-  ]);
-  arcanaSelect.addEventListener('change', (e) => { s.arcana = parseInt(e.target.value, 10); saveState(); render(); });
-  card.appendChild(arcanaSelect);
+  // Helper caption showing what surpass_stats actually gives at the
+  // CURRENTLY selected level and quality — recomputed on every render
+  // (the select's own change handler already calls render(), which
+  // rebuilds this whole card, so no separate update wiring is needed
+  // here). Uses the same resolveSurpassLevels() shape-detection and
+  // getEffectiveSurpassMax() clamping the Calculator itself uses, so
+  // this always matches what's actually being counted, never a
+  // separately-maintained copy that could drift out of sync.
+  if (item.surpass_stats) {
+    const effectiveSurpass = Math.min(s.surpass, getEffectiveSurpassMax(item, s.quality));
+    const parts = Object.entries(item.surpass_stats).map(([key, statValue]) => {
+      const levels = resolveSurpassLevels(statValue, s.quality);
+      if (!levels) return null;
+      const idx = Math.min(effectiveSurpass, levels.length - 1);
+      const val = levels[idx];
+      const label = RELIC_KEY_TO_LABEL[key] || key;
+      return val ? `${label} +${val}%` : null;
+    }).filter(Boolean);
+    if (parts.length) {
+      card.appendChild(el('div', { class: 'equip-readonly-caption' }, parts.join(', ')));
+    }
+  }
 
-  if (s.arcana >= 0 && arcanaDescs.length) {
-    const collated = collateArcanaEffects(arcanaDescs, s.arcana);
-    card.appendChild(el('div', { class: 'equip-arcana-writeup' }, collated));
+  // ---- Arcana ----
+  // Always read-only now, per the updated design — Arcana is exclusively
+  // set via Collection -> Arcana, matched here by item name through
+  // getArcanaEntry(). An item with no Arcana data at all (no entry in
+  // arcanas.json) shows nothing here, same as before this existed. One
+  // with data but no level set yet still shows the label + a dash, so
+  // it's clear this item supports Arcana and where to go set it.
+  const arcanaEntry = getArcanaEntry(item.n);
+  if (arcanaEntry) {
+    const matchedArcana = state.arcana[item.n];
+    card.appendChild(equipFieldLabel('Arcana'));
+    if (matchedArcana != null) {
+      card.appendChild(el('div', { class: 'equip-readonly-value' }, `A${matchedArcana}`));
+      const collated = arcanaEntry.arcana_descs ? collateArcanaEffects(arcanaEntry.arcana_descs, matchedArcana) : getArcanaEffectText(arcanaEntry, matchedArcana);
+      if (collated) card.appendChild(el('div', { class: 'equip-readonly-caption' }, collated));
+    } else {
+      card.appendChild(el('div', { class: 'equip-readonly-value' }, '\u2014'));
+      card.appendChild(el('div', { class: 'equip-readonly-caption' }, 'Not yet set \u2014 head to Collection \u2192 Arcana.'));
+    }
   }
 
   // Psionic Attributes only ever roll on SS-tier gear — confirmed. Hide the
   // whole section rather than show it disabled/inapplicable for S/Basic.
   if (item.tier === 'SS') {
-    card.appendChild(el('div', { class: 'equip-section-title' }, 'Psionic Attributes'));
+    const infoIcon = el('span', { class: 'psi-info-icon' }, 'ⓘ');
+    infoIcon.addEventListener('click', (e) => { e.stopPropagation(); openPsionicInfoModal(); });
+    card.appendChild(el('div', { class: 'equip-section-title psi-section-title-row' }, [
+      el('span', {}, 'Psionic Attributes'),
+      infoIcon,
+    ]));
     const psiOptions = DB.psionics[slotDef.psiKey] || [];
     card.appendChild(renderPsionicDropZone(slotDef, s, psiOptions));
     s.psionics.forEach((slot, i) => {
@@ -2551,6 +2941,48 @@ function showPsionicToast(message) {
   psiToastTimeout = setTimeout(() => toast.classList.remove('visible'), 5000);
 }
 
+
+// Generic tutorial modal — opens as a centered modal on desktop and a
+// bottom-sheet drawer on mobile automatically, via .modal-overlay/
+// .modal-box's own existing responsive CSS (no separate drawer component
+// needed, since that combination is already exactly what those two
+// classes do at the 843px breakpoint). Shared by both the Psionic and
+// Pet Skill upload tooltips rather than duplicated per-feature, since
+// both follow the same "step text, tutorial image, step text" shape.
+function openTutorialModal(title, beforeText, imageSrc, afterText) {
+  const overlay = el('div', { class: 'modal-overlay', onclick: (e) => { if (e.target === overlay) closeModal(); } });
+  function closeModal() { overlay.remove(); }
+
+  const box = el('div', { class: 'modal-box' }, [
+    el('div', { class: 'modal-title' }, title),
+    el('p', { class: 'section-desc', style: 'margin-bottom:10px;' }, beforeText),
+    el('img', { src: imageSrc, alt: title, class: 'tutorial-modal-img' }),
+    el('p', { class: 'section-desc', style: 'margin:10px 0 14px;' }, afterText),
+    el('div', { class: 'modal-actions' }, [
+      el('button', { class: 'bulk-action-btn primary', onclick: closeModal }, 'Got it'),
+    ]),
+  ]);
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+}
+
+function openPsionicInfoModal() {
+  openTutorialModal(
+    'Reading Psionic Attributes',
+    'Tap on the equipment and ensure that all the stats are in view before taking a screenshot.',
+    'assets/images/psionic-tutorial.webp',
+    'Upload the image into their corresponding equipment type.'
+  );
+}
+
+function openPetSkillInfoModal() {
+  openTutorialModal(
+    'Reading Pet Skills',
+    'Tap on your pet and ensure that you are viewing your "Original Stats".',
+    'assets/images/pet-original-tutorial.webp',
+    'Upload the image into their corresponding pet type.'
+  );
+}
 
 function renderPsionicDropZone(slotDef, s, psiOptions) {
   const wrap = el('div', { class: 'psi-dropzone-wrap' });
@@ -2818,9 +3250,15 @@ function render() {
   } else if (activeMainTab === 'equipment') {
     root.appendChild(renderEquipmentShell());
   } else if (activeMainTab === 'inheritance') {
-    root.appendChild(renderInheritanceShell());
+    // Lighter-release scope: Inheritance Tree is being held back for a later
+    // update (needs more thought on UI/interaction) — showing a "Coming
+    // soon" placeholder instead of the real page for now.
+    // root.appendChild(renderInheritanceShell());
+    root.appendChild(renderPlaceholder('Inheritance Tree', "We're still refining this one — check back soon!"));
   } else if (activeMainTab === 'specialization') {
-    root.appendChild(renderSpecializationShell());
+    // Lighter-release scope: same as Inheritance above — held back for now.
+    // root.appendChild(renderSpecializationShell());
+    root.appendChild(renderPlaceholder('Specialization', "We're still refining this one — check back soon!"));
   } else {
     const labels = { inheritance: 'Inheritance Tree' };
     root.appendChild(renderPlaceholder(labels[activeMainTab] || activeMainTab));
@@ -2932,6 +3370,7 @@ function clearAllCollection() {
   clearAllMountsOrArtifacts('mounts');
   clearAllMountsOrArtifacts('artifacts');
   state.fashionLevel = 0;
+  state.capymon = {};
   state.homestead = {};
   saveState();
   render();
@@ -3632,13 +4071,32 @@ function renderCollectibleCard(item) {
       // already whole percentages like 1.0 = 1%, not a 0.01 fraction) —
       // no more ×100 conversion, and flat stats (HP/ATK/DEF/Block) get no
       // "%" at all since they're not percentages to begin with.
-      const display = item.is_percent ? `${val}%` : `${val}`;
+      const display = isPercentLabel(item.stat_label) ? `${val}%` : `${val}`;
       effectLine = el('div', { class: 'item-effect' }, [
         item.stat_label.replace(/\s*%$/, '') + ': ',
         el('span', { class: 'stat-value-live' }, display),
       ]);
     }
-    card.appendChild(el('div', { class: 'card-info' }, [effectLine]));
+    const lines = [effectLine];
+    // Second stat line — Immortal-rarity collectibles only, currently
+    // (Laurel Jade Rabbit onward), but rendered purely off star_vals2's
+    // presence rather than checking rarity directly, same as the
+    // Calculator side, so any future item gets this for free just by
+    // having the field populated.
+    if (item.star_vals2) {
+      const val2 = item.star_vals2[stars];
+      if (val2 == null) {
+        lines.push(el('div', { class: 'item-effect placeholder' },
+          `${item.stat_label2}: not documented at ${stars}★ yet`));
+      } else {
+        const display2 = isPercentLabel(item.stat_label2) ? `${val2}%` : `${val2}`;
+        lines.push(el('div', { class: 'item-effect' }, [
+          item.stat_label2.replace(/\s*%$/, '') + ': ',
+          el('span', { class: 'stat-value-live' }, display2),
+        ]));
+      }
+    }
+    card.appendChild(el('div', { class: 'card-info' }, lines));
   }
   return card;
 }
@@ -4010,6 +4468,7 @@ const RELIC_KEY_TO_LABEL = {
   crit_dmg_reduction: 'Crit DMG Reduction', 
 
   basic_atk_crit_rate: 'Basic ATK Crit Rate', 
+  dagger_crit_rate: 'Dagger Crit Rate',
   ignore_normal_attack_crit_rate: 'Ignore Normal ATK Crit',
   
   final_basic_atk_dmg: 'Final Normal ATK DMG', 
@@ -4407,8 +4866,32 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
     if (!state.collectibleOwned[c.n]) return;
     const star = Math.min(state.collectibleStars[c.n] || 0, 10);
     const val = c.star_vals[star];
-    const label = RELIC_KEY_TO_LABEL[c.stat_key] || (c.is_percent ? c.stat_label : null);
+    // No more is_percent-gated fallback to the raw stat_label here — it
+    // never actually fired for any existing collectible (is_percent was
+    // never populated on any of them), so removing it changes nothing
+    // in practice. Inferring "is this a percent" from the label text
+    // (isPercentLabel, used for the UI's "%" suffix) is NOT reused here:
+    // roughly two dozen collectibles have an unmapped stat_key with a
+    // percent-looking label (Daily Gem Bonus %, Battle Gold Gain %, and
+    // similar economy/utility stats that were never meant to be tracked
+    // combat categories at all) — applying that same inference here
+    // would suddenly start counting all of them as bogus stats, a real
+    // behavior change rather than the display-only fix this was meant
+    // to be. So this stays a straightforward mapped-or-nothing lookup.
+    const label = RELIC_KEY_TO_LABEL[c.stat_key];
     if (label && val) add(label, val, `${c.n} (${star}★)`);
+    // A second, independent stat — currently only Immortal-rarity
+    // collectibles carry this (e.g. Laurel Jade Rabbit), but the field
+    // itself isn't rarity-gated in any way here: any collectible with
+    // star_vals2 populated gets it applied, the same way the first stat
+    // works. Mirrors the primary stat's own fields exactly (stat_key2/
+    // stat_label2/star_vals2) rather than a nested object, so an item
+    // with only one stat needs no structural change at all.
+    if (c.star_vals2) {
+      const val2 = c.star_vals2[star];
+      const label2 = RELIC_KEY_TO_LABEL[c.stat_key2];
+      if (label2 && val2) add(label2, val2, `${c.n} (${star}★)`);
+    }
     // conditional_stats — same optional, separate-field pattern as
     // Relics' flat_stats and Mounts/Artifacts' conditional_stats. Nothing
     // populates this for any real Collectible yet.
@@ -4746,23 +5229,34 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
         // every 6 turns, alongside its base "every release" DMG to
         // Shields bonus still firing every 3 turns in the same tier) —
         // defaults to 3 when omitted, matching every prior use of this
-        // mechanism. The ceiling (round === null) view shows the flat
-        // value, since that's the peak this ever reaches — it never
-        // stacks.
+        // mechanism. cfg.one_time is a separate override for a
+        // genuinely single-fire trigger (e.g. Crimson Glow Drake's
+        // [ Glowflame ] buff, which fires once "after the enemy lands
+        // their first Crit" — not a recurring, deploy-slot-staggered
+        // cadence at all): when set, the pulse always starts at round 1
+        // (regardless of deploy slot) and never recurs afterward, per
+        // this session's established "assume it happens on round 1"
+        // convention for one-time, hard-to-predict procs. The ceiling
+        // (round === null) view shows the flat value either way, since
+        // that's the peak this ever reaches — it never stacks.
         const pulseTier = pickAwakenTier(item.pulse_stats_awaken_tiers);
         if (pulseTier) {
           const firstTurn = deploySlotIdx + 1;
           const pulseKindLabel = kind === 'mounts' ? 'Deployed mount' : 'Deployed artifact';
           Object.entries(pulseTier.stats || {}).forEach(([key, cfg]) => {
-            const interval = cfg.interval ?? 3;
             let active;
             if (round == null) {
               active = true;
-            } else if (round < firstTurn) {
-              active = false;
+            } else if (cfg.one_time) {
+              active = round >= 1 && round < 1 + cfg.duration;
             } else {
-              const turnsSinceTrigger = (round - firstTurn) % interval;
-              active = turnsSinceTrigger < cfg.duration;
+              const interval = cfg.interval ?? 3;
+              if (round < firstTurn) {
+                active = false;
+              } else {
+                const turnsSinceTrigger = (round - firstTurn) % interval;
+                active = turnsSinceTrigger < cfg.duration;
+              }
             }
             const val = active ? cfg.val : 0;
             const label = RELIC_KEY_TO_LABEL[key];
@@ -4785,8 +5279,8 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
           const partnerName = pairedTier.requires_paired_name;
           const partner = DB.mounts.find(m => m.n === partnerName) || DB.artifacts.find(a => a.n === partnerName);
           const partnerDeployed = partner && (
-            (state.mountSlots || []).some(slot => slot.itemIdx === partner.idx) ||
-            (state.artifactSlots || []).some(slot => slot.itemIdx === partner.idx)
+            (state.mountSlots || []).some(slot => slot && slot.itemIdx === partner.idx) ||
+            (state.artifactSlots || []).some(slot => slot && slot.itemIdx === partner.idx)
           );
           if (partnerDeployed) {
             Object.entries(pairedTier.stats || {}).forEach(([key, val]) => {
@@ -4804,17 +5298,55 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
   // Equipment Arcana — cumulative (selecting A4 activates A0-A4 together),
   // using only the "trackable" totals (excludes entries the source data
   // itself marks "(not tracked)", usually weapon-specific ATK bonuses).
+  // Reads exclusively from DB.arcanas now (via getArcanaEntry, matched by
+  // item name) rather than an embedded arcana_descs field on the item
+  // itself — that embedded copy no longer exists once migrated out. The
+  // effective arcana level is matched from the Collection tab's name-
+  // keyed record; an item with no Collection entry at all contributes
+  // nothing, since Arcana is no longer settable any other way.
   EQUIPMENT_SLOTS.forEach(slotDef => {
     const s = state.equipment[slotDef.id];
-    if (!s || s.arcana == null || s.arcana < 0) return;
-    const item = (DB[slotDef.dataKey] || []).find(it => it.n === s.itemName);
-    const descs = item && item.arcana_descs;
+    if (!s || !s.itemName) return;
+    const effectiveArcana = state.arcana ? state.arcana[s.itemName] : null;
+    if (effectiveArcana == null || effectiveArcana < 0) return;
+    const arcanaEntry = getArcanaEntry(s.itemName);
+    const descs = arcanaEntry && arcanaEntry.arcana_descs;
     if (!descs || !descs.length) return;
-    const { trackable } = computeArcanaTotals(descs, s.arcana);
+    const { trackable } = computeArcanaTotals(descs, effectiveArcana);
     Object.entries(trackable).forEach(([name, val]) => {
       const label = ARCANA_NAME_TO_LABEL[name] || name;
       add(label, val, `${slotDef.label} arcana`);
     });
+
+    // stacking_stats — a genuinely new-since-arcanas.json mechanism for
+    // arcana entries whose top milestone describes a per-hit/per-trigger
+    // stack rather than a flat unlock (e.g. Whisperer's dagger crit
+    // rate/damage per hit, up to 10 stacks). Uses the same conservative
+    // "1 stack per round from round 1" approximation as every other
+    // combat-event-triggered stacking mechanism this session, since the
+    // real trigger frequency depends on the Protagonist's own build, not
+    // a fixed cadence.
+    if (arcanaEntry && arcanaEntry.stacking_stats && effectiveArcana >= arcanaEntry.stacking_stats.min_arcana) {
+      const startsRound = CONDITIONAL_ACTIVE_FROM_ROUND;
+      Object.entries(arcanaEntry.stacking_stats.stats).forEach(([key, cfg]) => {
+        if (round != null && round < startsRound) return;
+        const stacksElapsed = round == null ? cfg.max_stacks : (round - startsRound + 1);
+        const currentStacks = Math.max(0, Math.min(cfg.max_stacks, stacksElapsed));
+        const val = cfg.per_stack * currentStacks;
+        const label = RELIC_KEY_TO_LABEL[key];
+        if (label && val) add(label, val, `${slotDef.label} arcana (A${effectiveArcana})`);
+      });
+    }
+
+    // flat_stats — a flat, always-on bonus once the milestone is met, for
+    // arcana effects that are simpler than a stacking build-up (e.g.
+    // Piggy's own pet-side flat bonus uses the same shape below).
+    if (arcanaEntry && arcanaEntry.flat_stats && effectiveArcana >= arcanaEntry.flat_stats.min_arcana) {
+      Object.entries(arcanaEntry.flat_stats.stats).forEach(([key, val]) => {
+        const label = RELIC_KEY_TO_LABEL[key];
+        if (label && val) add(label, val, `${slotDef.label} arcana (A${effectiveArcana})`);
+      });
+    }
   });
 
   // Equipment quality-scaled base contributions — bonuses baked directly
@@ -4828,6 +5360,82 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
   // A7-9, A10], since some contributions kick in at A4 and stay constant
   // through A10 (Ignore Crit) while others only appear at A10 exactly
   // (FDR/FD) — a single flat index wouldn't reproduce both patterns.
+  // Equipment Surpass — a clean, dedicated structure separate from the
+  // older, buried quality_contributions.surpassBonus field (which only
+  // ever got populated for 4 items). surpass_stats lives directly on the
+  // equipment item itself (in equipment.json, not arcanas.json), as
+  // EITHER a flat {statKey: [valueAt+0, valueAt+1, ...]} map (when the
+  // values are the same regardless of the item's own quality — most
+  // items) OR, for the handful of SS-grade items whose Surpass bonus
+  // itself differs between Legendary and Mythic, a nested
+  // {statKey: {quality: [valueAt+0, valueAt+1, ...]}} map instead. Which
+  // shape a given stat uses is detected per-key (an array vs. a plain
+  // object) by the shared resolveSurpassLevels() helper (defined near
+  // the other equipment-card helpers), so one item can freely mix both,
+  // and both this Calculator block and the Equipment card's helper
+  // caption stay in sync automatically — a stat that doesn't vary by
+  // quality doesn't need to be needlessly duplicated under both tiers.
+  // Either way, the array holds the EXPLICIT total value at each Surpass
+  // level, not a per-level delta to multiply, so this is transcribed
+  // directly from source data without computing anything first, and
+  // doesn't assume a linear progression.
+  EQUIPMENT_SLOTS.forEach(slotDef => {
+    const s = state.equipment[slotDef.id];
+    if (!s || !s.itemName || !s.surpass) return;
+    const item = (DB[slotDef.dataKey] || []).find(it => it.n === s.itemName);
+    if (!item || !item.surpass_stats) return;
+    // Clamped against the current quality's own effective max, not just
+    // the item's raw surpass_max — protects against a stale saved state
+    // (a Legendary item stored at +4 from before this rule existed)
+    // still counting a level that quality no longer allows.
+    const effectiveSurpass = Math.min(s.surpass, getEffectiveSurpassMax(item, s.quality));
+    Object.entries(item.surpass_stats).forEach(([key, statValue]) => {
+      const levels = resolveSurpassLevels(statValue, s.quality);
+      if (!levels) return;
+      const label = RELIC_KEY_TO_LABEL[key];
+      const idx = Math.min(effectiveSurpass, levels.length - 1);
+      const val = levels[idx];
+      if (label && val) add(label, val, `${item.n} (${s.quality}, +${effectiveSurpass} Surpass)`);
+    });
+  });
+
+  // Equipment surpass_skills — unlike surpass_stats above (a numeric
+  // per-level array keyed by RELIC_KEY_TO_LABEL), these three fields are
+  // a hand-picked numeric encoding of specific tier-11 ("Surpass"/
+  // "Mythic") surpass_skills text entries: the ones that are either a
+  // flat, unconditional % bonus, or a clean stacking/conversion
+  // mechanic with an explicit cap stated in the source text. The large
+  // majority of surpass_skills entries are proc-based (chance to
+  // trigger), tied to a specific named skill/summon rather than a
+  // general tracked stat, a non-percentage effect (shield grants, HP
+  // recovery amounts, status effects), or "stackable" with no stated
+  // cap — those are deliberately left as descriptive-only text on the
+  // Equipment card, same as the rest of the regular (non-surpass)
+  // skills tiers, rather than guessing a number that isn't in the data.
+  // Gated on quality === 'Mythic' alone: every item's own rarity_tiers
+  // table places tier 11 ("Surpass" or "Mythic", depending on the
+  // item's grade) at quality 6 = Mythic, regardless of grade, so the
+  // surpass_skill content itself is on/off at Mythic quality — the
+  // separate `s.surpass` +N counter only scales surpass_stats' own
+  // per-level numeric array above, not whether these fire at all.
+  EQUIPMENT_SLOTS.forEach(slotDef => {
+    const s = state.equipment[slotDef.id];
+    if (!s || !s.itemName || s.quality !== 'Mythic') return;
+    const item = (DB[slotDef.dataKey] || []).find(it => it.n === s.itemName);
+    if (!item) return;
+    Object.entries(item.surpass_flat_stats || {}).forEach(([label, val]) => {
+      if (val) add(label, val, `${item.n} (Mythic Surpass)`);
+    });
+    Object.entries(item.surpass_stacking_stats || {}).forEach(([label, cfg]) => {
+      const startsRound = cfg.starts_round ?? CONDITIONAL_ACTIVE_FROM_ROUND;
+      if (round != null && round < startsRound) return;
+      const stacksElapsed = round == null ? cfg.max_stacks : (round - startsRound + 1);
+      const currentStacks = Math.max(0, Math.min(cfg.max_stacks, stacksElapsed));
+      const val = cfg.per_stack * currentStacks;
+      if (val) add(label, val, `${item.n} (Mythic Surpass, ${currentStacks} stack${currentStacks === 1 ? '' : 's'})`, `${item.n}:surpass_stacking:${label}`);
+    });
+  });
+
   const arcanaBandIndex = (arcana) => {
     if (arcana >= 10) return 3;
     if (arcana >= 7) return 2;
@@ -4837,17 +5445,19 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
   EQUIPMENT_SLOTS.forEach(slotDef => {
     const s = state.equipment[slotDef.id];
     if (!s || !s.itemName) return;
+    const effectiveArcana = state.arcana ? state.arcana[s.itemName] : null;
     const item = (DB[slotDef.dataKey] || []).find(it => it.n === s.itemName);
-    if (!item || !item.quality_contributions) return;
+    const arcanaEntry = getArcanaEntry(s.itemName);
+    if (!item || !arcanaEntry || !arcanaEntry.quality_contributions) return;
     const qualIdx = (item.q || []).indexOf(s.quality);
-    item.quality_contributions.forEach(c => {
+    arcanaEntry.quality_contributions.forEach(c => {
       const qualPart = c.qualD && qualIdx !== -1 ? (c.qualD[qualIdx] || 0) : 0;
       const surpassPart = c.qualD && qualIdx !== -1 ? (c.surpassBonus || 0) * (s.surpass || 0) : 0;
-      const arcanaPart = c.arcanaD && s.arcana >= 0 ? (c.arcanaD[arcanaBandIndex(s.arcana)] || 0) : 0;
+      const arcanaPart = c.arcanaD && effectiveArcana != null && effectiveArcana >= 0 ? (c.arcanaD[arcanaBandIndex(effectiveArcana)] || 0) : 0;
       // A simple threshold unlock — "once arcana reaches arcanaFlatAt, add
       // arcanaFlat" — not round-dependent like qualV5, so safe to include
       // unconditionally once the arcana level is actually met.
-      const arcanaFlatPart = (c.arcanaFlat != null && s.arcana >= c.arcanaFlatAt) ? c.arcanaFlat : 0;
+      const arcanaFlatPart = (c.arcanaFlat != null && effectiveArcana != null && effectiveArcana >= c.arcanaFlatAt) ? c.arcanaFlat : 0;
       if (!c.qualD && !c.arcanaD && c.arcanaFlat == null) return;
       // Round-gating only applies to a contribution that explicitly opts
       // in via active_from/active_until — otherwise every existing,
@@ -4860,7 +5470,7 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
       const key = `${c.calc}:${c.cond || ''}:${c.ty || ''}`;
       const label = EQUIP_CONTRIB_TO_LABEL[key];
       if (label && total) {
-        const qualifiers = [s.quality, s.surpass ? `+${s.surpass}` : null, s.arcana >= 0 ? `A${s.arcana}` : null].filter(Boolean).join(', ');
+        const qualifiers = [s.quality, s.surpass ? `+${s.surpass}` : null, effectiveArcana >= 0 ? `A${effectiveArcana}` : null].filter(Boolean).join(', ');
         add(label, total, `${item.n} (${qualifiers})`);
       }
     });
@@ -4907,6 +5517,33 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
       if (!sl.stat || !sl.val) return;
       add(PET_ATTR_TO_LABEL[sl.stat] || sl.stat, sl.val, `Pet ${pi + 1}: ${p.itemName}`);
     });
+
+    // Pet Arcana — previously purely decorative (write-up text only);
+    // now feeds real stats for the handful of pets whose arcana entry
+    // has stacking_stats/flat_stats built out (Elsa, Piggy). Matched the
+    // same way as equipment arcana: by name via getArcanaEntry() against
+    // the Collection tab's record, not any per-slot field.
+    const effectiveArcana = state.arcana ? state.arcana[p.itemName] : null;
+    if (effectiveArcana != null && effectiveArcana >= 0) {
+      const arcanaEntry = getArcanaEntry(p.itemName);
+      if (arcanaEntry && arcanaEntry.stacking_stats && effectiveArcana >= arcanaEntry.stacking_stats.min_arcana) {
+        const startsRound = CONDITIONAL_ACTIVE_FROM_ROUND;
+        Object.entries(arcanaEntry.stacking_stats.stats).forEach(([key, cfg]) => {
+          if (round != null && round < startsRound) return;
+          const stacksElapsed = round == null ? cfg.max_stacks : (round - startsRound + 1);
+          const currentStacks = Math.max(0, Math.min(cfg.max_stacks, stacksElapsed));
+          const val = cfg.per_stack * currentStacks;
+          const label = RELIC_KEY_TO_LABEL[key];
+          if (label && val) add(label, val, `Pet ${pi + 1}: ${p.itemName} arcana (A${effectiveArcana})`);
+        });
+      }
+      if (arcanaEntry && arcanaEntry.flat_stats && effectiveArcana >= arcanaEntry.flat_stats.min_arcana) {
+        Object.entries(arcanaEntry.flat_stats.stats).forEach(([key, val]) => {
+          const label = RELIC_KEY_TO_LABEL[key];
+          if (label && val) add(label, val, `Pet ${pi + 1}: ${p.itemName} arcana (A${effectiveArcana})`);
+        });
+      }
+    }
   });
 
   // Adventurer stat buffs (ATK/HP only — the only structured numeric part)
@@ -4934,6 +5571,15 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
     if (totalFd) add('General Final Damage', Math.round(totalFd * 10000) / 100, `Fashion Level ${state.fashionLevel}`);
     if (totalFdr) add('General Final Damage Reduction', Math.round(totalFdr * 10000) / 100, `Fashion Level ${state.fashionLevel}`);
     Object.entries(statTotals).forEach(([stat, val]) => add(`${stat}%`, val, `Fashion Level ${state.fashionLevel}`));
+  }
+
+  // Capymon Cards
+  {
+    const { breakdown } = computeCapymonStats();
+    breakdown.forEach(({ name, fd, fdr }) => {
+      if (fd) add('General Final Damage', Math.round(fd * 10000) / 100, `Capymon: ${name}`);
+      if (fdr) add('General Final Damage Reduction', Math.round(fdr * 10000) / 100, `Capymon: ${name}`);
+    });
   }
 
   // Homestead
@@ -5107,20 +5753,84 @@ Object.entries(stackingStats || {}).forEach(([key, cfg]) => {
     if (val != null) add(label, val, `${set.set} (Set Bonus)`);
   });
 
+  // Arcana conversion_stats — a genuinely new mechanism (e.g. Dragon Ball
+  // Ring/Judgement Ring: "every 1% Basic ATK Crit Rate grants 0.4%
+  // Global Basic ATK DMG, capped at 40%"). Must run as a final pass
+  // AFTER every other contribution, since it derives its value from
+  // another stat's own already-fully-aggregated total — computing it
+  // any earlier would silently miss whatever added to the source stat
+  // afterward. Only applies while the linked item is actually equipped
+  // in some slot (checked directly, not just "has an arcana record"),
+  // and only once the Collection-set arcana level meets the entry's own
+  // min_arcana threshold.
+  (DB.arcanas || []).forEach(entry => {
+    if (!entry.conversion_stats) return;
+    const effectiveArcana = state.arcana ? state.arcana[entry.linked_item] : null;
+    if (effectiveArcana == null || effectiveArcana < entry.conversion_stats.min_arcana) return;
+    const isEquipped = Object.values(state.equipment || {}).some(s => s && s.itemName === entry.linked_item);
+    if (!isEquipped) return;
+    const { source, target, ratio, cap } = entry.conversion_stats;
+    const sourceLabel = RELIC_KEY_TO_LABEL[source];
+    const targetLabel = RELIC_KEY_TO_LABEL[target];
+    if (!sourceLabel || !targetLabel) return;
+    const sourceVal = stats[sourceLabel] ? stats[sourceLabel].total : 0;
+    const converted = Math.min(sourceVal * ratio, cap);
+    if (converted > 0) add(targetLabel, converted, `${entry.linked_item} arcana (A${effectiveArcana}, converted)`);
+  });
+
+  // Equipment surpass_conversion — same "derive from another stat's
+  // already-aggregated total" shape as arcana's conversion_stats just
+  // above, so this also has to run as this final pass, after every
+  // other equipment/relic/collectible/psionic/gem contribution earlier
+  // in this function. Independent of (and stacks with) that item's own
+  // arcana-side conversion_stats, where one exists — these are two
+  // separate in-game mechanics that happen to share the same 4 rings
+  // (Salama Dragon Pearl Ring, Verdan Ring of Judgement, Dragon Ball
+  // Ring, Judgement Ring), not a duplicate of it: the arcana-side one
+  // converts crit rate into flat ATK/Skill DMG at min_arcana 10, this
+  // one converts the same crit rate into Crit DMG once the item itself
+  // reaches Mythic quality (see surpass_flat_stats/surpass_stacking_stats
+  // above for why quality is the right gate for surpass_skills content).
+  EQUIPMENT_SLOTS.forEach(slotDef => {
+    const s = state.equipment[slotDef.id];
+    if (!s || !s.itemName || s.quality !== 'Mythic') return;
+    const item = (DB[slotDef.dataKey] || []).find(it => it.n === s.itemName);
+    if (!item || !item.surpass_conversion) return;
+    const { source, target, ratio, cap } = item.surpass_conversion;
+    const sourceVal = stats[source] ? stats[source].total : 0;
+    const converted = cap != null ? Math.min(sourceVal * ratio, cap) : sourceVal * ratio;
+    if (converted > 0) add(target, converted, `${item.n} (Mythic Surpass, converted)`);
+  });
+
   return stats;
 }
 
 const CALC_TABLE_CATEGORIES = [
+  // Per damage_formula.md: Global ATK and the PVP ATK/DEF/HP% stats feed the
+  // ATK/DEF/HP buildup stage ("ATK = (flat ATK + ...) x (1 + ATK% + ...) x
+  // (1 + Global ATK)"), which runs BEFORE the hit-damage chain even starts —
+  // they were previously grouped into Bonus Damage, which is the DMG pool
+  // stage further down the chain. Pulled out into their own category so the
+  // grouping matches which multiplicative stage they actually belong to.
+  { title: 'Attribute Boosts (ATK/DEF/HP)', labels: ['Global ATK', 'PVP ATK%', 'PVP DEF%', 'PVP HP%'] },
+  // Per damage_formula.md's "Crit" section: Crit Rate and Crit DMG (plus
+  // their per-type variants and the enemy's Crit DMG Reduction) are all one
+  // multiplicative stage — "crit chance" decides whether it fires, "crit
+  // multiplier" decides how much it multiplies by. Previously split across
+  // Proc Rates (the rate side) and Bonus Damage / DMG Reduction (the DMG
+  // side), which obscured that they're the same stage. Combo Rate and
+  // Counter Rate stay in Proc Rates below — those gate a different trigger
+  // mechanic (whether a combo/counter attack happens at all), not a crit.
+  { title: 'Crit', labels: ['Crit Rate (Generic)', 'Skill Crit Rate', 'Basic ATK Crit Rate', 'Weapon Crit Rate', 'Lightning Crit Rate', 'DoT Crit Rates', 'Dagger Crit Rate', 'Sword Qi Crit Rate', 'Light Spear Crit Rate', 'Crit DMG', 'Skill Crit DMG', 'Dagger Crit DMG', 'Crit DMG Reduction', 'Skill Crit DMG Red', 'Basic ATK Crit DMG Red', 'DoT Crit DMG Red'] },
   // PVP Damage Reduction and Mounted DMG Reduction are both defensive
   // reduction stats, so they live in DMG Reduction rather than their own
-  // category. PVP ATK%/DEF%/HP% are general stat boosts, closest in kind
-  // to Global ATK, so they sit in Bonus Damage alongside it.
-  { title: 'Bonus Damage', labels: ['Global ATK', 'Crit DMG', 'Skill DMG', 'Skill Crit DMG', 'Basic ATK DMG', 'Combo DMG', 'Counter DMG', 'Lightning DMG', 'Dagger DMG', 'Dagger Crit DMG', 'Sword Qi DMG', 'Light Spear DMG', 'DoT DMG', 'Fire DMG', 'Explosion DMG', 'Physical DMG', 'Pet DMG', 'Bonus Damage', 'PVP ATK%', 'PVP DEF%', 'PVP HP%',] },
+  // category.
+  { title: 'Bonus Damage', labels: ['Skill DMG', 'Basic ATK DMG', 'Combo DMG', 'Counter DMG', 'Lightning DMG', 'Dagger DMG', 'Sword Qi DMG', 'Light Spear DMG', 'DoT DMG', 'Fire DMG', 'Explosion DMG', 'Physical DMG', 'Pet DMG', 'Bonus Damage',] },
   { title: 'Final Damage', labels: ['General Final Damage', 'Final Skill Damage', 'Final Lightning DMG', 'Final Sword Qi DMG', 'Final Dagger DMG', 'Final Combo DMG', 'Final Counter DMG', 'Final Normal ATK DMG', 'Final Damage to Shields'] },
-  { title: 'Proc Rates', labels: ['Combo Rate', 'Counter Rate', 'Crit Rate (Generic)', 'Skill Crit Rate', 'Basic ATK Crit Rate', 'Weapon Crit Rate', 'Lightning Crit Rate', 'DoT Crit Rates', 'Dagger Crit Rate', 'Sword Qi Crit Rate', 'Light Spear Crit Rate'] },
+  { title: 'Proc Rates', labels: ['Combo Rate', 'Counter Rate'] },
   { title: 'Damage Coefficients', labels: ['General DMG Coef', 'Skill DMG Coef', 'Normal ATK DMG Coef', 'Combo DMG Coef', 'Counter DMG Coef', 'Lightning DMG Coef', 'Dagger DMG Coef', 'Sword Qi DMG Coef', 'Fire DMG Coef'] },
   { title: 'Speed', labels: ['Speed'] },
-  { title: 'DMG Reduction', labels: ['Generic DMG Reduction', 'Skill DMG Reduction', 'Basic ATK DMG Reduction', 'Combo DMG Reduction', 'Counter DMG Reduction', 'Lightning DMG Reduction', 'Dagger DMG Reduction', 'Sword Qi DMG Reduction', 'Light Spear DMG Red', 'Fire DMG Reduction', 'DoT DMG Reduction', 'Crit DMG Reduction', 'Skill Crit DMG Red', 'Basic ATK Crit DMG Red', 'DoT Crit DMG Red', 'PVP Damage Reduction', 'Mounted DMG Reduction', 'Conditional Damage Reduction'] },
+  { title: 'DMG Reduction', labels: ['Generic DMG Reduction', 'Skill DMG Reduction', 'Basic ATK DMG Reduction', 'Combo DMG Reduction', 'Counter DMG Reduction', 'Lightning DMG Reduction', 'Dagger DMG Reduction', 'Sword Qi DMG Reduction', 'Light Spear DMG Red', 'Fire DMG Reduction', 'DoT DMG Reduction', 'PVP Damage Reduction', 'Mounted DMG Reduction', 'Conditional Damage Reduction'] },
   { title: 'Final Damage Reduction', labels: ['General Final Damage Reduction', 'Skill Damage Final Damage Reduction', 'Basic Attack Final Damage Reduction', 'Adventurer Final Damage Reduction', 'Artifact Final Damage Reduction', 'Mount Final Damage Reduction', 'Pet Final Damage Reduction'] },
   { title: 'Tenacity & Armor Break', labels: ['Tenacity', 'Tenacity Resistance', 'Armor Break', 'Armor Break Resistance', 'Control Immunity Rate', 'Ignore Control Immunity Rate', 'Suppression'] },
   { title: 'Ignore Proc Rates', labels: ['Ignore Combo', 'Ignore Crit', 'Ignore Weapon Crit', 'Ignore Skill Crit', 'Ignore Normal ATK Crit', 'Ignore Lightning Crit', 'Ignore DoT Crit', 'Ignore Dagger Crit', 'Ignore Sword Qi Crit', 'Ignore Light Spear Crit', 'Ignore Counter', 'Ignore Suppression'] },
@@ -5147,6 +5857,251 @@ function renderAccordion(title, contentEl, defaultOpen, ghost) {
 }
 
 const CALC_NON_PERCENT_LABELS = new Set(['Tenacity', 'Tenacity Resistance', 'Armor Break', 'Armor Break Resistance', 'Speed', 'Suppression']);
+
+// Attack-type filter — per the game's own attribute rules (an attack can
+// carry multiple attributes at once, e.g. Lightning is both "skill" and
+// "lightning", and all matching stat types add together for that one
+// attack rather than only the single narrowest one applying), each
+// chip's labels are the stats it ADDS on top of the always-on generic
+// baseline — not a self-contained list repeating "Crit Rate (Generic)"
+// itself — so turning on several chips at once sums generic + the union
+// of every enabled chip's own labels, without double-counting generic.
+// Physical Crit Rate is deliberately left out of Dagger/Sword Qi/Light
+// Spear's crit rate list below — nothing in the item data currently
+// tracks it as its own stat, so including a label that never appears
+// would just be dead weight, not a real omission.
+const CALC_FILTER_GENERIC = {
+  critRate: ['Crit Rate (Generic)'],
+  dmgBoost: ['Global ATK'],
+  critDmg: ['Crit DMG'],
+  finalDmg: ['General Final Damage'],
+  dmgRed: ['Generic DMG Reduction'],
+  finalDmgRed: ['General Final Damage Reduction'],
+};
+const ATTACK_TYPE_DEFS = [
+  { name: 'Basic Attack',
+    critRate: ['Basic ATK Crit Rate', 'Weapon Crit Rate'],
+    dmgBoost: ['Basic ATK DMG'],
+    critDmg: [],
+    finalDmg: ['Final Normal ATK DMG'],
+    dmgRed: ['Basic ATK DMG Reduction'],
+    finalDmgRed: ['Basic Attack Final Damage Reduction'] },
+  { name: 'Combo',
+    critRate: ['Basic ATK Crit Rate', 'Weapon Crit Rate'],
+    dmgBoost: ['Basic ATK DMG', 'Combo DMG'],
+    critDmg: [],
+    finalDmg: ['Final Combo DMG'],
+    dmgRed: ['Basic ATK DMG Reduction', 'Combo DMG Reduction'],
+    finalDmgRed: ['Basic Attack Final Damage Reduction'] },
+  { name: 'Counter',
+    critRate: ['Basic ATK Crit Rate', 'Weapon Crit Rate'],
+    dmgBoost: ['Basic ATK DMG', 'Counter DMG'],
+    critDmg: [],
+    finalDmg: ['Final Counter DMG'],
+    dmgRed: ['Basic ATK DMG Reduction', 'Counter DMG Reduction'],
+    finalDmgRed: ['Basic Attack Final Damage Reduction'] },
+  { name: 'Rage Skill',
+    critRate: ['Skill Crit Rate', 'Weapon Crit Rate'],
+    dmgBoost: ['Skill DMG'],
+    critDmg: ['Skill Crit DMG'],
+    finalDmg: ['Final Skill Damage'],
+    dmgRed: ['Skill DMG Reduction'],
+    finalDmgRed: ['Skill Damage Final Damage Reduction'] },
+  { name: 'Lightning',
+    critRate: ['Skill Crit Rate', 'Lightning Crit Rate'],
+    dmgBoost: ['Skill DMG', 'Lightning DMG'],
+    critDmg: ['Skill Crit DMG'],
+    finalDmg: ['Final Skill Damage', 'Final Lightning DMG'],
+    dmgRed: ['Skill DMG Reduction', 'Lightning DMG Reduction'],
+    finalDmgRed: ['Skill Damage Final Damage Reduction'] },
+  { name: 'Dagger',
+    critRate: ['Skill Crit Rate', 'Dagger Crit Rate'],
+    dmgBoost: ['Skill DMG', 'Dagger DMG', 'Physical DMG'],
+    critDmg: ['Skill Crit DMG', 'Dagger Crit DMG'],
+    finalDmg: ['Final Skill Damage', 'Final Dagger DMG'],
+    dmgRed: ['Skill DMG Reduction', 'Dagger DMG Reduction'],
+    finalDmgRed: ['Skill Damage Final Damage Reduction'] },
+  { name: 'Sword Qi',
+    critRate: ['Skill Crit Rate', 'Sword Qi Crit Rate'],
+    dmgBoost: ['Skill DMG', 'Sword Qi DMG', 'Physical DMG'],
+    critDmg: ['Skill Crit DMG'],
+    finalDmg: ['Final Skill Damage', 'Final Sword Qi DMG'],
+    dmgRed: ['Skill DMG Reduction', 'Sword Qi DMG Reduction'],
+    finalDmgRed: ['Skill Damage Final Damage Reduction'] },
+  { name: 'Light Spear',
+    critRate: ['Skill Crit Rate', 'Light Spear Crit Rate'],
+    dmgBoost: ['Skill DMG', 'Light Spear DMG', 'Physical DMG'],
+    critDmg: ['Skill Crit DMG'],
+    finalDmg: ['Final Skill Damage'],
+    dmgRed: ['Skill DMG Reduction', 'Light Spear DMG Red'],
+    finalDmgRed: ['Skill Damage Final Damage Reduction'] },
+];
+
+// Reverse index: which Full Stat Breakdown table LABELS belong to which
+// attack-type chip(s), so the table can hide rows that don't match any
+// currently-enabled chip. Built once from ATTACK_TYPE_DEFS + the generic
+// baseline rather than hand-maintained separately, so the table filter
+// can never drift out of sync with the card definitions above it.
+// Every label from every category is included — a label belonging to
+// ANY enabled chip stays visible.
+const CALC_LABEL_TO_TYPES = {};
+[CALC_FILTER_GENERIC, ...ATTACK_TYPE_DEFS].forEach(def => {
+  const typeName = def.name || '__generic__';
+  ['critRate', 'dmgBoost', 'critDmg', 'finalDmg', 'dmgRed', 'finalDmgRed'].forEach(cat => {
+    (def[cat] || []).forEach(label => {
+      CALC_LABEL_TO_TYPES[label] = CALC_LABEL_TO_TYPES[label] || new Set();
+      CALC_LABEL_TO_TYPES[label].add(typeName);
+    });
+  });
+});
+
+// Short explanation of what each stat actually covers, drawn from the
+// game's own attribute rules — shown as each card's caption so the
+// write-up lives on the page itself, not only in chat. Deliberately
+// terse (one line) since this repeats on every card; labels not listed
+// here (Set Bonus-derived or otherwise unmapped) just render without a
+// caption rather than a blank placeholder.
+const CALC_STAT_EXPLANATIONS = {
+  'Crit Rate (Generic)': 'Applies to every attack, regardless of type.',
+  'Skill Crit Rate': 'Affects Rage Skill, Sword Qi, Lightning, Dagger, Light Spear, and any other damaging skill.',
+  'Basic ATK Crit Rate': 'Affects Normal Attack, Combo, and Counter.',
+  'Weapon Crit Rate': 'Affects Normal Attack, Combo, Counter, and Rage Skill.',
+  'Lightning Crit Rate': 'Only affects Lightning specifically.',
+  'Dagger Crit Rate': 'Only affects Dagger specifically.',
+  'Sword Qi Crit Rate': 'Only affects Sword Qi specifically.',
+  'Light Spear Crit Rate': 'Only affects Light Spear specifically.',
+  'Global ATK': 'Applies to all damage, regardless of type.',
+  'Skill DMG': 'Affects Rage Skill, Sword Qi, Lightning, Dagger, Light Spear, and other damaging skills.',
+  'Basic ATK DMG': 'Affects Normal Attack, Combo, and Counter.',
+  'Combo DMG': 'Only affects Combo specifically.',
+  'Counter DMG': 'Only affects Counter specifically.',
+  'Lightning DMG': 'Only affects Lightning specifically.',
+  'Dagger DMG': 'Only affects Dagger specifically.',
+  'Sword Qi DMG': 'Only affects Sword Qi specifically.',
+  'Light Spear DMG': 'Only affects Light Spear specifically.',
+  'Physical DMG': 'Affects Dagger, Sword Qi, and Light Spear (physical-attribute skills).',
+  'Crit DMG': 'Applies to every critical hit, regardless of type.',
+  'Skill Crit DMG': 'Affects critical hits from skills specifically.',
+  'Dagger Crit DMG': 'Only affects critical hits from Dagger.',
+  'General Final Damage': 'Applies to all damage, regardless of type.',
+  'Final Skill Damage': 'Affects all skill-type damage.',
+  'Final Normal ATK DMG': 'Only affects Normal Attack damage.',
+  'Final Combo DMG': 'Only affects Combo damage.',
+  'Final Counter DMG': 'Only affects Counter damage.',
+  'Final Lightning DMG': 'Only affects Lightning damage.',
+  'Final Dagger DMG': 'Only affects Dagger damage.',
+  'Final Sword Qi DMG': 'Only affects Sword Qi damage.',
+  'Generic DMG Reduction': 'Reduces damage taken from any attack, regardless of type.',
+  'Skill DMG Reduction': 'Reduces damage taken from skill-type attacks.',
+  'Basic ATK DMG Reduction': 'Reduces damage taken from Normal Attack, Combo, and Counter.',
+  'Combo DMG Reduction': 'Only reduces damage taken from Combo specifically.',
+  'Counter DMG Reduction': 'Only reduces damage taken from Counter specifically.',
+  'Lightning DMG Reduction': 'Only reduces damage taken from Lightning specifically.',
+  'Dagger DMG Reduction': 'Only reduces damage taken from Dagger specifically.',
+  'Sword Qi DMG Reduction': 'Only reduces damage taken from Sword Qi specifically.',
+  'Light Spear DMG Red': 'Only reduces damage taken from Light Spear specifically.',
+  'General Final Damage Reduction': 'Reduces damage taken from any attack, regardless of type.',
+  'Skill Damage Final Damage Reduction': 'Reduces damage taken from skill-type attacks.',
+  'Basic Attack Final Damage Reduction': 'Reduces damage taken from Normal Attack, Combo, and Counter.',
+};
+
+// Shared filter state + a listener list so the chips (in
+// renderAttackTypeFilter) and the Full Stat Breakdown table (in
+// buildFullCalcTable) can stay in sync without a full page re-render —
+// toggling a chip just updates this Set and notifies whoever's listening,
+// same pattern as the rest of the calculator's in-place DOM updates.
+let calcFilterEnabledTypes = new Set();
+const calcFilterListeners = [];
+function setCalcFilterTypes(next) {
+  calcFilterEnabledTypes = next;
+  calcFilterListeners.forEach(fn => fn(calcFilterEnabledTypes));
+}
+
+function renderAttackTypeFilter() {
+  const wrap = el('div', { class: 'calc-attack-filter' });
+  wrap.appendChild(el('div', { class: 'section-title-row' }, [
+    el('div', { class: 'accordion-title', style: 'font-weight:600;' }, 'Filter by Attack Type'),
+  ]));
+  wrap.appendChild(el('p', { class: 'section-desc' },
+    'The cards below always show your generic totals. Toggle on an attack type to add its own section underneath — e.g. Lightning is both Skill and Lightning, so turning it on adds a Lightning DMG section with its own cards for Skill Crit Rate, Lightning Crit Rate, Skill DMG, Lightning DMG and so on, each shown on its own rather than added together.'));
+
+  const chipRow = el('div', { class: 'calc-attack-chip-row' });
+  const chipButtons = {};
+  ATTACK_TYPE_DEFS.forEach(def => {
+    const chip = el('button', { class: 'filter-chip' }, def.name);
+    chip.addEventListener('click', () => {
+      const next = new Set(calcFilterEnabledTypes);
+      if (next.has(def.name)) next.delete(def.name); else next.add(def.name);
+      chip.classList.toggle('active', next.has(def.name));
+      setCalcFilterTypes(next);
+    });
+    chipButtons[def.name] = chip;
+    chipRow.appendChild(chip);
+  });
+  const clearAllBtn = el('button', { class: 'filter-chip' }, 'Clear All');
+  clearAllBtn.addEventListener('click', () => {
+    Object.values(chipButtons).forEach(b => b.classList.remove('active'));
+    setCalcFilterTypes(new Set());
+  });
+  chipRow.appendChild(clearAllBtn);
+  wrap.appendChild(chipRow);
+
+  // Fixed, always-visible row — the 6 generic baseline stats alone,
+  // never combined with anything a chip adds. Built once since none of
+  // these ever change based on chip selection.
+  const genericGrid = el('div', { class: 'calc-stat-grid' });
+  wrap.appendChild(genericGrid);
+
+  // One section per currently-enabled type, each with its own H3 title
+  // ("Lightning DMG", "Counter DMG", etc.) and its own grid of cards
+  // directly underneath — kept as fully separate sections rather than
+  // merged into one grid, so a label shared by two enabled types (e.g.
+  // "Skill Crit Rate" under both Lightning and Dagger) correctly appears
+  // once per section it belongs to, since each section stands on its own.
+  const extraSectionsWrap = el('div', { class: 'calc-extra-sections' });
+  wrap.appendChild(extraSectionsWrap);
+
+  const renderGeneric = () => {
+    const stats = aggregateFullStatsWithSources();
+    const val = (l) => stats[l] ? stats[l].total : 0;
+    const card = (cardLabel, statLabel) =>
+      renderStatCard(cardLabel, `${val(statLabel).toFixed(1)}%`, CALC_STAT_EXPLANATIONS[statLabel]);
+    genericGrid.appendChild(card('Crit Rate (Generic)', CALC_FILTER_GENERIC.critRate[0]));
+    genericGrid.appendChild(card('Damage Boost (Global ATK)', CALC_FILTER_GENERIC.dmgBoost[0]));
+    genericGrid.appendChild(card('Crit Damage', CALC_FILTER_GENERIC.critDmg[0]));
+    genericGrid.appendChild(card('Final Damage Boost (General)', CALC_FILTER_GENERIC.finalDmg[0]));
+    genericGrid.appendChild(card('DMG Reduction (Generic)', CALC_FILTER_GENERIC.dmgRed[0]));
+    genericGrid.appendChild(card('Final DMG Reduction (General)', CALC_FILTER_GENERIC.finalDmgRed[0]));
+  };
+  renderGeneric();
+
+  const renderExtras = (enabledTypes) => {
+    const stats = aggregateFullStatsWithSources();
+    extraSectionsWrap.innerHTML = '';
+    // Fixed canonical order (same as the chip row) rather than click
+    // order, so sections don't reshuffle depending on the sequence
+    // someone happened to toggle them in.
+    ATTACK_TYPE_DEFS.filter(d => enabledTypes.has(d.name)).forEach(def => {
+      const labelSet = new Set();
+      ['critRate', 'dmgBoost', 'critDmg', 'finalDmg', 'dmgRed', 'finalDmgRed'].forEach(cat => def[cat].forEach(l => labelSet.add(l)));
+
+      const section = el('div', { class: 'calc-extra-section' });
+      section.appendChild(el('h3', { class: 'calc-extra-section-title' }, `${def.name} DMG`));
+      const grid = el('div', { class: 'calc-stat-grid' });
+      [...labelSet].forEach(label => {
+        const total = stats[label] ? stats[label].total : 0;
+        grid.appendChild(renderStatCard(label, `${total.toFixed(1)}%`, CALC_STAT_EXPLANATIONS[label]));
+      });
+      section.appendChild(grid);
+      extraSectionsWrap.appendChild(section);
+    });
+  };
+
+  calcFilterListeners.push(renderExtras);
+  renderExtras(calcFilterEnabledTypes);
+
+  return wrap;
+}
 
 function buildFullCalcTable() {
   const wrap = el('div', {});
@@ -5188,6 +6143,11 @@ function buildFullCalcTable() {
   controls.appendChild(expandAllBtn);
   controls.appendChild(hideEmptyBtn);
   wrap.appendChild(controls);
+
+  // Shown/hidden by the filter-application listener registered at the
+  // end of this function, once allEntries is fully populated.
+  const filterNotice = el('div', { class: 'calc-filter-notice calc-row-hidden' }, 'Detailed stats are currently being filtered by attack type.');
+  wrap.appendChild(filterNotice);
 
   // Quick-jump nav — clicking scrolls straight to that category's title,
   // skipping the scroll-and-hunt through every section above it.
@@ -5355,11 +6315,32 @@ function buildFullCalcTable() {
       ]);
       tbody.appendChild(statRow);
       sourceRows.forEach(r => tbody.appendChild(r));
-      allEntries.push({ statRow, sourceRows, chevron, hasSources, emptyRow });
+      allEntries.push({ statRow, sourceRows, chevron, hasSources, emptyRow, label });
     });
     table.appendChild(tbody);
     wrap.appendChild(table);
   });
+
+  // Applies the current attack-type chip selection to every row: a label
+  // with no entry in CALC_LABEL_TO_TYPES at all (Speed, Tenacity, Global
+  // ATK's own generic contributions via sumBlockAtLevel, etc.) is not
+  // attack-type-specific and always stays visible; a label that IS
+  // mapped only stays visible while no chips are enabled, or while at
+  // least one of its mapped types is currently enabled. Registered as a
+  // listener rather than computed once, so toggling a chip re-applies
+  // this in place without rebuilding the whole table.
+  const applyAttackTypeFilter = (enabledTypes) => {
+    filterNotice.classList.toggle('calc-row-hidden', enabledTypes.size === 0);
+    allEntries.forEach(({ statRow, emptyRow, label }) => {
+      const mappedTypes = CALC_LABEL_TO_TYPES[label];
+      const visible = enabledTypes.size === 0 || !mappedTypes ||
+        [...mappedTypes].some(t => t === '__generic__' || enabledTypes.has(t));
+      statRow.classList.toggle('calc-row-filtered', !visible);
+      if (emptyRow) emptyRow.classList.toggle('calc-row-filtered', !visible);
+    });
+  };
+  calcFilterListeners.push(applyAttackTypeFilter);
+  applyAttackTypeFilter(calcFilterEnabledTypes);
 
   return wrap;
 }
@@ -5410,6 +6391,14 @@ function pctEffectiveness(delta) {
 
 /* ---------- Calculator UI ---------- */
 function renderCalculator() {
+  // Fresh listener list (and cleared chip selection) each time this page
+  // renders — matches the existing Expand All/Hide Empty toggles, which
+  // are also local, per-render UI state rather than persisted across
+  // re-renders, and avoids stale listeners piling up against detached
+  // DOM from a previous visit to this tab.
+  calcFilterListeners.length = 0;
+  calcFilterEnabledTypes = new Set();
+
   const wrap = el('div', {});
   wrap.appendChild(el('div', { class: 'section-title-row' }, [
     el('div', { class: 'section-title' }, 'Calculator'),
@@ -5419,6 +6408,8 @@ function renderCalculator() {
   wrap.appendChild(el('p', { class: 'section-desc', style: 'font-style:italic;' },
   'Some contributions come from conditional or proc-based effects (e.g. a relic bonus that only activates after a trigger, or a stat that applies "for 1 round" rather than the whole battle) — these are still counted as if fully active, so the numbers shown here represent the ceiling for what your build can reach, not a guaranteed constant.'
 ));
+
+  wrap.appendChild(renderAttackTypeFilter());
 
   /* ---- Quick Stats — commented out, not deleted, per her call that it
      wasn't proving useful; trivial to restore by uncommenting if that

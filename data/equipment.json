@@ -1,0 +1,7471 @@
+{
+ "weapons": [
+  {
+   "n": "None",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ]
+  },
+  {
+   "n": "Blood Shadow Ailoren Sword",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "surpass_stats": {
+    "combo_rate_pct": {
+     "Legendary": [
+      25,
+      30,
+      35,
+      40
+     ],
+     "Mythic": [
+      50,
+      55,
+      60,
+      65,
+      70
+     ]
+    }
+   },
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global ATK +35%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Sword Energy Damage +50%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Adds 1 extra sword energy when performing a combo"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "All sword auras become Breath of Airolein, dealing 70% sword aura damage and 70% basic attack damage of the protagonist's attack"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Breath of Airolein damage increased to 100% sword aura damage and 100% basic attack damage of the protagonist's attack"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Sword energy additionally deals true damage equal to 3% of the target's current HP and 3% sword energy damage. True damage and sword energy damage cannot exceed 7\u00d7 the hero's ATK."
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Breath of Airolein damage increased to 100% sword aura damage and 100% basic attack damage of the protagonist's attack"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Sword energy additionally deals true damage equal to 3% of the target's current HP and 3% sword energy damage. True damage and sword energy damage cannot exceed 7\u00d7 the hero's ATK."
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Combo Rate"
+   ]
+  },
+  {
+   "n": "Divine Thunder Nashir's Scepter",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Release 1 lightning bolt each turn"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Lightning Damage +50%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "During \u3010Charging\u3011, electric damage increases by 30%, 60%, 90% each turn respectively, \u3010Nasir Divine Thunder\u3011 coefficient increases by 15%, 30%, 45% each turn respectively. Effect removed after \u3010Nasir Divine Thunder\u3011 is released"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "[Electric Shield] increased to 10% of the hero's max HP."
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "All lightning has 50% chance to become \u3010Nasir Divine Thunder\u3011, \u3010Nasir Divine Thunder\u3011 damage +20% per release, increases up to 6 times"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "While having \u3010Electric Shield\u3011, receives -10% final skill damage"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "All lightning has 50% chance to become \u3010Nasir Divine Thunder\u3011, \u3010Nasir Divine Thunder\u3011 damage +20% per release, increases up to 6 times"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "While having \u3010Electric Shield\u3011, receives -10% final skill damage"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Skill DMG"
+   ]
+  },
+  {
+   "n": "Gale Elres' Whisper",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global ATK +35%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Dagger Damage +50%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "When a weapon crits, throw 2 daggers."
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Gain 15 rage on weapon critical hits, triggers 2 times per turn"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Each dagger hit increases the hero's weapon crit rate by 2% and crit damage by 5%, stacking up to 10 times."
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Each throwing knife randomly gains shield break, weakness, poison, shrink, or vulnerability effects"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Each dagger hit increases the hero's weapon crit rate by 2% and crit damage by 5%, stacking up to 10 times."
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Each throwing knife randomly gains shield break, weakness, poison, shrink, or vulnerability effects"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Weapon Crit Rate"
+   ],
+   "surpass_stacking_stats": {
+    "Weapon Crit Rate": {
+     "per_stack": 2,
+     "max_stacks": 10
+    },
+    "Crit DMG": {
+     "per_stack": 5,
+     "max_stacks": 10
+    }
+   }
+  },
+  {
+   "n": "Helos Warblade",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global ATK +35%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Combo Damage +50%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "The Soul of Helos will follow the protagonist in battle. After each basic attack by the protagonist, Helos deals combo damage equal to 150% of the protagonist's attack power to enemies"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "The Soul of Helos inherits the hero's normal attack critical rate and damage boost effects, counts normal attacks and combo hits, but does not trigger post-combo effects."
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "The Soul of Helos' damage increases to 200% of the hero's ATK."
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "50% of the hero's normal attack damage is converted into a skill shield."
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "The Soul of Helos' damage increases to 200% of the hero's ATK."
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "50% of the hero's normal attack damage is converted into a skill shield."
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Combo Rate"
+   ]
+  },
+  {
+   "n": "St. Mung's Elven Bow",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global ATK +35%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Dagger Damage +50%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Throws 1 Angel Dagger per turn"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "After the hero throws an Angel Dagger, the Ilar Angel deals 3.5x Angel Dagger damage"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Each dagger thrown increases Angel Dagger damage coefficient by 25% and restores +1 charge, reset after Angel Dagger is cast"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "50% of Ilar Angel\u2019s damage converts to shield"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Each dagger thrown increases Angel Dagger damage coefficient by 25% and restores +1 charge, reset after Angel Dagger is cast"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "50% of Ilar Angel\u2019s damage converts to shield"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Weapon Crit Rate"
+   ]
+  },
+  {
+   "n": "Thorn-Seles Suffering",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global HP +35%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Gain an additional 10% shield when counterattacking."
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "All shields become Thorn Shields. While having Thorn Shield, record direct damage received by the protagonist. Each attack deals counterattack damage equal to 10% of the recorded value to enemies, triggers up to 5 times per turn, recorded damage resets 1 time every 2 turns"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Each counterattack increases Thorn Shield damage by +2%, stackable up to 6 times, lasts until battle ends"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "While having Thorn Shield, protagonist receives -10% final basic attack damage"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "At the start of battle, the hero gains a shield equal to 60% of max HP."
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "While having Thorn Shield, protagonist receives -10% final basic attack damage"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "At the start of battle, the hero gains a shield equal to 60% of max HP."
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Counter Rate"
+   ]
+  },
+  {
+   "n": "Angel Bow",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Throw 1 Dagger each round"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Rage Recovery from Basic Attack +10"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global ATK +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Daggers have a chance to become Angel Daggers"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Become an angel for 2 rounds after throwing 3 Angel Daggers"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Become an angel for 2 rounds after throwing 3 Angel Daggers"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Weapon Crit Rate"
+   ]
+  },
+  {
+   "n": "Bishop Staff",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Initial Rage +50"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Basic Attacks restore 25 extra Rage"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Skill damage +35%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Ult. DMG bonus +50%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Ult. DMG boost effective on enemies with <60% HP"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Ult. DMG boost effective on enemies with <60% HP"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Skill DMG"
+   ]
+  },
+  {
+   "n": "Blade of Justice",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Combo DMG +45%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Basic Attacks restore 10 extra Rage"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global ATK +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Initial Rage +75"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Combo Rate on Judgment targets +15%"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Combo Rate on Judgment targets +15%"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Combo Rate"
+   ]
+  },
+  {
+   "n": "Durian Hammer",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Increases shield by 10% upon Counterattack"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Basic Attacks restore 10 extra Rage"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global HP +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "All shields become Durian Shields that deal Counter DMG equal to 25% of ATK when attacked"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Durian Shield Counter DMG increases to 75% of ATK"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Durian Shield Counter DMG increases to 75% of ATK"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Counter Rate"
+   ]
+  },
+  {
+   "n": "Mushroom Hammer",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Damage taken next round reduces by 25% after Counter"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Basic Attacks restore 10 extra Rage"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global HP +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Shield +15%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Take 30% less damage when you have a shield"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Take 30% less damage when you have a shield"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Counter Rate"
+   ]
+  },
+  {
+   "n": "Reaper Staff",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Cast 1 Bolt each round"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Basic Attacks restore 25 extra Rage"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Bolt DMG +35%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Lightning DMG +25%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "All bolts have a chance to become Deathbolts"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "All bolts have a chance to become Deathbolts"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Skill DMG"
+   ]
+  },
+  {
+   "n": "Shadow Lance",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Attacks have a chance to poison enemies."
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Basic Attacks restore 10 extra Rage"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global ATK +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Lifesteal Rate +15%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Lifesteal Effect +30%"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Lifesteal Effect +30%"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Counter Rate"
+   ]
+  },
+  {
+   "n": "Skysplitter",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Add 1 [Sword Chi] during a combo"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Basic Attacks restore 10 extra Rage"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global ATK +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Sword Chi DMG increases"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Sword Chi additionally deals true DMG equal to 5% of target's current HP"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Sword Chi additionally deals true DMG equal to 5% of target's current HP"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Combo Rate"
+   ]
+  },
+  {
+   "n": "Star Staff",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Release 1 Flame Strike each round"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Basic Attacks restore 25 extra Rage"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Burn DMG +35%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Fire DMG +25%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "DMG +40% to Burning enemies"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "DMG +40% to Burning enemies"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Skill DMG"
+   ]
+  },
+  {
+   "n": "Warrior's Blade",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Critical DMG +20% upon CRIT, up to 5 stacks. Last until the battle ends."
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +15%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Stack times +10"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Stack times +10"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Combo Rate"
+   ],
+   "surpass_stacking_stats": {
+    "Crit DMG": {
+     "per_stack": 20,
+     "max_stacks": 15
+    }
+   }
+  },
+  {
+   "n": "Warrior's Sword",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Combo DMG +30%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +15%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "ATK +5% upon Combo. Stackable. Last until the battle ends."
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "ATK +5% upon Combo. Stackable. Last until the battle ends."
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Combo Rate"
+   ]
+  },
+  {
+   "n": "Whisperer",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Throw 2 Daggers upon weapon CRIT Hit"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Basic Attacks restore 10 extra Rage"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global ATK +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Dagger DMG +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Each Dagger hit increases hero Weapon Crit Rate by 2% and Crit DMG by 5%. Max 10 stacks."
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Each Dagger hit increases hero Weapon Crit Rate by 2% and Crit DMG by 5%. Max 10 stacks."
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Weapon Crit Rate"
+   ]
+  },
+  {
+   "n": "Forest Staff",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Basic Attacks restore 10 extra Rage"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Rage Skill DMG +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Restore 15% HP on Ult. hit."
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Restore 15% HP on Ult. hit."
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Skill DMG"
+   ]
+  },
+  {
+   "n": "Frostbite Spear",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Counterattack DMG +30%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +15%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Restore 5% HP when upon Counter."
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Restore 5% HP when upon Counter."
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Counter Rate"
+   ]
+  },
+  {
+   "n": "Giant's Hammer",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Counterattack DMG +30%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global HP +15%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "DMG Reduction +3% upon Counter. Stackable. Lasts until the battle ends."
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "DMG Reduction +3% upon Counter. Stackable. Lasts until the battle ends."
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Counter Rate"
+   ]
+  },
+  {
+   "n": "Hawkeye Bow",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Critical DMG +30%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +15%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Chance to reduce target's Rage by 10 upon CRIT."
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Chance to reduce target's Rage by 10 upon CRIT."
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Weapon Crit Rate"
+   ]
+  },
+  {
+   "n": "Mystic Staff",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Rage skill has a chance to reduce target\u2019s Rage by 10."
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Basic Attacks restore 10 extra Rage"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Skill DMG +25%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Rage Skill has a chance to Stun enemies for 1 round"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Rage Skill has a chance to Stun enemies for 1 round"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Skill DMG"
+   ]
+  },
+  {
+   "n": "Nomad Bow",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "Basic",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Critical DMG +30%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +15%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "ATK +10% upon weapon CRIT. Stackable. Last until the battle ends."
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "ATK +10% upon weapon CRIT. Stackable. Last until the battle ends."
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Weapon Crit Rate"
+   ]
+  },
+  {
+   "n": "Nomad Staff",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Basic Attacks restore 10 extra Rage"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Skill DMG +25%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Increase skill DMG by 15% upon Rage skill hit. Last until the battle ends."
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Increase skill DMG by 15% upon Rage skill hit. Last until the battle ends."
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "Skill DMG"
+   ],
+   "surpass_flat_stats": {
+    "Skill DMG": 15
+   }
+  },
+  {
+   "n": "Nomad Sword",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Attacks have 35% chance to add 1 Sword Chi"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +15%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Restore 5% HP after killing target"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Restore 5% HP after killing target"
+    }
+   ],
+   "base_stats": [
+    "ATK"
+   ]
+  }
+ ],
+ "armors": [
+  {
+   "n": "None",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ]
+  },
+  {
+   "n": "Crimson Dracula Chestplate",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global HP +50%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Damage reduction +20%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Every 2 turns, Crimson Dracula Chestplate restores 30% max health to protagonist"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "When Crimson Dracula Chestplate restores health, grants protagonist 20% final damage reduction, lasting 2 turns"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Crimson Dracula Chestplate health restoration effect increased to 50% of protagonist's max health, final damage reduction effect increased to 30%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "50% of Crimson Dracula Chestplate's overflow healing converts to shield"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Crimson Dracula Chestplate health restoration effect increased to 50% of protagonist's max health, final damage reduction effect increased to 30%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "50% of Crimson Dracula Chestplate's overflow healing converts to shield"
+    }
+   ],
+   "base_stats": [
+    "HP",
+    "Final Damage Reduction"
+   ]
+  },
+  {
+   "n": "Reinhardt's Resolve",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global HP +50%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Damage reduction +20%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Revive with 40% health after death, can only take effect 1 time"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "For 3 turns before battle starts, protagonist gains +30% final damage reduction"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "After revival, protagonist's health increases to 80%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "After revival, protagonist's final damage +10%, lasts until battle ends"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "After revival, protagonist's health increases to 80%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "After revival, protagonist's final damage +10%, lasts until battle ends"
+    }
+   ],
+   "base_stats": [
+    "HP",
+    "Final Damage Reduction"
+   ]
+  },
+  {
+   "n": "Eternal Dragon's Breath Armor",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global HP +10%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Restore 25% ATK as HP each round"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global HP +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Restore 40% ATK as HP each round"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "At <40% HP for the 1st time, instantly restore HP equal to 100% of ATK"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "At <40% HP for the 1st time, instantly restore HP equal to 100% of ATK"
+    }
+   ],
+   "base_stats": [
+    "HP"
+   ]
+  },
+  {
+   "n": "Revival Cape",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global HP +10%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Revive with 20% HP after death, effective only once"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global HP +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Revive with 50% HP"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "After revival, ATK and DEF +25% for 3 rounds"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "After revival, ATK and DEF +25% for 3 rounds"
+    }
+   ],
+   "base_stats": [
+    "HP"
+   ]
+  },
+  {
+   "n": "Hard Armor",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "Basic",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global HP +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "At <30% HP for the 1st time, reduce damage taken by 30% for 1 round"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "DMG Reduction +1 round"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "DMG Reduction +15%"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "DMG Reduction +15%"
+    }
+   ],
+   "base_stats": [
+    "HP"
+   ]
+  },
+  {
+   "n": "Silverscale Plate",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "Basic",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global HP +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Counter Rate +3% when attacked. Max 4 stacks"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Chance for Counterattack +2% for each stack"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Stacks +2"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Stacks +2"
+    }
+   ],
+   "base_stats": [
+    "HP"
+   ],
+   "surpass_stacking_stats": {
+    "Counter Rate": {
+     "per_stack": 3,
+     "max_stacks": 6
+    }
+   }
+  },
+  {
+   "n": "Tunic",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "Basic",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global HP +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global ATK +10% at the end of each action. Max 3 stacks."
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Stacks +2"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Global ATK +15% after each action"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Global ATK +15% after each action"
+    }
+   ],
+   "base_stats": [
+    "HP",
+    "Global DMG Reduction"
+   ],
+   "surpass_stacking_stats": {
+    "Global ATK": {
+     "per_stack": 15,
+     "max_stacks": 5
+    }
+   }
+  }
+ ],
+ "rings": [
+  {
+   "n": "None",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ]
+  },
+  {
+   "n": "Forbidden Julian's Inquisition",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global Attack +15%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Counterattack Damage +35%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Each counterattack has a 30 % chance to summon 1 light spear (max 2 per turn), increasing the hero\u2019s final counterattack damage by 5 %, stacking up to 2 times until the end of battle"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When counterattacking, there is a 30% chance to summon 1 additional Forbidden Spear dealing 200% of hero\u2019s attack as Light Spear damage, up to 2 times per turn"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When Forbidden Spear hits, grants a shield equal to 5 % of Max HP and increases final counterattack damage by 5 %, stacking up to 3 times"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When counterattacking, there is a 30% chance to summon 1 additional Forbidden Spear dealing 200% of hero\u2019s attack as Light Spear damage, up to 2 times per turn"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When Forbidden Spear hits, grants a shield equal to 5 % of Max HP and increases final counterattack damage by 5 %, stacking up to 3 times"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Ruin Tyr's Smash",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global Attack +15%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Combo Damage +35%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Each combo hit has a 30 % chance to deal an additional 70 % Attack combo damage (max 2 per turn), increasing final normal attack damage by 5 %, stacking up to 2 layers until the end of battle"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "After combo, has a 50% chance to trigger 1 Smash, dealing combo damage equal to 125% of hero\u2019s attack, up to 3 times per turn"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When Smash hits, increases final normal attack damage by 10 % for 1 turn"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "After combo, has a 50% chance to trigger 1 Smash, dealing combo damage equal to 125% of hero\u2019s attack, up to 3 times per turn"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When Smash hits, increases final normal attack damage by 10 % for 1 turn"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Salama Dragon Pearl Ring",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global Attack +15%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Normal Attack Damage +35%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Heaven\u2019s Punishment: Every 3 turns, deals normal attack damage equal to 100% of the hero\u2019s ATK, and gains 25% Normal Attack Critical Rate for 2 turns"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "[Unique] For every 1% Normal Attack Crit Rate owned, gain additional 2.5% Normal Attack Crit Damage"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Salama \u00b7 Dragon Pearl Ring Damage Coefficient increased to 200%"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "[Unique] For every 1% Normal Attack Crit Rate owned, gain additional 2.5% Normal Attack Crit Damage"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Salama \u00b7 Dragon Pearl Ring Damage Coefficient increased to 200%"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ],
+   "surpass_conversion": {
+    "source": "Basic ATK Crit Rate",
+    "target": "Crit DMG",
+    "ratio": 2.5
+   }
+  },
+  {
+   "n": "Shadowblade Sivira's Fang",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global Attack +15%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Dagger Damage +35%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Throws 1 dagger each turn, increasing final dagger damage by 10 % for 1 turn"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When throwing a dagger, there\u2019s a 50 % chance to throw an extra Sivira Blade dealing 60 % of the hero\u2019s Attack as dagger damage (max 3 times per turn)"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When Sivira Flying Blade hits, restores 5 Rage to the hero"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When throwing a dagger, there\u2019s a 50 % chance to throw an extra Sivira Blade dealing 60 % of the hero\u2019s Attack as dagger damage (max 3 times per turn)"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When Sivira Flying Blade hits, restores 5 Rage to the hero"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Skybreaker Elenos' Creed",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global Attack +15%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Sword Aura Damage +35%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Each combo hit has a 30 % chance to release 1 sword energy (max 2 per turn), increasing final sword energy damage by 10 % for 1 turn"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "After the first normal attack each turn, releases a Void Slash, dealing sword energy damage equal to 100% of the hero's attack"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When Void Slash Sword Qi hits, increases final sword energy damage by 10 % for 1 turn"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "After the first normal attack each turn, releases a Void Slash, dealing sword energy damage equal to 100% of the hero's attack"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When Void Slash Sword Qi hits, increases final sword energy damage by 10 % for 1 turn"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Thunderous Ezra's End",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global Attack +15%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Lightning Damage +35%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Casts 1 lightning bolt each turn, increasing the hero\u2019s final lightning damage by 10% for 1 turn"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Each turn, releases 1 Ezra Lightning dealing 100% of hero\u2019s attack as lightning damage"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When Ezra\u2019s lightning hits, reduces the target\u2019s final damage by 15% for 1 turn"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Each turn, releases 1 Ezra Lightning dealing 100% of hero\u2019s attack as lightning damage"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When Ezra\u2019s lightning hits, reduces the target\u2019s final damage by 15% for 1 turn"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Ursol Shadow Ring",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global Attack +15%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Damage to Frozen targets +50%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Every 3 turns, casts on the target to trigger an Icebound Shadow, with a 50% chance to freeze the target."
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When Icebound Shadow hits, the enemy becomes poisoned and weakened for 2 turns."
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Icebound Shadow cooldown -1."
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When Icebound Shadow hits, the enemy becomes poisoned and weakened for 2 turns."
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Icebound Shadow cooldown -1."
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Verdan Ring of Judgement",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global Attack +15%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Skill Damage +35%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Divine Might: Every 3 turns, deals skill damage equal to 100% of the hero\u2019s ATK, and gains 25% Skill Critical Rate for 2 turns"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global ATK +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "[Unique] Gain extra 2.5% Skill Crit Damage for every 1% Skill Critical Rate owned"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Verdant \u00b7 Ring of Judgment damage multiplier increased to 200%"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "[Unique] Gain extra 2.5% Skill Crit Damage for every 1% Skill Critical Rate owned"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Verdant \u00b7 Ring of Judgment damage multiplier increased to 200%"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ],
+   "surpass_conversion": {
+    "source": "Skill Crit Rate",
+    "target": "Crit DMG",
+    "ratio": 2.5
+   }
+  },
+  {
+   "n": "Dragon Ball Ring",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Summon 1 Light Spear after every 3 rounds and Basic Attacks gain 10% Crit Rate for 2 rounds"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global ATK +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "When triggered, Basic Attack Crit Rate increases by an extra 10%."
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "\u3010Unique Passive\u3011Gain 2% basic attack crit damage for every 1% basic attack crit rate"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "\u3010Unique Passive\u3011Gain 2% basic attack crit damage for every 1% basic attack crit rate"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ],
+   "surpass_conversion": {
+    "source": "Basic ATK Crit Rate",
+    "target": "Crit DMG",
+    "ratio": 2
+   }
+  },
+  {
+   "n": "Judgement Ring",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Summon 2 Bolts after every 3 rounds and gain 10% Skill Crit Rate for 2 rounds."
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global ATK +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "After activation, Skill Crit Rate increases by an extra 10%."
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "\u3010Unique Passive\u3011Gain 2% skill crit damage for every 1% skill crit rate"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "\u3010Unique Passive\u3011Gain 2% skill crit damage for every 1% skill crit rate"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ],
+   "surpass_conversion": {
+    "source": "Skill Crit Rate",
+    "target": "Crit DMG",
+    "ratio": 2
+   }
+  },
+  {
+   "n": "Shadow Ring",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Trigger an Icy Spike on the target after every 4 rounds"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global ATK +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Icy Spike DMG +25%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "CD -1 round"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "CD -1 round"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Sky Flame Ring",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "From round 4, cast 1 Fire Strike each round."
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global ATK +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "\u3010Unique Passive\u3011Flame Wave deals an extra 1.5% of the target's max HP as damage"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Cast Fire Strike from round 3 instead"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Cast Fire Strike from round 3 instead"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Eagle Ring",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Summon 2 Light Spears after every 4 rounds and increase Basic Attack DMG by 25% for 2 rounds"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Basic Attack DMG bonus changes to 35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "CD -1 round"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "CD -1 round"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Guardian's Ring",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "Basic",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global HP +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Throw 2 daggers after every 4 rounds and gain a shield with 10% Max HP for 2 rounds"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Shield value increases"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "CD -1 round"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "CD -1 round"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Magic Ring",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global ATK +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Cast after every 3 rounds. Strikes all enemies with 2 Bolts."
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Bolt DMG +25%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "CD -1 round"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "CD -1 round"
+    }
+   ],
+   "base_stats": [
+    "ATK",
+    "DEF"
+   ]
+  }
+ ],
+ "accessories": [
+  {
+   "n": "None",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ]
+  },
+  {
+   "n": "Battle Will Grande's Wrath",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global HP +15%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Damage Reduction +30%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Normal Attack has 10% chance to deal 2x damage"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global HP +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Trigger Double Damage Chance +5%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Normal Attack has 5% chance to deal 3x damage"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Trigger Double Damage Chance +5%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Normal Attack has 5% chance to deal 3x damage"
+    }
+   ],
+   "base_stats": [
+    "HP",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Demonseed Crimson Chalice",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global HP +15%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Damage Increase +30%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "On attack, inflicts Vulnerable for 2 turns; when landing a Crit on Vulnerable targets, damage +60%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global HP +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "On Crit against Vulnerable targets, 50% chance to deal True Damage equal to 5% of enemy\u2019s Max HP (capped at 20x hero\u2019s Attack, max 2 times/turn)"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "After Crit on Vulnerable targets, damage increase effect rises to 90%"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "On Crit against Vulnerable targets, 50% chance to deal True Damage equal to 5% of enemy\u2019s Max HP (capped at 20x hero\u2019s Attack, max 2 times/turn)"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "After Crit on Vulnerable targets, damage increase effect rises to 90%"
+    }
+   ],
+   "base_stats": [
+    "HP",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Justice Emblem of Verdict",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global HP +15%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Damage Reduction +30%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Skills deal +40% damage to targets with HP above 35%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global HP +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When own HP >60%, Final Damage Reduction +10%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Skills deal +60% damage to targets with HP above 35%"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "When own HP >60%, Final Damage Reduction +10%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Skills deal +60% damage to targets with HP above 35%"
+    }
+   ],
+   "base_stats": [
+    "HP",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Winter Ice Soul Guard",
+   "q": [
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "SS",
+   "surpass_max": 4,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Surpass",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Surpass +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Surpass +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Surpass +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Surpass +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global HP +15%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Damage Reduction +30%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Immune to Freeze for the first 2 turns, after effect ends, Ignore Freeze Rate +20%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Global HP +35%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Final Damage Reduction +10%, when Frozen, Final Damage Reduction +10% extra"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "After immunity to Freeze ends, Ignore Freeze Rate boost increases to 50%"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "Final Damage Reduction +10%, when Frozen, Final Damage Reduction +10% extra"
+    },
+    {
+     "tier": 11,
+     "tierName": "Surpass",
+     "desc": "After immunity to Freeze ends, Ignore Freeze Rate boost increases to 50%"
+    }
+   ],
+   "base_stats": [
+    "HP",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Bloody Grail",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global HP +10%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Inflict Vulnerability for 2 rounds, CRIT against Vulnerable targets deals +40% DMG"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global HP +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "DMG +60% after a CRIT to a Vulnerable target"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "DMG +25%"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "DMG +25%"
+    }
+   ],
+   "base_stats": [
+    "HP",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Proof of Glory",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global HP +10%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Basic Attack additionally deals true DMG equal to 5% of current HP, up to 10x ATK DMG"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global HP +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Basic Attack additionally deals true DMG equal to 10% of current HP"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "DMG Reduction +25%"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "DMG Reduction +25%"
+    }
+   ],
+   "base_stats": [
+    "HP",
+    "DEF"
+   ],
+   "surpass_flat_stats": {
+    "General Final Damage Reduction": 25
+   }
+  },
+  {
+   "n": "Reckoning Badge",
+   "q": [
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "S",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 2,
+     "tierName": "Great",
+     "desc": "Global HP +10%"
+    },
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Skills deal an extra 150% DMG to targets with <50% HP."
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Global HP +25%"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Deal 210% extra damage"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Effective on targets with <70% HP"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Effective on targets with <70% HP"
+    }
+   ],
+   "base_stats": [
+    "HP",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Frostwind Horn",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global HP +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "DMG +30% to Frozen or Stunned enemies"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "DMG +40%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "DMG +60%"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "DMG +60%"
+    }
+   ],
+   "base_stats": [
+    "HP",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Icy Bubble",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "tier": "Basic",
+   "surpass_max": 3,
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global HP +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Basic Attacks have a chance to trigger Icy Spikes"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "Trigger chance increases"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Icy Spike triggers twice"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "Icy Spike triggers twice"
+    }
+   ],
+   "base_stats": [
+    "HP",
+    "DEF"
+   ]
+  },
+  {
+   "n": "Vitality Stone",
+   "q": [
+    "Common",
+    "Uncommon",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic"
+   ],
+   "rarity_tiers": [
+    {
+     "tier": 1,
+     "name": "Common",
+     "quality": 1
+    },
+    {
+     "tier": 2,
+     "name": "Great",
+     "quality": 2
+    },
+    {
+     "tier": 3,
+     "name": "Rare",
+     "quality": 3
+    },
+    {
+     "tier": 4,
+     "name": "Epic",
+     "quality": 4
+    },
+    {
+     "tier": 5,
+     "name": "Epic +1",
+     "quality": 4
+    },
+    {
+     "tier": 6,
+     "name": "Epic +2",
+     "quality": 4
+    },
+    {
+     "tier": 7,
+     "name": "Legendary",
+     "quality": 5
+    },
+    {
+     "tier": 8,
+     "name": "Legend +1",
+     "quality": 5
+    },
+    {
+     "tier": 9,
+     "name": "Legend +2",
+     "quality": 5
+    },
+    {
+     "tier": 10,
+     "name": "Legend +3",
+     "quality": 5
+    },
+    {
+     "tier": 11,
+     "name": "Mythic",
+     "quality": 6
+    },
+    {
+     "tier": 12,
+     "name": "Mythic +1",
+     "quality": 6
+    },
+    {
+     "tier": 13,
+     "name": "Mythic +2",
+     "quality": 6
+    },
+    {
+     "tier": 14,
+     "name": "Mythic +3",
+     "quality": 6
+    },
+    {
+     "tier": 15,
+     "name": "Mythic +4",
+     "quality": 6
+    }
+   ],
+   "skills": [
+    {
+     "tier": 3,
+     "tierName": "Rare",
+     "desc": "Global HP +10%"
+    },
+    {
+     "tier": 4,
+     "tierName": "Epic",
+     "desc": "Basic Attacks have a chance to restore 10% of lost HP"
+    },
+    {
+     "tier": 7,
+     "tierName": "Legendary",
+     "desc": "HP Recovery +5%"
+    },
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "HP Recovery +10%"
+    }
+   ],
+   "surpass_skills": [
+    {
+     "tier": 11,
+     "tierName": "Mythic",
+     "desc": "HP Recovery +10%"
+    }
+   ],
+   "base_stats": [
+    "HP",
+    "DEF"
+   ]
+  }
+ ]
+}

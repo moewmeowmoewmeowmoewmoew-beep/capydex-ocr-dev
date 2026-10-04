@@ -505,6 +505,27 @@
   "deploy_type": "totem"
     },
     {
+      "id": "1376025",
+      "n": "Twin-Eared Dagger",
+      "rarity": "Mythic",
+      "star_stats":{
+        "final_basic_atk_dmg": [5, 6, 7, 8, 9, 10, 11.5, 13, 14.5, 16, 17.5],
+        "tenacity_res": [1000,1200,1400,1600,1800,2000,2300,2600,2900,3200,3500],
+        "atk": [20000,24000,28000,32000,36000,40000,46000,52000,58000,64000,70000]
+      },
+
+      "effect_base": "Each Dagger with a different effect cast increases Dagger Final DMG Boost by +1%, stacking up to 5 times.",
+      "flat_stats_base": { "final_dagger_dmg": 5 },
+
+      "effect_5star": "Each Dagger with a different effect cast increases Dagger Final DMG Boost by +1%, stacking up to 5 times; after 5 stacks, increases Dagger Final DMG Boost by +5% and Dagger Crit Rate by +5%.",
+      "flat_stats_5star": { "final_dagger_dmg": 10, "dagger_crit_rate": 5 },
+
+      "effect": "Each Dagger with a different effect cast increases Dagger Final DMG Boost by +1%, stacking up to 5 times; after 5 stacks, increases Dagger Final DMG Boost by +15% and Dagger Crit Rate by +10%.",
+      "flat_stats": { "final_dagger_dmg": 20, "dagger_crit_rate": 10 },
+
+      "deploy_type": "core"
+    },
+    {
       "id": "1375001",
       "n": "Ashoka Pillar",
       "rarity": "Legendary",
@@ -2102,8 +2123,8 @@
         "set": "Vajra Wrath Lightning",
         "stat": "Final Damage Boost",
         "vals":[3.0,3.0,4.0,4.0,5.0,5.0],
-        "items": ["Skythunder Vajra Pestle"],
-        "tracked":false
+        "items": ["Skythunder Vajra Pestle", "Twin-Eared Dagger"],
+        "tracked":true
       }
     ]
   }

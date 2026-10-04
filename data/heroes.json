@@ -97,6 +97,35 @@
       }
     },
     {
+      "n": "Cube Golem",
+      "q": [
+        "Common",
+        "Rare",
+        "Epic",
+        "Legendary",
+        "Mythic"
+      ],
+      "quality_effects": {
+        "Common": "Global ATK +5%",
+        "Rare": "Global ATK +10%",
+        "Epic": "After the Protagonist takes cumulative DMG equal to 50% of Max HP, summons a Cube Golem to cast [ Arcane Shock ], dealing Skill DMG equal to 400% of the Protagonist’s ATK, granting the Protagonist a Shield of 50% Max HP, and thereafter gaining a Shield of 20% Max HP each round for 2 rounds. Cooldown: 7 rounds.",
+        "Legendary": "Casting [ Arcane Shock ] grants the Protagonist [ Anima ] until the end of the battle. If the Protagonist is controlled while [ Anima ] is active, the Protagonist’s Final DMG Reduction +10% until the end of the battle, and the Protagonist becomes immune to control effects for the next round. This effect triggers once every 3 rounds.",
+        "Mythic": "When the Protagonist is controlled while [ Anima ] is active, the Protagonist’s Final DMG Boost +10% until the end of the battle. When the Protagonist’s HP drops below 50% for the first time while [ Anima ] is active, the Protagonist’s Final DMG Reduction +10% and Final DMG Boost +10% until the end of the battle, while granting the Protagonist a Shield of 50% Max HP and 1 round of Control Immunity. This effect triggers once per battle."
+      },
+      "polarization_effects": {
+        "P1": "Final Damage Reduction +0.5%",
+        "P2": "Final Damage Reduction +1.0%",
+        "P3": "Final Damage Reduction +1.5%",
+        "P4": "Final Damage Reduction +2.0%",
+        "P5": "Final Damage Reduction +2.5%",
+        "P6": "Final Damage Reduction +3.0%",
+        "P7": "Final Damage Reduction +3.5%",
+        "P8": "Final Damage Reduction +4.0%",
+        "P9": "Final Damage Reduction +4.5%",
+        "P10": "Final Damage Reduction +5.0%"
+      }
+    },
+    {
       "n": "Dark Knight",
       "q": [
         "Common",
