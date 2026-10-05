@@ -107,60 +107,7 @@
       "deploy_type": "totem"
     },
     {
-      "id": "1375002",
-      "n": "Zhuge Repeating Crossbow",
-      "type": "Utility",
-      "effect": "In the first 3 turns of battle, the hero's dagger damage +45%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Legendary",
-      "star_stats": {
-        "combo": [
-          1.5,
-          1.8,
-          2.1,
-          2.4,
-          2.7,
-          3,
-          3.4,
-          3.8,
-          4.2,
-          4.6,
-          5
-        ],
-        "armor_break": [
-          100,
-          120,
-          140,
-          160,
-          180,
-          200,
-          230,
-          260,
-          290,
-          320,
-          350
-        ],
-        "atk": [
-          2000,
-          2400,
-          2800,
-          3200,
-          3600,
-          4000,
-          4600,
-          5200,
-          5800,
-          6400,
-          7000
-        ]
-      },
-      "effect_base": "In the first 3 turns of battle, the hero's dagger damage +15%",
-      "effect_5star": "In the first 3 turns of battle, the hero's dagger damage +30%",
-      "deploy_type": "totem"
-    },
-    {
-      "id": null,
+      "id": "1376002",
       "n": "Holy Grail",
       "type": "",
       "effect": "When hitting an enemy with HP >30%, hero's final damage bonus +20%",
@@ -214,59 +161,6 @@
       "img": "holy-grail-mythic-treasure"
     },
     {
-      "id": "1375004",
-      "n": "Golden Chariot",
-      "type": "Utility",
-      "effect": "Counterattack Damage +30%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Legendary",
-      "star_stats": {
-        "tenacity_res": [
-          100,
-          120,
-          140,
-          160,
-          180,
-          200,
-          230,
-          260,
-          290,
-          320,
-          350
-        ],
-        "skill_crit_rate": [
-          1.5,
-          1.8,
-          2.1,
-          2.4,
-          2.7,
-          3,
-          3.4,
-          3.8,
-          4.2,
-          4.6,
-          5
-        ],
-        "atk": [
-          2000,
-          2400,
-          2800,
-          3200,
-          3600,
-          4000,
-          4600,
-          5200,
-          5800,
-          6400,
-          7000
-        ]
-      },
-      "effect_base": "Counterattack Damage +10%",
-      "effect_5star": "Counterattack Damage +20%",
-      "deploy_type": "totem"
-    },
-    {
       "id": "1376003",
       "n": "Rosetta Stone",
       "type": "",
@@ -317,59 +211,6 @@
       },
       "effect_base": "After a Combo, final Combo damage +1%, can stack up to 5 layers",
       "effect_5star": "After a Combo, final Combo damage +2%, can stack up to 5 layers",
-      "deploy_type": "totem"
-    },
-    {
-      "id": "1375005",
-      "n": "Trojan Horse",
-      "type": "Utility",
-      "effect": "In the first 3 turns of battle, hero's counterattack damage +45%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Legendary",
-      "star_stats": {
-        "basic_atk_crit_rate": [
-          1.5,
-          1.8,
-          2.1,
-          2.4,
-          2.7,
-          3,
-          3.4,
-          3.8,
-          4.2,
-          4.6,
-          5
-        ],
-        "armor_break": [
-          100,
-          120,
-          140,
-          160,
-          180,
-          200,
-          230,
-          260,
-          290,
-          320,
-          350
-        ],
-        "atk": [
-          2000,
-          2400,
-          2800,
-          3200,
-          3600,
-          4000,
-          4600,
-          5200,
-          5800,
-          6400,
-          7000
-        ]
-      },
-      "effect_base": "In the first 3 turns of battle, hero's counterattack damage +15%",
-      "effect_5star": "In the first 3 turns of battle, hero's counterattack damage +30%",
       "deploy_type": "totem"
     },
     {
@@ -426,59 +267,6 @@
       "deploy_type": "totem"
     },
     {
-      "id": "1375006",
-      "n": "Sphinx Statue",
-      "type": "Offensive",
-      "effect": "When hitting an enemy with HP >50%, hero's damage bonus +22.5%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Legendary",
-      "star_stats": {
-        "dotcritrate": [
-          1.5,
-          1.8,
-          2.1,
-          2.4,
-          2.7,
-          3,
-          3.4,
-          3.8,
-          4.2,
-          4.6,
-          5
-        ],
-        "armor_break": [
-          100,
-          120,
-          140,
-          160,
-          180,
-          200,
-          230,
-          260,
-          290,
-          320,
-          350
-        ],
-        "hp": [
-          10000,
-          12000,
-          14000,
-          16000,
-          18000,
-          20000,
-          23000,
-          26000,
-          29000,
-          32000,
-          35000
-        ]
-      },
-      "effect_base": "When hitting an enemy with HP >50%, hero's damage bonus +7.5%",
-      "effect_5star": "When hitting an enemy with HP >50%, hero's damage bonus +15%",
-      "deploy_type": "core"
-    },
-    {
       "id": "1376005",
       "n": "Sword of Goujian",
       "type": "Utility",
@@ -530,58 +318,6 @@
       "effect_base": "After the first Normal Attack at the start of battle, release 2 Sword Qi waves",
       "effect_5star": "After the first Normal Attack at the start of battle, release 2 Sword Qi waves; after release, hero's final damage to shields +5% for 5 turns",
       "deploy_type": "totem"
-    },
-    {
-      "id": "1375007",
-      "n": "Ancient Olympic Gold Crown",
-      "type": "Utility",
-      "effect": "In the first 3 turns of battle, hero's lightning damage +45%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Legendary",
-      "star_stats": {
-        "tenacity": [
-          100,
-          120,
-          140,
-          160,
-          180,
-          200,
-          230,
-          260,
-          290,
-          320,
-          350
-        ],
-        "ignore_combo": [
-          1.5,
-          1.8,
-          2.1,
-          2.4,
-          2.7,
-          3,
-          3.4,
-          3.8,
-          4.2,
-          4.6,
-          5
-        ],
-        "hp": [
-          10000,
-          12000,
-          14000,
-          16000,
-          18000,
-          20000,
-          23000,
-          26000,
-          29000,
-          32000,
-          35000
-        ]
-      },
-      "effect_base": "In the first 3 turns of battle, hero's lightning damage +15%",
-      "effect_5star": "In the first 3 turns of battle, hero's lightning damage +30%"
     },
     {
       "id": "1376006",
@@ -637,59 +373,6 @@
       "deploy_type": "core"
     },
     {
-      "id": "1375011",
-      "n": "Dinosaur Skull",
-      "type": "Utility",
-      "effect": "Combo Damage +30%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Legendary",
-      "star_stats": {
-        "ignore_basic_atk_crit_rate": [
-          1.5,
-          1.8,
-          2.1,
-          2.4,
-          2.7,
-          3,
-          3.4,
-          3.8,
-          4.2,
-          4.6,
-          5
-        ],
-        "armor_break": [
-          100,
-          120,
-          140,
-          160,
-          180,
-          200,
-          230,
-          260,
-          290,
-          320,
-          350
-        ],
-        "hp": [
-          10000,
-          12000,
-          14000,
-          16000,
-          18000,
-          20000,
-          23000,
-          26000,
-          29000,
-          32000,
-          35000
-        ]
-      },
-      "effect_base": "Combo Damage +10%",
-      "effect_5star": "Combo Damage +20%",
-      "deploy_type": "totem"
-    },
-    {
       "id": "1376007",
       "n": "Moai Statues of Easter Island",
       "type": "Utility",
@@ -741,59 +424,6 @@
       "effect_base": "At the start of battle, release 2 Lightning",
       "effect_5star": "At the start of battle, release 2 Lightning; after release, 50% chance to paralyze enemies for 1 turn",
       "deploy_type": "totem"
-    },
-    {
-      "id": "1375012",
-      "n": "Mexican Pyramid of the Sun",
-      "type": "Defensive",
-      "effect": "When hero HP <75%, damage reduction +30%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Legendary",
-      "star_stats": {
-        "tenacity_res": [
-          100,
-          120,
-          140,
-          160,
-          180,
-          200,
-          230,
-          260,
-          290,
-          320,
-          350
-        ],
-        "hp": [
-          10000,
-          12000,
-          14000,
-          16000,
-          18000,
-          20000,
-          23000,
-          26000,
-          29000,
-          32000,
-          35000
-        ],
-        "ignoredotcritrate": [
-          1.5,
-          1.8,
-          2.1,
-          2.4,
-          2.7,
-          3,
-          3.4,
-          3.8,
-          4.2,
-          4.6,
-          5
-        ]
-      },
-      "effect_base": "When hero HP <75%, damage reduction +10%",
-      "effect_5star": "When hero HP <75%, damage reduction +20%",
-      "deploy_type": "guardian"
     },
     {
       "id": "1376008",
@@ -850,57 +480,57 @@
       "img": "da-vinci-s-codex"
     },
     {
-      "id": null,
-      "n": "Bronze Statue of Shiva as Nataraja",
-      "type": "",
-      "effect": "In the first 3 turns of battle, hero's combo damage +45%",
+      "id": "1376009",
+      "n": "Galileo's Telescope",
+      "type": "Defensive",
+      "effect": "When critically hit, the hero's final damage reduction increases by +2%, stacking up to 5 layers. When fully stacked, the hero's final damage reduction increases by +10%",
       "pve": "",
       "pvp": "",
-      "rarity": "Legendary",
+      "rarity": "Mythic",
       "star_stats": {
+        "tenacity": [
+          1000,
+          1200,
+          1400,
+          1600,
+          1800,
+          2000,
+          2300,
+          2600,
+          2900,
+          3200,
+          3500
+        ],
         "global_hp": [
-          2,
-          2.4,
-          2.8,
-          3.2,
-          3.6,
-          4,
-          4.6,
-          5.2,
-          5.8,
-          6.4,
-          7
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          23,
+          26,
+          29,
+          32,
+          35
         ],
         "hp": [
-          10000,
-          12000,
-          14000,
-          16000,
-          18000,
-          20000,
-          23000,
-          26000,
-          29000,
-          32000,
-          35000
-        ],
-        "armor_break_res": [
-          100,
-          120,
-          140,
-          160,
-          180,
-          200,
-          230,
-          260,
-          290,
-          320,
-          350
+          100000,
+          120000,
+          140000,
+          160000,
+          180000,
+          200000,
+          230000,
+          260000,
+          290000,
+          320000,
+          350000
         ]
       },
-      "effect_base": "In the first 3 turns of battle, hero's combo damage +15%",
-      "effect_5star": "In the first 3 turns of battle, hero's combo damage +30%",
-      "deploy_type": "totem"
+      "effect_base": "When critically hit, the hero's final damage reduction increases by +1%, stacking up to 5 layers",
+      "effect_5star": "When critically hit, the hero's final damage reduction increases by +2%, stacking up to 5 layers",
+      "deploy_type": "guardian"
     },
     {
       "id": "1376010",
@@ -953,59 +583,6 @@
       },
       "effect_base": "After the first counterattack at the start of battle, release 2 light spears.",
       "effect_5star": "After the first counterattack at the start of battle, release 2 light spears. After releasing, the hero gains a shield equal to 30% of Max HP",
-      "deploy_type": "totem"
-    },
-    {
-      "id": "1375017",
-      "n": "Gold Cicada and Jade Leaf",
-      "type": "Utility",
-      "effect": "Dagger Damage +30%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Legendary",
-      "star_stats": {
-        "global_hp": [
-          2,
-          2.4,
-          2.8,
-          3.2,
-          3.6,
-          4,
-          4.6,
-          5.2,
-          5.8,
-          6.4,
-          7
-        ],
-        "hp": [
-          10000,
-          12000,
-          14000,
-          16000,
-          18000,
-          20000,
-          23000,
-          26000,
-          29000,
-          32000,
-          35000
-        ],
-        "armor_break_res": [
-          100,
-          120,
-          140,
-          160,
-          180,
-          200,
-          230,
-          260,
-          290,
-          320,
-          350
-        ]
-      },
-      "effect_base": "Dagger Damage +10%",
-      "effect_5star": "Dagger Damage +20%",
       "deploy_type": "totem"
     },
     {
@@ -1062,59 +639,6 @@
       "deploy_type": "totem"
     },
     {
-      "id": "1375018",
-      "n": "Nebra Sky Disk",
-      "type": "Utility",
-      "effect": "Lightning Damage +20%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Legendary",
-      "star_stats": {
-        "global_hp": [
-          2,
-          2.4,
-          2.8,
-          3.2,
-          3.6,
-          4,
-          4.6,
-          5.2,
-          5.8,
-          6.4,
-          7
-        ],
-        "hp": [
-          10000,
-          12000,
-          14000,
-          16000,
-          18000,
-          20000,
-          23000,
-          26000,
-          29000,
-          32000,
-          35000
-        ],
-        "armor_break_res": [
-          100,
-          120,
-          140,
-          160,
-          180,
-          200,
-          230,
-          260,
-          290,
-          320,
-          350
-        ]
-      },
-      "effect_base": "Lightning Damage +10%",
-      "effect_5star": "Lightning Damage +20%",
-      "deploy_type": "totem"
-    },
-    {
       "id": "1376012",
       "n": "Mona Lisa",
       "type": "Utility",
@@ -1165,59 +689,6 @@
       },
       "effect_base": "During the first turn after the battle starts, each combo deals an additional 200% ATK combo damage.",
       "effect_5star": "During the first turn after the battle starts, each combo deals an additional 200% ATK combo damage. After triggering, the hero gains +5% lifesteal for 5 turns",
-      "deploy_type": "totem"
-    },
-    {
-      "id": "1375019",
-      "n": "Honjo Masamune",
-      "type": "Utility",
-      "effect": "In the first 3 turns of battle, hero's Sword Qi Damage +45%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Legendary",
-      "star_stats": {
-        "global_hp": [
-          2,
-          2.4,
-          2.8,
-          3.2,
-          3.6,
-          4,
-          4.6,
-          5.2,
-          5.8,
-          6.4,
-          7
-        ],
-        "hp": [
-          10000,
-          12000,
-          14000,
-          16000,
-          18000,
-          20000,
-          23000,
-          26000,
-          29000,
-          32000,
-          35000
-        ],
-        "armor_break_res": [
-          100,
-          120,
-          140,
-          160,
-          180,
-          200,
-          230,
-          260,
-          290,
-          320,
-          350
-        ]
-      },
-      "effect_base": "In the first 3 turns of battle, hero's Sword Qi Damage +15%",
-      "effect_5star": "In the first 3 turns of battle, hero's Sword Qi Damage +30%",
       "deploy_type": "totem"
     },
     {
@@ -1274,59 +745,6 @@
       "deploy_type": "totem"
     },
     {
-      "id": "1375034",
-      "n": "Ulfberht Sword",
-      "type": "Utility",
-      "effect": "Sword Qi Damage +30%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Legendary",
-      "star_stats": {
-        "tenacity_res": [
-          100,
-          120,
-          140,
-          160,
-          180,
-          200,
-          230,
-          260,
-          290,
-          320,
-          350
-        ],
-        "global_atk": [
-          2,
-          2.4,
-          2.8,
-          3.2,
-          3.6,
-          4,
-          4.6,
-          5.2,
-          5.8,
-          6.4,
-          7
-        ],
-        "atk": [
-          2000,
-          2400,
-          2800,
-          3200,
-          3600,
-          4000,
-          4600,
-          5200,
-          5800,
-          6400,
-          7000
-        ]
-      },
-      "effect_base": "Sword Qi Damage +10%",
-      "effect_5star": "Sword Qi Damage +20%",
-      "deploy_type": "totem"
-    },
-    {
       "id": "1376014",
       "n": "Tutankhamun's Dagger",
       "type": "",
@@ -1377,6 +795,1194 @@
       },
       "effect_base": "After each dagger, dagger final damage +1%, stackable up to 5 stacks",
       "effect_5star": "After each dagger, dagger final damage +2%, stackable up to 5 stacks",
+      "deploy_type": "totem"
+    },
+    {
+      "id": "1376015",
+      "n": "Nio Armor",
+      "type": "",
+      "effect": "After taking cumulative damage equal to 30% of Max HP for the first time, increases Protagonist's Final DMG Reduc. by +10% and CRIT DMG Reduc. by +20% until the end of battle.",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Mythic",
+      "star_stats": {
+        "tenacity": [
+          1000,
+          1200,
+          1400,
+          1600,
+          1800,
+          2000,
+          2300,
+          2600,
+          2900,
+          3200,
+          3500
+        ],
+        "final_basic_atk_dmg_reduction": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11.5,
+          13,
+          14.5,
+          16,
+          17.5
+        ],
+        "hp": [
+          100000,
+          120000,
+          140000,
+          160000,
+          180000,
+          200000,
+          230000,
+          260000,
+          290000,
+          320000,
+          350000
+        ]
+      },
+      "effect_base": "After taking cumulative damage equal to 50% of Max HP for the first time, increases Protagonist's Final DMG Reduc. by +3% until the end of battle.",
+      "effect_5star": "After taking cumulative damage equal to 50% of Max HP for the first time, increases Protagonist's Final DMG Reduc. by +6% and CRIT DMG Reduc. by +20% until the end of battle.",
+      "deploy_type": "guardian"
+    },
+    {
+      "id": "1376016",
+      "n": "Holy Spear",
+      "type": "",
+      "effect": "After the first Normal ATK each round, increases Protagonist's Final DMG Bonus by +2%. Stacks up to 4 times and lasts until the end of battle. At 3 stacks, grants Crit DMG +20% and Final DMG Bonus +3%.",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Mythic",
+      "star_stats": {
+        "armor_break": [
+          1000,
+          1200,
+          1400,
+          1600,
+          1800,
+          2000,
+          2300,
+          2600,
+          2900,
+          3200,
+          3500
+        ],
+        "final_basic_atk_dmg": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11.5,
+          13,
+          14.5,
+          16,
+          17.5
+        ],
+        "atk": [
+          20000,
+          24000,
+          28000,
+          32000,
+          36000,
+          40000,
+          46000,
+          52000,
+          58000,
+          64000,
+          70000
+        ]
+      },
+      "effect_base": "After the first Basic ATK each round, increases Protagonist's Final DMG Bonus by +1%. Stacks up to 3 times until the end of battle.",
+      "effect_5star": "After the first Normal ATK each round, increases Protagonist's Final DMG Bonus by +2%. Stacks up to 3 times and lasts until the end of battle. At 3 stacks, grants Crit DMG +20% and Final DMG Bonus +3%.",
+      "deploy_type": "core"
+    },
+    {
+      "id": "1376017",
+      "n": "Spartan Shield",
+      "type": "",
+      "effect": "When Hero HP <70%, Final DMG Reduction +20%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Mythic",
+      "star_stats": {
+        "final_skill_dmg_reduction": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11.5,
+          13,
+          14.5,
+          16,
+          17.5
+        ],
+        "armor_break_res": [
+          1000,
+          1200,
+          1400,
+          1600,
+          1800,
+          2000,
+          2300,
+          2600,
+          2900,
+          3200,
+          3500
+        ],
+        "atk": [
+          20000,
+          24000,
+          28000,
+          32000,
+          36000,
+          40000,
+          46000,
+          52000,
+          58000,
+          64000,
+          70000
+        ]
+      },
+      "effect_base": "When Hero HP <50%, Final DMG Reduction +5%",
+      "effect_5star": "When Hero HP <60%, Final DMG Reduction +10%",
+      "deploy_type": "guardian"
+    },
+    {
+      "id": "1376018",
+      "n": "Spartan Scimitar",
+      "type": "",
+      "effect": "For every 10% of Max HP lost, Protagonist's Final DMG +2% (Max 5 stacks). At max stacks, Final DMG +10% additional.",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Mythic",
+      "star_stats": {
+        "tenacity_res": [
+          1000,
+          1200,
+          1400,
+          1600,
+          1800,
+          2000,
+          2300,
+          2600,
+          2900,
+          3200,
+          3500
+        ],
+        "final_skill_dmg": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11.5,
+          13,
+          14.5,
+          16,
+          17.5
+        ],
+        "atk": [
+          20000,
+          24000,
+          28000,
+          32000,
+          36000,
+          40000,
+          46000,
+          52000,
+          58000,
+          64000,
+          70000
+        ]
+      },
+      "effect_base": "For every 20% of Max HP lost, Protagonist's Final DMG +1%. Stacks up to 5 times.",
+      "effect_5star": "Each time the protagonist cumulatively takes damage equal to 10% of Max HP, increases the protagonist's Final DMG+2%, stackable up to5times",
+      "deploy_type": "core"
+    },
+    {
+      "id": "1376019",
+      "n": "Li Gang's Mace",
+      "type": "",
+      "effect": "After Hero CRIT, 100% chance to gain. Final DMG Bonus +1%, stacking up to 10 times. When fully stacked, gain an additional Final DMG Bonus +10%.",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Mythic",
+      "star_stats": {
+        "tenacity": [
+          1000,
+          1200,
+          1400,
+          1600,
+          1800,
+          2000,
+          2300,
+          2600,
+          2900,
+          3200,
+          3500
+        ],
+        "final_skill_dmg": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11.5,
+          13,
+          14.5,
+          16,
+          17.5
+        ],
+        "atk": [
+          20000,
+          24000,
+          28000,
+          32000,
+          36000,
+          40000,
+          46000,
+          52000,
+          58000,
+          64000,
+          70000
+        ]
+      },
+      "effect_base": "After Hero CRIT, 50% chance to gain Final DMG Bonus +1% (Stacks up to 5 times)",
+      "effect_5star": "After Hero CRIT, 50% chance to gain Final DMG Bonus +1% (Stacks up to 10 times)",
+      "deploy_type": "core"
+    },
+    {
+      "id": "1376020",
+      "n": "Cold Moon Blade",
+      "type": "",
+      "effect": "Final Basic Attack DMG Boost increased to 15%, and grants the Protagonist a Skill Shield equal to 3% of Max HP",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Mythic",
+      "star_stats": {
+        "armor_break": [
+          1000,
+          1200,
+          1400,
+          1600,
+          1800,
+          2000,
+          2300,
+          2600,
+          2900,
+          3200,
+          3500
+        ],
+        "final_basic_atk_dmg": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11.5,
+          13,
+          14.5,
+          16,
+          17.5
+        ],
+        "atk": [
+          20000,
+          24000,
+          28000,
+          32000,
+          36000,
+          40000,
+          46000,
+          52000,
+          58000,
+          64000,
+          70000
+        ]
+      },
+      "effect_base": "After a Basic Attack crits, increases the Protagonist's Final Basic Attack DMG by +5% for 1 round",
+      "effect_5star": "Final Basic Attack DMG Boost increased to 10%",
+      "deploy_type": "totem"
+    },
+    {
+      "id": "1376021",
+      "n": "Radiant Armor",
+      "type": "",
+      "effect": "Can be stacked an additional time, with each stack increasing the final damage reduction to 5%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Mythic",
+      "star_stats": {
+        "final_skill_dmg_reduction": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11.5,
+          13,
+          14.5,
+          16,
+          17.5
+        ],
+        "armor_break_res": [
+          1000,
+          1200,
+          1400,
+          1600,
+          1800,
+          2000,
+          2300,
+          2600,
+          2900,
+          3200,
+          3500
+        ],
+        "hp": [
+          100000,
+          120000,
+          140000,
+          160000,
+          180000,
+          200000,
+          230000,
+          260000,
+          290000,
+          320000,
+          350000
+        ]
+      },
+      "effect_base": "After the battle starts, the protagonist's final damage reduction will be increased by 2% each round, up to 3 stacks.",
+      "effect_5star": "Each round increases the final damage reduction to4%",
+      "deploy_type": "guardian"
+    },
+    {
+      "id": "1376023",
+      "n": "Sekhmet's Aegis",
+      "type": "Defensive",
+      "effect": "Upon taking DMG for the first time each round, Protagonist Final DMG Reduction +4% for 1 round, and grants the Protagonist a Shield equal to 5% of Max HP",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Mythic",
+      "star_stats": {
+        "armor_break_res": [
+          1000,
+          1200,
+          1400,
+          1600,
+          1800,
+          2000,
+          2300,
+          2600,
+          2900,
+          3200,
+          3500
+        ],
+        "hp": [
+          100000,
+          120000,
+          140000,
+          160000,
+          180000,
+          200000,
+          230000,
+          260000,
+          290000,
+          320000,
+          350000
+        ],
+        "final_basic_atk_dmg_reduction": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11.5,
+          13,
+          14.5,
+          16,
+          17.5
+        ]
+      },
+      "effect_base": "Upon taking DMG for the first time each round, reduces the enemy's Final DMG Boost by -4% for 1 round",
+      "effect_5star": "The reduction in the enemy's Final DMG Boost increases to 8%",
+      "deploy_type": "guardian"
+    },
+    {
+      "id": "1376024",
+      "n": "Skythunder Vajra Pestle",
+      "type": "",
+      "effect": "After accumulating 5 Lightning CRITs, Protagonist Final Lightning DMG +10% and Lightning CRIT Rate +5% until the battle ends",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Mythic",
+      "star_stats": {
+        "final_skill_dmg": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11.5,
+          13,
+          14.5,
+          16,
+          17.5
+        ],
+        "armor_break": [
+          1000,
+          1200,
+          1400,
+          1600,
+          1800,
+          2000,
+          2300,
+          2600,
+          2900,
+          3200,
+          3500
+        ],
+        "atk": [
+          20000,
+          24000,
+          28000,
+          32000,
+          36000,
+          40000,
+          46000,
+          52000,
+          58000,
+          64000,
+          70000
+        ]
+      },
+      "effect_base": "Upon a Lightning CRIT, Protagonist Final Lightning DMG +5% for 1 round",
+      "flat_stats_base": {
+        "final_lightning_dmg": 5
+      },
+      "effect_5star": "After accumulating 3 Lightning CRITs, Protagonist Final Lightning DMG +5% and Lightning CRIT Rate +5% until the battle ends",
+      "flat_stats_5star": {
+        "final_lightning_dmg": 5,
+        "lightning_crit_rate": 5
+      },
+      "flat_stats": {
+        "final_lightning_dmg": 10,
+        "lightning_crit_rate": 5
+      },
+      "deploy_type": "totem"
+    },
+    {
+      "id": "1376025",
+      "n": "Twin-Eared Dagger",
+      "type": "Offensive",
+      "effect": "Each Dagger with a different effect cast increases Dagger Final DMG Boost by +1%, stacking up to 5 times; after 5 stacks, increases Dagger Final DMG Boost by +15% and Dagger Crit Rate by +10%.",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Mythic",
+      "star_stats": {
+        "final_basic_atk_dmg": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11.5,
+          13,
+          14.5,
+          16,
+          17.5
+        ],
+        "tenacity_res": [
+          1000,
+          1200,
+          1400,
+          1600,
+          1800,
+          2000,
+          2300,
+          2600,
+          2900,
+          3200,
+          3500
+        ],
+        "atk": [
+          20000,
+          24000,
+          28000,
+          32000,
+          36000,
+          40000,
+          46000,
+          52000,
+          58000,
+          64000,
+          70000
+        ]
+      },
+      "effect_base": "Each Dagger with a different effect cast increases Dagger Final DMG Boost by +1%, stacking up to 5 times.",
+      "flat_stats_base": {
+        "final_dagger_dmg": 5
+      },
+      "effect_5star": "Each Dagger with a different effect cast increases Dagger Final DMG Boost by +1%, stacking up to 5 times; after 5 stacks, increases Dagger Final DMG Boost by +5% and Dagger Crit Rate by +5%.",
+      "flat_stats_5star": {
+        "final_dagger_dmg": 10,
+        "dagger_crit_rate": 5
+      },
+      "flat_stats": {
+        "final_dagger_dmg": 20,
+        "dagger_crit_rate": 10
+      },
+      "deploy_type": "totem"
+    },
+    {
+      "id": "1375002",
+      "n": "Zhuge Repeating Crossbow",
+      "type": "Utility",
+      "effect": "In the first 3 turns of battle, the hero's dagger damage +45%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Legendary",
+      "star_stats": {
+        "combo": [
+          1.5,
+          1.8,
+          2.1,
+          2.4,
+          2.7,
+          3,
+          3.4,
+          3.8,
+          4.2,
+          4.6,
+          5
+        ],
+        "armor_break": [
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          230,
+          260,
+          290,
+          320,
+          350
+        ],
+        "atk": [
+          2000,
+          2400,
+          2800,
+          3200,
+          3600,
+          4000,
+          4600,
+          5200,
+          5800,
+          6400,
+          7000
+        ]
+      },
+      "effect_base": "In the first 3 turns of battle, the hero's dagger damage +15%",
+      "effect_5star": "In the first 3 turns of battle, the hero's dagger damage +30%",
+      "deploy_type": "totem"
+    },
+    {
+      "id": "1375004",
+      "n": "Golden Chariot",
+      "type": "Utility",
+      "effect": "Counterattack Damage +30%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Legendary",
+      "star_stats": {
+        "tenacity_res": [
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          230,
+          260,
+          290,
+          320,
+          350
+        ],
+        "skill_crit_rate": [
+          1.5,
+          1.8,
+          2.1,
+          2.4,
+          2.7,
+          3,
+          3.4,
+          3.8,
+          4.2,
+          4.6,
+          5
+        ],
+        "atk": [
+          2000,
+          2400,
+          2800,
+          3200,
+          3600,
+          4000,
+          4600,
+          5200,
+          5800,
+          6400,
+          7000
+        ]
+      },
+      "effect_base": "Counterattack Damage +10%",
+      "effect_5star": "Counterattack Damage +20%",
+      "deploy_type": "totem"
+    },
+    {
+      "id": "1375005",
+      "n": "Trojan Horse",
+      "type": "Utility",
+      "effect": "In the first 3 turns of battle, hero's counterattack damage +45%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Legendary",
+      "star_stats": {
+        "basic_atk_crit_rate": [
+          1.5,
+          1.8,
+          2.1,
+          2.4,
+          2.7,
+          3,
+          3.4,
+          3.8,
+          4.2,
+          4.6,
+          5
+        ],
+        "armor_break": [
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          230,
+          260,
+          290,
+          320,
+          350
+        ],
+        "atk": [
+          2000,
+          2400,
+          2800,
+          3200,
+          3600,
+          4000,
+          4600,
+          5200,
+          5800,
+          6400,
+          7000
+        ]
+      },
+      "effect_base": "In the first 3 turns of battle, hero's counterattack damage +15%",
+      "effect_5star": "In the first 3 turns of battle, hero's counterattack damage +30%",
+      "deploy_type": "totem"
+    },
+    {
+      "id": "1375006",
+      "n": "Sphinx Statue",
+      "type": "Offensive",
+      "effect": "When hitting an enemy with HP >50%, hero's damage bonus +22.5%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Legendary",
+      "star_stats": {
+        "dotcritrate": [
+          1.5,
+          1.8,
+          2.1,
+          2.4,
+          2.7,
+          3,
+          3.4,
+          3.8,
+          4.2,
+          4.6,
+          5
+        ],
+        "armor_break": [
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          230,
+          260,
+          290,
+          320,
+          350
+        ],
+        "hp": [
+          10000,
+          12000,
+          14000,
+          16000,
+          18000,
+          20000,
+          23000,
+          26000,
+          29000,
+          32000,
+          35000
+        ]
+      },
+      "effect_base": "When hitting an enemy with HP >50%, hero's damage bonus +7.5%",
+      "effect_5star": "When hitting an enemy with HP >50%, hero's damage bonus +15%",
+      "deploy_type": "core"
+    },
+    {
+      "id": "1375007",
+      "n": "Ancient Olympic Gold Crown",
+      "type": "Utility",
+      "effect": "In the first 3 turns of battle, hero's lightning damage +45%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Legendary",
+      "star_stats": {
+        "tenacity": [
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          230,
+          260,
+          290,
+          320,
+          350
+        ],
+        "ignore_combo": [
+          1.5,
+          1.8,
+          2.1,
+          2.4,
+          2.7,
+          3,
+          3.4,
+          3.8,
+          4.2,
+          4.6,
+          5
+        ],
+        "hp": [
+          10000,
+          12000,
+          14000,
+          16000,
+          18000,
+          20000,
+          23000,
+          26000,
+          29000,
+          32000,
+          35000
+        ]
+      },
+      "effect_base": "In the first 3 turns of battle, hero's lightning damage +15%",
+      "effect_5star": "In the first 3 turns of battle, hero's lightning damage +30%",
+      "deploy_type": "totem"
+    },
+    {
+      "id": "1375011",
+      "n": "Dinosaur Skull",
+      "type": "Utility",
+      "effect": "Combo Damage +30%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Legendary",
+      "star_stats": {
+        "ignore_basic_atk_crit_rate": [
+          1.5,
+          1.8,
+          2.1,
+          2.4,
+          2.7,
+          3,
+          3.4,
+          3.8,
+          4.2,
+          4.6,
+          5
+        ],
+        "armor_break": [
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          230,
+          260,
+          290,
+          320,
+          350
+        ],
+        "hp": [
+          10000,
+          12000,
+          14000,
+          16000,
+          18000,
+          20000,
+          23000,
+          26000,
+          29000,
+          32000,
+          35000
+        ]
+      },
+      "effect_base": "Combo Damage +10%",
+      "effect_5star": "Combo Damage +20%",
+      "deploy_type": "totem"
+    },
+    {
+      "id": "1375012",
+      "n": "Mexican Pyramid of the Sun",
+      "type": "Defensive",
+      "effect": "When hero HP <75%, damage reduction +30%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Legendary",
+      "star_stats": {
+        "tenacity_res": [
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          230,
+          260,
+          290,
+          320,
+          350
+        ],
+        "hp": [
+          10000,
+          12000,
+          14000,
+          16000,
+          18000,
+          20000,
+          23000,
+          26000,
+          29000,
+          32000,
+          35000
+        ],
+        "ignoredotcritrate": [
+          1.5,
+          1.8,
+          2.1,
+          2.4,
+          2.7,
+          3,
+          3.4,
+          3.8,
+          4.2,
+          4.6,
+          5
+        ]
+      },
+      "effect_base": "When hero HP <75%, damage reduction +10%",
+      "effect_5star": "When hero HP <75%, damage reduction +20%",
+      "deploy_type": "guardian"
+    },
+    {
+      "id": "1375015",
+      "n": "Bronze Statue of Shiva as Nataraja",
+      "type": "",
+      "effect": "In the first 3 turns of battle, hero's combo damage +45%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Legendary",
+      "star_stats": {
+        "global_hp": [
+          2,
+          2.4,
+          2.8,
+          3.2,
+          3.6,
+          4,
+          4.6,
+          5.2,
+          5.8,
+          6.4,
+          7
+        ],
+        "hp": [
+          10000,
+          12000,
+          14000,
+          16000,
+          18000,
+          20000,
+          23000,
+          26000,
+          29000,
+          32000,
+          35000
+        ],
+        "armor_break_res": [
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          230,
+          260,
+          290,
+          320,
+          350
+        ]
+      },
+      "effect_base": "In the first 3 turns of battle, hero's combo damage +15%",
+      "effect_5star": "In the first 3 turns of battle, hero's combo damage +30%",
+      "deploy_type": "totem"
+    },
+    {
+      "id": "1375017",
+      "n": "Gold Cicada and Jade Leaf",
+      "type": "Utility",
+      "effect": "Dagger Damage +30%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Legendary",
+      "star_stats": {
+        "global_hp": [
+          2,
+          2.4,
+          2.8,
+          3.2,
+          3.6,
+          4,
+          4.6,
+          5.2,
+          5.8,
+          6.4,
+          7
+        ],
+        "hp": [
+          10000,
+          12000,
+          14000,
+          16000,
+          18000,
+          20000,
+          23000,
+          26000,
+          29000,
+          32000,
+          35000
+        ],
+        "armor_break_res": [
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          230,
+          260,
+          290,
+          320,
+          350
+        ]
+      },
+      "effect_base": "Dagger Damage +10%",
+      "effect_5star": "Dagger Damage +20%",
+      "deploy_type": "totem"
+    },
+    {
+      "id": "1375018",
+      "n": "Nebra Sky Disk",
+      "type": "Utility",
+      "effect": "Lightning Damage +20%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Legendary",
+      "star_stats": {
+        "global_hp": [
+          2,
+          2.4,
+          2.8,
+          3.2,
+          3.6,
+          4,
+          4.6,
+          5.2,
+          5.8,
+          6.4,
+          7
+        ],
+        "hp": [
+          10000,
+          12000,
+          14000,
+          16000,
+          18000,
+          20000,
+          23000,
+          26000,
+          29000,
+          32000,
+          35000
+        ],
+        "armor_break_res": [
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          230,
+          260,
+          290,
+          320,
+          350
+        ]
+      },
+      "effect_base": "Lightning Damage +10%",
+      "effect_5star": "Lightning Damage +20%",
+      "deploy_type": "totem"
+    },
+    {
+      "id": "1375019",
+      "n": "Honjo Masamune",
+      "type": "Utility",
+      "effect": "In the first 3 turns of battle, hero's Sword Qi Damage +45%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Legendary",
+      "star_stats": {
+        "global_hp": [
+          2,
+          2.4,
+          2.8,
+          3.2,
+          3.6,
+          4,
+          4.6,
+          5.2,
+          5.8,
+          6.4,
+          7
+        ],
+        "hp": [
+          10000,
+          12000,
+          14000,
+          16000,
+          18000,
+          20000,
+          23000,
+          26000,
+          29000,
+          32000,
+          35000
+        ],
+        "armor_break_res": [
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          230,
+          260,
+          290,
+          320,
+          350
+        ]
+      },
+      "effect_base": "In the first 3 turns of battle, hero's Sword Qi Damage +15%",
+      "effect_5star": "In the first 3 turns of battle, hero's Sword Qi Damage +30%",
+      "deploy_type": "totem"
+    },
+    {
+      "id": "1375034",
+      "n": "Ulfberht Sword",
+      "type": "Utility",
+      "effect": "Sword Qi Damage +30%",
+      "pve": "",
+      "pvp": "",
+      "rarity": "Legendary",
+      "star_stats": {
+        "tenacity_res": [
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          230,
+          260,
+          290,
+          320,
+          350
+        ],
+        "global_atk": [
+          2,
+          2.4,
+          2.8,
+          3.2,
+          3.6,
+          4,
+          4.6,
+          5.2,
+          5.8,
+          6.4,
+          7
+        ],
+        "atk": [
+          2000,
+          2400,
+          2800,
+          3200,
+          3600,
+          4000,
+          4600,
+          5200,
+          5800,
+          6400,
+          7000
+        ]
+      },
+      "effect_base": "Sword Qi Damage +10%",
+      "effect_5star": "Sword Qi Damage +20%",
       "deploy_type": "totem"
     },
     {
@@ -1433,59 +2039,6 @@
       "deploy_type": "guardian"
     },
     {
-      "id": null,
-      "n": "Nio Armor",
-      "type": "",
-      "effect": "After taking cumulative damage equal to 30% of Max HP for the first time, increases Protagonist's Final DMG Reduc. by +10% and CRIT DMG Reduc. by +20% until the end of battle.",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Mythic",
-      "star_stats": {
-        "tenacity": [
-          1000,
-          1200,
-          1400,
-          1600,
-          1800,
-          2000,
-          2300,
-          2600,
-          2900,
-          3200,
-          3500
-        ],
-        "final_basic_atk_dmg_reduction": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11.5,
-          13,
-          14.5,
-          16,
-          17.5
-        ],
-        "hp": [
-          100000,
-          120000,
-          140000,
-          160000,
-          180000,
-          200000,
-          230000,
-          260000,
-          290000,
-          320000,
-          350000
-        ]
-      },
-      "effect_base": "After taking cumulative damage equal to 50% of Max HP for the first time, increases Protagonist's Final DMG Reduc. by +3% until the end of battle.",
-      "effect_5star": "After taking cumulative damage equal to 50% of Max HP for the first time, increases Protagonist's Final DMG Reduc. by +6% and CRIT DMG Reduc. by +20% until the end of battle.",
-      "deploy_type": "guardian"
-    },
-    {
       "id": "1375003",
       "n": "Phoenix Feather",
       "type": "",
@@ -1534,59 +2087,6 @@
           5
         ]
       }
-    },
-    {
-      "id": null,
-      "n": "Holy Spear",
-      "type": "",
-      "effect": "After the first Normal ATK each round, increases Protagonist's Final DMG Bonus by +2%. Stacks up to 4 times and lasts until the end of battle. At 3 stacks, grants Crit DMG +20% and Final DMG Bonus +3%.",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Mythic",
-      "star_stats": {
-        "armor_break": [
-          1000,
-          1200,
-          1400,
-          1600,
-          1800,
-          2000,
-          2300,
-          2600,
-          2900,
-          3200,
-          3500
-        ],
-        "final_basic_atk_dmg": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11.5,
-          13,
-          14.5,
-          16,
-          17.5
-        ],
-        "atk": [
-          20000,
-          24000,
-          28000,
-          32000,
-          36000,
-          40000,
-          46000,
-          52000,
-          58000,
-          64000,
-          70000
-        ]
-      },
-      "effect_base": "After the first Basic ATK each round, increases Protagonist's Final DMG Bonus by +1%. Stacks up to 3 times until the end of battle.",
-      "effect_5star": "After the first Normal ATK each round, increases Protagonist's Final DMG Bonus by +2%. Stacks up to 3 times and lasts until the end of battle. At 3 stacks, grants Crit DMG +20% and Final DMG Bonus +3%.",
-      "deploy_type": "core"
     },
     {
       "id": "1375008",
@@ -1639,59 +2139,6 @@
       }
     },
     {
-      "id": null,
-      "n": "Spartan Shield",
-      "type": "",
-      "effect": "When Hero HP <70%, Final DMG Reduction +20%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Mythic",
-      "star_stats": {
-        "final_skill_dmg_reduction": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11.5,
-          13,
-          14.5,
-          16,
-          17.5
-        ],
-        "armor_break_res": [
-          1000,
-          1200,
-          1400,
-          1600,
-          1800,
-          2000,
-          2300,
-          2600,
-          2900,
-          3200,
-          3500
-        ],
-        "atk": [
-          20000,
-          24000,
-          28000,
-          32000,
-          36000,
-          40000,
-          46000,
-          52000,
-          58000,
-          64000,
-          70000
-        ]
-      },
-      "effect_base": "When Hero HP <50%, Final DMG Reduction +5%",
-      "effect_5star": "When Hero HP <60%, Final DMG Reduction +10%",
-      "deploy_type": "guardian"
-    },
-    {
       "id": "1375009",
       "n": "Beethoven's Manuscript",
       "type": "",
@@ -1740,59 +2187,6 @@
           35000
         ]
       }
-    },
-    {
-      "id": null,
-      "n": "Li Gang's Mace",
-      "type": "",
-      "effect": "After Hero CRIT, 100% chance to gain. Final DMG Bonus +1%, stacking up to 10 times. When fully stacked, gain an additional Final DMG Bonus +10%.",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Mythic",
-      "star_stats": {
-        "tenacity": [
-          1000,
-          1200,
-          1400,
-          1600,
-          1800,
-          2000,
-          2300,
-          2600,
-          2900,
-          3200,
-          3500
-        ],
-        "final_skill_dmg": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11.5,
-          13,
-          14.5,
-          16,
-          17.5
-        ],
-        "atk": [
-          20000,
-          24000,
-          28000,
-          32000,
-          36000,
-          40000,
-          46000,
-          52000,
-          58000,
-          64000,
-          70000
-        ]
-      },
-      "effect_base": "After Hero CRIT, 50% chance to gain Final DMG Bonus +1% (Stacks up to 5 times)",
-      "effect_5star": "After Hero CRIT, 50% chance to gain Final DMG Bonus +1% (Stacks up to 10 times)",
-      "deploy_type": "core"
     },
     {
       "id": "1375010",
@@ -1845,59 +2239,6 @@
       }
     },
     {
-      "id": null,
-      "n": "Cold Moon Blade",
-      "type": "",
-      "effect": "Final Basic Attack DMG Boost increased to 15%, and grants the Protagonist a Skill Shield equal to 3% of Max HP",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Mythic",
-      "star_stats": {
-        "armor_break": [
-          1000,
-          1200,
-          1400,
-          1600,
-          1800,
-          2000,
-          2300,
-          2600,
-          2900,
-          3200,
-          3500
-        ],
-        "final_basic_atk_dmg": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11.5,
-          13,
-          14.5,
-          16,
-          17.5
-        ],
-        "atk": [
-          20000,
-          24000,
-          28000,
-          32000,
-          36000,
-          40000,
-          46000,
-          52000,
-          58000,
-          64000,
-          70000
-        ]
-      },
-      "effect_base": "After a Basic Attack crits, increases the Protagonist's Final Basic Attack DMG by +5% for 1 round",
-      "effect_5star": "Final Basic Attack DMG Boost increased to 10%",
-      "deploy_type": "totem"
-    },
-    {
       "id": "1375013",
       "n": "Shakespeare's Manuscript",
       "type": "",
@@ -1946,59 +2287,6 @@
           35000
         ]
       }
-    },
-    {
-      "id": null,
-      "n": "Radiant Armor",
-      "type": "",
-      "effect": "Can be stacked an additional time, with each stack increasing the final damage reduction to 5%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Mythic",
-      "star_stats": {
-        "final_skill_dmg_reduction": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11.5,
-          13,
-          14.5,
-          16,
-          17.5
-        ],
-        "armor_break_res": [
-          1000,
-          1200,
-          1400,
-          1600,
-          1800,
-          2000,
-          2300,
-          2600,
-          2900,
-          3200,
-          3500
-        ],
-        "hp": [
-          100000,
-          120000,
-          140000,
-          160000,
-          180000,
-          200000,
-          230000,
-          260000,
-          290000,
-          320000,
-          350000
-        ]
-      },
-      "effect_base": "After the battle starts, the protagonist's final damage reduction will be increased by 2% each round, up to 3 stacks.",
-      "effect_5star": "Each round increases the final damage reduction to4%",
-      "deploy_type": "guardian"
     },
     {
       "id": "1375014",
@@ -2051,59 +2339,6 @@
       }
     },
     {
-      "id": null,
-      "n": "Spartan Scimitar",
-      "type": "",
-      "effect": "For every 10% of Max HP lost, Protagonist's Final DMG +2% (Max 5 stacks). At max stacks, Final DMG +10% additional.",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Mythic",
-      "star_stats": {
-        "tenacity_res": [
-          1000,
-          1200,
-          1400,
-          1600,
-          1800,
-          2000,
-          2300,
-          2600,
-          2900,
-          3200,
-          3500
-        ],
-        "final_skill_dmg": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11.5,
-          13,
-          14.5,
-          16,
-          17.5
-        ],
-        "atk": [
-          20000,
-          24000,
-          28000,
-          32000,
-          36000,
-          40000,
-          46000,
-          52000,
-          58000,
-          64000,
-          70000
-        ]
-      },
-      "effect_base": "For every 20% of Max HP lost, Protagonist's Final DMG +1%. Stacks up to 5 times.",
-      "effect_5star": "Each time the protagonist cumulatively takes damage equal to 10% of Max HP, increases the protagonist's Final DMG+2%, stackable up to5times",
-      "deploy_type": "totem"
-    },
-    {
       "id": "1375016",
       "n": "All-Encompassing Vase",
       "type": "",
@@ -2152,59 +2387,6 @@
           350
         ]
       }
-    },
-    {
-      "id": "1376009",
-      "n": "Galileo's Telescope",
-      "type": "Defensive",
-      "effect": "When critically hit, the hero's final damage reduction increases by +2%, stacking up to 5 layers. When fully stacked, the hero's final damage reduction increases by +10%",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Mythic",
-      "star_stats": {
-        "tenacity": [
-          1000,
-          1200,
-          1400,
-          1600,
-          1800,
-          2000,
-          2300,
-          2600,
-          2900,
-          3200,
-          3500
-        ],
-        "global_hp": [
-          10,
-          12,
-          14,
-          16,
-          18,
-          20,
-          23,
-          26,
-          29,
-          32,
-          35
-        ],
-        "hp": [
-          100000,
-          120000,
-          140000,
-          160000,
-          180000,
-          200000,
-          230000,
-          260000,
-          290000,
-          320000,
-          350000
-        ]
-      },
-      "effect_base": "When critically hit, the hero's final damage reduction increases by +1%, stacking up to 5 layers",
-      "effect_5star": "When critically hit, the hero's final damage reduction increases by +2%, stacking up to 5 layers",
-      "deploy_type": "guardian"
     },
     {
       "id": "1375020",
@@ -3307,7 +3489,7 @@
       }
     },
     {
-      "id": null,
+      "id": "1375043",
       "n": "Bronze Owl-shaped You",
       "type": "",
       "effect": "",
@@ -4007,7 +4189,7 @@
       }
     },
     {
-      "id": null,
+      "id": "1375058",
       "n": "Franks Casket",
       "type": "",
       "effect": "",
@@ -5008,7 +5190,7 @@
     },
     {
       "id": "1373008",
-      "n": "Marshal\u2019s Medal",
+      "n": "Marshal’s Medal",
       "type": "",
       "effect": "",
       "pve": "",
@@ -5308,7 +5490,7 @@
     },
     {
       "id": "1373014",
-      "n": "Blue and White Jar with Lid and Lotus Scroll",
+      "n": "Blue and White Jar with Lid and Lotus Scroll Design",
       "type": "",
       "effect": "",
       "pve": "",
@@ -6057,7 +6239,7 @@
       }
     },
     {
-      "id": null,
+      "id": "1374009",
       "n": "Franks Casket (Epic)",
       "type": "",
       "effect": "",
@@ -7157,8 +7339,8 @@
       }
     },
     {
-      "id": "1375142",
-      "n": "Mountain-Supressing Knuckles",
+      "id": "1376022",
+      "n": "Mountain-Suppressing Knuckles",
       "type": "Offensive",
       "effect": "Upon dealing DMG for the first time, Protagonist Final DMG Boost +4% for 1 round, and deals DMG equal to 5% of the enemy's Max HP, capped at 50x the Protagonist ATK",
       "pve": "",
@@ -7208,187 +7390,6 @@
       "effect_base": "Upon dealing DMG for the first time each round, reduces the enemy's Final DMG Reduction by -4% for 1 round",
       "effect_5star": "The reduction in the enemy's Final DMG Reduction increases to 8%",
       "deploy_type": "core"
-    },
-    {
-      "id": "1375143",
-      "n": "Sekhmet's Aegis",
-      "type": "Defensive",
-      "effect": "Upon taking DMG for the first time each round, Protagonist Final DMG Reduction +4% for 1 round, and grants the Protagonist a Shield equal to 5% of Max HP",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Mythic",
-      "star_stats": {
-        "armor_break_res": [
-          1000,
-          1200,
-          1400,
-          1600,
-          1800,
-          2000,
-          2300,
-          2600,
-          2900,
-          3200,
-          3500
-        ],
-        "hp": [
-          100000,
-          120000,
-          140000,
-          160000,
-          180000,
-          200000,
-          230000,
-          260000,
-          290000,
-          320000,
-          350000
-        ],
-        "final_basic_atk_dmg_reduction": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11.5,
-          13,
-          14.5,
-          16,
-          17.5
-        ]
-      },
-      "effect_base": "Upon taking DMG for the first time each round, reduces the enemy's Final DMG Boost by -4% for 1 round",
-      "effect_5star": "The reduction in the enemy's Final DMG Boost increases to 8%",
-      "deploy_type": "guardian"
-    },
-    {
-      "id": "1376025",
-      "n": "Twin-Eared Dagger",
-      "type": "Offensive",
-      "effect": "Each Dagger with a different effect cast increases Dagger Final DMG Boost by +1%, stacking up to 5 times; after 5 stacks, increases Dagger Final DMG Boost by +15% and Dagger Crit Rate by +10%.",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Mythic",
-      "star_stats": {
-        "final_basic_atk_dmg": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11.5,
-          13,
-          14.5,
-          16,
-          17.5
-        ],
-        "tenacity_res": [
-          1000,
-          1200,
-          1400,
-          1600,
-          1800,
-          2000,
-          2300,
-          2600,
-          2900,
-          3200,
-          3500
-        ],
-        "atk": [
-          20000,
-          24000,
-          28000,
-          32000,
-          36000,
-          40000,
-          46000,
-          52000,
-          58000,
-          64000,
-          70000
-        ]
-      },
-      "effect_base": "Each Dagger with a different effect cast increases Dagger Final DMG Boost by +1%, stacking up to 5 times.",
-      "flat_stats_base": {
-        "final_dagger_dmg": 5
-      },
-      "effect_5star": "Each Dagger with a different effect cast increases Dagger Final DMG Boost by +1%, stacking up to 5 times; after 5 stacks, increases Dagger Final DMG Boost by +5% and Dagger Crit Rate by +5%.",
-      "flat_stats_5star": {
-        "final_dagger_dmg": 10,
-        "dagger_crit_rate": 5
-      },
-      "flat_stats": {
-        "final_dagger_dmg": 20,
-        "dagger_crit_rate": 10
-      },
-      "deploy_type": "totem"
-    },
-    {
-      "id": "1376024",
-      "n": "Skythunder Vajra Pestle",
-      "type": "",
-      "effect": "After accumulating 5 Lightning CRITs, Protagonist Final Lightning DMG +10% and Lightning CRIT Rate +5% until the battle ends",
-      "pve": "",
-      "pvp": "",
-      "rarity": "Mythic",
-      "star_stats": {
-        "final_skill_dmg": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11.5,
-          13,
-          14.5,
-          16,
-          17.5
-        ],
-        "armor_break": [
-          1000,
-          1200,
-          1400,
-          1600,
-          1800,
-          2000,
-          2300,
-          2600,
-          2900,
-          3200,
-          3500
-        ],
-        "atk": [
-          20000,
-          24000,
-          28000,
-          32000,
-          36000,
-          40000,
-          46000,
-          52000,
-          58000,
-          64000,
-          70000
-        ]
-      },
-      "effect_base": "Upon a Lightning CRIT, Protagonist Final Lightning DMG +5% for 1 round",
-      "flat_stats_base": {
-        "final_lightning_dmg": 5
-      },
-      "effect_5star": "After accumulating 3 Lightning CRITs, Protagonist Final Lightning DMG +5% and Lightning CRIT Rate +5% until the battle ends",
-      "flat_stats_5star": {
-        "final_lightning_dmg": 5,
-        "lightning_crit_rate": 5
-      },
-      "flat_stats": {
-        "final_lightning_dmg": 10,
-        "lightning_crit_rate": 5
-      },
-      "deploy_type": "totem"
     }
   ],
   "relic_sets": {
@@ -7921,7 +7922,7 @@
       },
       {
         "set": "Pact of Rock and Blazing Sun",
-        "stat": "Final DMG Boost",
+        "stat": "Final Damage Boost",
         "vals": [
           3.0,
           3.0,
@@ -7938,7 +7939,7 @@
       },
       {
         "set": "Vajra Wrath Lightning",
-        "stat": "Final DMG Boost",
+        "stat": "Final Damage Boost",
         "vals": [
           3.0,
           3.0,

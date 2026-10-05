@@ -15,6 +15,7 @@ function defaultState() {
     capymon: {},             // cardName -> { owned, stars(0-5), deployed }
     homestead: {},           // buildingId -> level (0 = not owned)
     equipment: {},           // slotId -> { itemName, quality, surpass, arcana, psionics[4], gems[5] }
+    capytool: {},            // capytool stat key (see CAPYTOOL_GROUPS) -> summed % from the in-game Capytool tools
     arcana: {},              // itemName -> arcana level (0-10) — the Collection-tracked record, matched
                              // by name against whatever's currently equipped/petted; independent of
                              // any specific equipment slot or pet slot.
@@ -381,6 +382,16 @@ function renderCardTitleRow(kind, item, rarity) {
 }
 
 function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+/* Card info block — Figma "Readonly": a 12px tertiary label with its
+   content below. Used for Awakening Skill / Skill / Current Stats on
+   cards. Always visible. `content` is a node, string, or array of either. */
+function renderCardInfoBlock(label, content) {
+  return el('div', { class: 'card-info-block' }, [
+    el('div', { class: 'card-info-block-label' }, label),
+    el('div', { class: 'card-info-block-content' }, content),
+  ]);
+}
 
 let editingStepperKey = null;
 
@@ -868,82 +879,66 @@ function buildCapymonSectionContent() {
   wrap.appendChild(el('p', { class: 'section-desc' },
     'Mythic cards grant passive Final DMG / Final DMG Reduction just for being owned, scaling with star level. A few also buff you while deployed, at a separate stacking rate — tracked here at full stacks.'));
 
-  const grid = el('div', { class: 'cpm-grid' });
+  const grid = el('div', { class: 'card-grid cols-4' });
+  const pct = (v) => `${+(v * 100).toFixed(1)}%`;
   (DB.capymon || []).forEach(card => {
     const st = capymonState(card.n);
     const stars = Math.min(Math.max(st.stars || 0, 0), 5);
     const hasDeploy = (card.deploy_fd_by_star && card.deploy_fd_by_star.some(v => v)) ||
                        (card.deploy_fdr_by_star && card.deploy_fdr_by_star.some(v => v));
+
+    const cardEl = el('div', { class: 'item-card' });
+    // Capymon cards are all Mythic (see header comment above).
+    cardEl.appendChild(renderCardTitleRow('capymon', card, 'Mythic'));
+
+    cardEl.appendChild(el('div', { class: 'card-badge-row' }, [
+      renderOwnedBadge(st.owned, (checked) => {
+        st.owned = checked;
+        if (!checked) { st.stars = 0; st.deployed = false; }
+        saveState();
+        render();
+      }),
+    ]));
+
+    cardEl.appendChild(el('div', { class: 'card-stepper-row' }, [
+      el('div', { class: 'card-stepper-label' }, 'Stars'),
+      renderStepper(`capymon-${card.n}`, st.owned ? stars : null, 0, 5, (next) => {
+        st.stars = next;
+        st.owned = true;
+        if (next < 2) st.deployed = false;
+        saveState();
+        render();
+      }),
+    ]));
+
+    if (!st.owned) { grid.appendChild(cardEl); return; }
+
     const passiveFd = (card.fd_by_star || [])[stars] || 0;
     const passiveFdr = (card.fdr_by_star || [])[stars] || 0;
-
-    const cardEl = el('div', { class: 'cpm-card' + (st.owned ? ' owned' : '') });
-
-    if (st.owned) {
-      const removeBtn = el('button', { class: 'cpm-remove', title: `Remove ${card.n}` }, '✕');
-      removeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        st.owned = false;
-        st.deployed = false;
-        saveState();
-        render();
-      });
-      cardEl.appendChild(removeBtn);
-    } else {
-      cardEl.title = `Click to add ${card.n}`;
-      cardEl.addEventListener('click', () => {
-        st.owned = true;
-        saveState();
-        render();
-      });
+    const lines = [];
+    if (passiveFd) lines.push(el('div', { class: 'item-effect' }, ['Final DMG: ', el('span', { class: 'stat-value-live' }, `+${pct(passiveFd)}`)]));
+    if (passiveFdr) lines.push(el('div', { class: 'item-effect' }, ['Final DMG Reduction: ', el('span', { class: 'stat-value-live' }, `+${pct(passiveFdr)}`)]));
+    const dFd = (card.deploy_fd_by_star || [])[stars] || 0;
+    const dFdr = (card.deploy_fdr_by_star || [])[stars] || 0;
+    if (hasDeploy && st.deployed && stars >= 2) {
+      if (dFd) lines.push(el('div', { class: 'item-effect' }, ['Deployed Final DMG: ', el('span', { class: 'stat-value-live' }, `+${pct(dFd)}`)]));
+      if (dFdr) lines.push(el('div', { class: 'item-effect' }, ['Deployed Final DMG Reduction: ', el('span', { class: 'stat-value-live' }, `+${pct(dFdr)}`)]));
     }
-
-    cardEl.appendChild(el('div', { class: 'cpm-head' }, [renderThumb('capymon', card), el('div', { class: 'cpm-name' }, card.n)]));
-
-    const tagParts = [];
-    if (passiveFd) tagParts.push(el('span', { class: 'cpm-tag' }, `Final DMG +${(passiveFd * 100).toFixed(0)}%`));
-    if (passiveFdr) tagParts.push(el('span', { class: 'cpm-tag' }, `Final DMG Red. +${(passiveFdr * 100).toFixed(0)}%`));
-    cardEl.appendChild(el('div', { class: 'cpm-row' }, tagParts));
-
-    const starRow = el('div', { class: 'cpm-row' }, 'Stars ');
-    const starSelect = el('select', { disabled: st.owned ? null : 'disabled' });
-    for (let s = 0; s <= 5; s++) {
-      const sFd = (card.fd_by_star || [])[s] || 0;
-      const sFdr = (card.fdr_by_star || [])[s] || 0;
-      const pct = sFd || sFdr;
-      const opt = el('option', { value: String(s) }, `${s}★ (+${(pct * 100).toFixed(0)}%)`);
-      if (s === stars) opt.selected = true;
-      starSelect.appendChild(opt);
-    }
-    starSelect.addEventListener('click', (e) => e.stopPropagation());
-    starSelect.addEventListener('change', (e) => {
-      st.stars = parseInt(e.target.value, 10) || 0;
-      if (st.stars < 2) st.deployed = false;
-      saveState();
-      render();
-    });
-    starRow.appendChild(starSelect);
-    cardEl.appendChild(starRow);
+    if (lines.length) cardEl.appendChild(el('div', { class: 'card-info' }, lines));
 
     if (hasDeploy) {
-      const dFd = (card.deploy_fd_by_star || [])[stars] || 0;
-      const dFdr = (card.deploy_fdr_by_star || [])[stars] || 0;
-      const dLabel = dFd ? `+${(dFd * 100).toFixed(0)}% Final DMG` : dFdr ? `+${(dFdr * 100).toFixed(0)}% Final DMG Red.` : '';
-      const canDeploy = st.owned && stars >= 2;
-      const deployRow = el('div', { class: 'cpm-row cpm-deploy', title: card.deploy_desc || '' });
-      const deploySelect = el('select', { disabled: canDeploy ? null : 'disabled' });
-      deploySelect.appendChild(el('option', { value: '0', selected: (!st.deployed || !canDeploy) ? 'selected' : null }, 'Not deployed'));
-      deploySelect.appendChild(el('option', { value: '1', selected: (st.deployed && canDeploy) ? 'selected' : null },
-        `Deployed${dLabel ? ` (${dLabel})` : ''}`));
-      deploySelect.addEventListener('click', (e) => e.stopPropagation());
+      const canDeploy = stars >= 2;
+      cardEl.appendChild(equipFieldLabel(canDeploy ? 'Deployment' : 'Deployment (requires 2★)'));
+      const deploySelect = el('select', { class: 'equip-select', title: card.deploy_desc || '', disabled: canDeploy ? null : 'disabled' }, [
+        el('option', { value: '0', selected: (!st.deployed || !canDeploy) ? 'selected' : null }, 'Not deployed'),
+        el('option', { value: '1', selected: (st.deployed && canDeploy) ? 'selected' : null }, 'Deployed'),
+      ]);
       deploySelect.addEventListener('change', (e) => {
         st.deployed = e.target.value === '1';
         saveState();
         render();
       });
-      deployRow.appendChild(deploySelect);
-      if (!canDeploy) deployRow.appendChild(el('span', { class: 'cpm-dep-val' }, '2★+'));
-      cardEl.appendChild(deployRow);
+      cardEl.appendChild(deploySelect);
     }
 
     grid.appendChild(cardEl);
@@ -1900,6 +1895,496 @@ function buildAdventurerHeroBrandSectionContent() {
 }
 
 
+/* ============================================================
+   Capytool — summed sub-stat totals from the in-game Capytool tools.
+   Typed in by hand, or read in one batch from "Total Bonus" screenshots
+   of the Work tab (the panel scrolls, so a full read always takes
+   several screenshots).
+   ============================================================ */
+
+// k       — state.capytool key (also what gets saved)
+// n       — label as shown on this page
+// calc    — Calculator label the value feeds into (see CALC_TABLE_CATEGORIES).
+//           null = the game rolls it but the Calculator has no bucket for
+//           it, so it's shown greyed out and never read from screenshots.
+//           Every stat is tracked today; the null path is kept for any
+//           future in-game stat that isn't.
+const CAPYTOOL_GROUPS = [
+  { title: 'Damage Reduction', items: [
+    { k: 'ct_skillred',  n: 'Skill DMG Reduction',     calc: 'Skill DMG Reduction' },
+    { k: 'ct_bared',     n: 'Basic ATK DMG Reduction', calc: 'Basic ATK DMG Reduction' },
+    { k: 'ct_dmgred',    n: 'DMG Reduction',           calc: 'Generic DMG Reduction' },
+    { k: 'ct_lineupres', n: 'Lineup DMG RES',          calc: 'Lineup DMG RES' },
+  ] },
+  { title: 'Damage Increase', items: [
+    { k: 'ct_skilldmg',  n: 'Skill DMG',               calc: 'Skill DMG' },
+    { k: 'ct_badmg',     n: 'Basic ATK DMG',           calc: 'Basic ATK DMG' },
+    { k: 'ct_dmginc',    n: 'DMG Increase',            calc: 'Bonus Damage' },
+    { k: 'ct_lineupdmg', n: 'Lineup DMG Boost',        calc: 'Lineup DMG Boost' },
+  ] },
+  { title: 'Ignore Crit', items: [
+    { k: 'ct_ignw',      n: 'Ignore Weapon Crit Rate',      calc: 'Ignore Weapon Crit' },
+    { k: 'ct_igdot',     n: 'Ignore DoT Crit Rate',         calc: 'Ignore DoT Crit' },
+    { k: 'ct_igdagger',  n: 'Ignore Dagger Crit Rate',      calc: 'Ignore Dagger Crit' },
+    { k: 'ct_iglight',   n: 'Ignore Lightning Crit Rate',   calc: 'Ignore Lightning Crit' },
+    { k: 'ct_igswordqi', n: 'Ignore Sword Qi Crit Rate',    calc: 'Ignore Sword Qi Crit' },
+    { k: 'ct_iglspear',  n: 'Ignore Light Spear Crit Rate', calc: 'Ignore Light Spear Crit' },
+    { k: 'ct_igcrit',    n: 'Ignore Crit Rate',             calc: 'Ignore Crit' },
+  ] },
+  { title: 'Crit Rate', items: [
+    { k: 'ct_weapcrit',   n: 'Weapon Crit Rate',      calc: 'Weapon Crit Rate' },
+    { k: 'ct_dotcrit',    n: 'DoT Crit Rate',         calc: 'DoT Crit Rates' },
+    { k: 'ct_daggercrit', n: 'Dagger Crit Rate',      calc: 'Dagger Crit Rate' },
+    { k: 'ct_lightcrit',  n: 'Lightning Crit Rate',   calc: 'Lightning Crit Rate' },
+    { k: 'ct_sqcrit',     n: 'Sword Qi Crit Rate',    calc: 'Sword Qi Crit Rate' },
+    { k: 'ct_lspearcrit', n: 'Light Spear Crit Rate', calc: 'Light Spear Crit Rate' },
+    { k: 'ct_crit',       n: 'Crit Rate',             calc: 'Crit Rate (Generic)' },
+  ] },
+  { title: 'Crit Damage & Combo', items: [
+    { k: 'ct_skcritdmg',  n: 'Skill Crit DMG',         calc: 'Skill Crit DMG' },
+    { k: 'ct_bacritdmg',  n: 'Basic ATK Crit DMG',     calc: 'Basic ATK Crit DMG' },
+    { k: 'ct_dotcritdmg', n: 'DoT Crit DMG',           calc: 'DoT Crit DMG' },
+    { k: 'ct_critdmg',    n: 'Crit DMG',               calc: 'Crit DMG' },
+    { k: 'ct_combo',      n: 'Combo Rate',             calc: 'Combo Rate' },
+    { k: 'ct_counter',    n: 'Counter Rate',           calc: 'Counter Rate' },
+    { k: 'ct_ctrlimm',    n: 'Control Immunity Rate',  calc: 'Control Immunity Rate' },
+  ] },
+  { title: 'Crit DMG Reduction', items: [
+    { k: 'ct_skcritred',  n: 'Skill Crit DMG Reduction',      calc: 'Skill Crit DMG Red' },
+    { k: 'ct_bacritred',  n: 'Basic ATK Crit DMG Reduction',  calc: 'Basic ATK Crit DMG Red' },
+    { k: 'ct_dotcritred', n: 'DoT Crit DMG Reduction',        calc: 'DoT Crit DMG Red' },
+    { k: 'ct_critred',    n: 'Crit DMG Reduction',            calc: 'Crit DMG Reduction' },
+    { k: 'ct_igcombo',    n: 'Ignore Combo Rate',             calc: 'Ignore Combo' },
+    { k: 'ct_igcounter',  n: 'Ignore Counter Rate',           calc: 'Ignore Counter' },
+    { k: 'ct_igctrlimm',  n: 'Ignore Control Immunity Rate',  calc: 'Ignore Control Immunity Rate' },
+  ] },
+];
+
+/* ---------- Screenshot import: settings ---------- */
+const CAPYTOOL_MAX_IMAGES = 10;
+// The Total Bonus panel always sits in the lower part of the Work screen,
+// so the top of every screenshot is thrown away before it's sent for
+// reading — fewer image tokens, and less unrelated UI for the model to
+// get distracted by.
+const CAPYTOOL_CROP_TOP = 0.6;
+const CAPYTOOL_MAX_WIDTH = 900;
+const CAPYTOOL_CONCURRENCY = 3;
+
+const CAPYTOOL_OCR_PROMPT = `This is the lower part of a screenshot from a mobile game's Work screen. It contains a beige panel titled "Total Bonus" holding a scrolling list of stat rows, laid out in 2 columns. Each row is a stat name on the left and a value on the right (for example "DMG Reduction +4.80%").
+
+Extract every row of the Total Bonus panel whose value is a PERCENTAGE (ends in "%") and which is FULLY visible: the whole stat name AND the whole value must be readable, with nothing cut off. The panel is a small window onto a longer list, so rows at its top or bottom edge are often sliced in half. Skip any row that is clipped, partly hidden, or whose name or value you cannot read in full — do not guess or complete it. Skip rows with flat values (e.g. "+4.82M", "+766.1K", "+33.5K").
+
+Stat names sometimes wrap onto 2 lines — join them into one name. Copy each name exactly as shown in the game; do not rename or abbreviate it. Return the value as a plain number with no "+" and no "%".
+
+Respond with ONLY a JSON array, no other text:
+[{"name": "Skill DMG Reduction", "value": 9.85}]
+If there is no Total Bonus panel or no fully visible percentage rows, respond with [].`;
+
+/* ---------- Screenshot import: name matching ---------- */
+// The game's own wording drifts from this page's labels ("Critical" vs
+// "Crit", "Throwing Knife" for Dagger, "…of Sustained Damage" for DoT),
+// so both sides are folded to one form before comparing — same approach
+// as the Psionic reader above.
+function normalizeCapytoolName(raw) {
+  const original = String(raw || '').toLowerCase();
+  let alias = /throwing knife/.test(original);
+  let s = original
+    .replace(/\(.*?\)/g, ' ')
+    .replace(/[+%:]/g, ' ')
+    .replace(/\bdamage\b/g, 'dmg')
+    .replace(/\bcritical\b/g, 'crit')
+    .replace(/\bbasic attack\b/g, 'basic atk')
+    .replace(/\bthrowing knife\b/g, 'dagger')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const sustained = s.match(/^(ignore )?(.*?)\s+of sustained dmg$/);
+  if (sustained) {
+    s = `${sustained[1] || ''}dot ${sustained[2]}`;
+    alias = true;
+  }
+  return { key: s, alias };
+}
+
+let capytoolLookupCache = null;
+function capytoolLookup() {
+  if (capytoolLookupCache) return capytoolLookupCache;
+  capytoolLookupCache = new Map();
+  CAPYTOOL_GROUPS.forEach(g => g.items.forEach(it => {
+    capytoolLookupCache.set(normalizeCapytoolName(it.n).key, it);
+  }));
+  return capytoolLookupCache;
+}
+
+// Folds the per-screenshot readings into one result: { [k]: { value, shot, name, alias } }.
+// Screenshots overlap by design (each one has to share a row or two with
+// the last, or a stat that straddles a scroll edge is lost), so the same
+// stat showing up twice is expected — first reading wins. Anything that
+// isn't a tracked Capytool stat (HP/ATK/DEF, junk) is dropped.
+function mergeCapytoolReadings(readingsPerShot) {
+  const lookup = capytoolLookup();
+  const merged = {};
+  readingsPerShot.forEach((entries, shotIdx) => {
+    (entries || []).forEach(entry => {
+      if (!entry || typeof entry.name !== 'string') return;
+      const value = typeof entry.value === 'number' ? entry.value : parseFloat(entry.value);
+      if (!Number.isFinite(value) || value <= 0 || value > 100) return;
+      const norm = normalizeCapytoolName(entry.name);
+      const item = lookup.get(norm.key);
+      if (!item || !item.calc || merged[item.k]) return;
+      merged[item.k] = { value: Math.round(value * 100) / 100, shot: shotIdx + 1, name: entry.name.trim(), alias: norm.alias };
+    });
+  });
+  return merged;
+}
+
+/* ---------- Screenshot import: image prep + request ---------- */
+function loadImageFromFile(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('That file couldn’t be opened as an image.')); };
+    img.src = url;
+  });
+}
+
+async function prepareCapytoolImage(file) {
+  const img = await loadImageFromFile(file);
+  const sy = Math.floor(img.naturalHeight * CAPYTOOL_CROP_TOP);
+  const sh = img.naturalHeight - sy;
+  const scale = Math.min(1, CAPYTOOL_MAX_WIDTH / img.naturalWidth);
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.round(img.naturalWidth * scale);
+  canvas.height = Math.round(sh * scale);
+  canvas.getContext('2d').drawImage(img, 0, sy, img.naturalWidth, sh, 0, 0, canvas.width, canvas.height);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+  return { dataUrl, base64: dataUrl.split(',')[1] };
+}
+
+async function readCapytoolImage(item) {
+  const response = await fetch(PSIONIC_OCR_WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1200,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: item.base64 } },
+          { type: 'text', text: CAPYTOOL_OCR_PROMPT },
+        ],
+      }],
+    }),
+  });
+  if (response.status === 429) throw new Error("You've hit the testing limit for now — try again later.");
+  if (!response.ok) throw new Error(`Request failed (${response.status})`);
+  const data = await response.json();
+  if (data.error) throw new Error(data.error.message || 'API error');
+  const textBlock = (data.content || []).find(b => b.type === 'text');
+  const cleaned = (textBlock ? textBlock.text : '').replace(/```json|```/g, '').trim();
+  const arrayText = cleaned.match(/\[[\s\S]*\]/);
+  const parsed = JSON.parse(arrayText ? arrayText[0] : '[]');
+  return Array.isArray(parsed) ? parsed : [];
+}
+
+/* ---------- Screenshot import: state + flow ---------- */
+// Lives outside `state` on purpose — it's a transient working area, not
+// something to save — and outside the DOM so the card can be rebuilt from
+// it at any time (a scan keeps running if the page re-renders).
+// phase: 'idle' (picking files) -> 'processing' -> 'success'
+let capyImport = { phase: 'idle', items: [], run: 0, result: null, message: '' };
+let capyItemSeq = 0;
+
+function refreshCapytoolImport() {
+  const old = document.getElementById('capytool-import-card');
+  if (old) old.replaceWith(renderCapytoolImportCard());
+}
+
+function resetCapytoolImport() {
+  capyImport = { phase: 'idle', items: [], run: capyImport.run + 1, result: null, message: '' };
+}
+
+async function addCapytoolFiles(fileList) {
+  const room = CAPYTOOL_MAX_IMAGES - capyImport.items.length;
+  const files = Array.from(fileList || []).filter(f => /^image\//.test(f.type)).slice(0, Math.max(0, room));
+  for (const file of files) {
+    const item = { id: ++capyItemSeq, name: file.name, status: 'queued', dataUrl: '', base64: '', entries: [] };
+    capyImport.items.push(item);
+    refreshCapytoolImport();
+    try {
+      Object.assign(item, await prepareCapytoolImage(file));
+    } catch (err) {
+      capyImport.items = capyImport.items.filter(i => i !== item);
+    }
+    refreshCapytoolImport();
+  }
+}
+
+async function runCapytoolScan() {
+  const imp = capyImport;
+  const items = imp.items.filter(i => i.base64);
+  if (!items.length) return;
+  const run = ++imp.run;
+  imp.phase = 'processing';
+  imp.message = '';
+  items.forEach(i => { i.status = 'queued'; i.entries = []; i.error = ''; });
+  refreshCapytoolImport();
+
+  let next = 0;
+  const worker = async () => {
+    while (next < items.length) {
+      const item = items[next++];
+      if (imp.run !== run) return;
+      item.status = 'reading';
+      refreshCapytoolImport();
+      try {
+        item.entries = await readCapytoolImage(item);
+      } catch (err) {
+        item.entries = [];
+        item.error = err.message || 'Something went wrong reading that image.';
+      }
+      if (imp.run !== run) return;
+      item.status = 'done';
+      refreshCapytoolImport();
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(CAPYTOOL_CONCURRENCY, items.length) }, worker));
+  if (imp.run !== run) return;
+
+  imp.result = mergeCapytoolReadings(items.map(i => i.entries));
+  if (!Object.keys(imp.result).length) {
+    const firstError = items.map(i => i.error).find(Boolean);
+    imp.message = firstError || 'No Capytool values found. Make sure the Total Bonus panel is on screen in each screenshot.';
+  }
+  imp.phase = 'success';
+  refreshCapytoolImport();
+}
+
+function cancelCapytoolScan() {
+  capyImport.run++;
+  capyImport.phase = 'idle';
+  capyImport.items.forEach(i => { i.status = 'queued'; });
+  refreshCapytoolImport();
+}
+
+function applyCapytoolImport() {
+  if (!state.capytool) state.capytool = {};
+  Object.entries(capyImport.result || {}).forEach(([k, r]) => { state.capytool[k] = r.value; });
+  const count = Object.keys(capyImport.result || {}).length;
+  resetCapytoolImport();
+  saveState();
+  showPsionicToast(`Capytool: ${count} value${count === 1 ? '' : 's'} applied`);
+  render();
+}
+
+/* ---------- Screenshot import: rendering ---------- */
+function capyIcon(inner, size) {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('width', String(size));
+  svg.setAttribute('height', String(size));
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('stroke-width', '2.5');
+  svg.setAttribute('stroke-linecap', 'round');
+  svg.setAttribute('stroke-linejoin', 'round');
+  svg.innerHTML = inner;
+  return svg;
+}
+const CAPY_ICON_CHECK = '<path d="M20 6 9 17l-5-5"/>';
+const CAPY_ICON_X = '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>';
+const CAPY_ICON_SPIN = '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>';
+
+function renderCapytoolThumb(item, removable) {
+  const readCount = Object.keys(mergeCapytoolReadings([item.entries])).length;
+  const statusText = item.status === 'done'
+    ? `Done \u00B7 ${readCount} value${readCount === 1 ? '' : 's'}`
+    : item.status === 'reading' ? 'Reading\u2026' : 'Queued';
+  const tile = el('div', { class: 'capy-thumb-tile' }, [
+    item.dataUrl ? el('img', { src: item.dataUrl, alt: '' }) : null,
+  ]);
+  if (removable) {
+    tile.appendChild(el('button', {
+      class: 'capy-thumb-remove', 'aria-label': `Remove ${item.name}`,
+      onclick: () => { capyImport.items = capyImport.items.filter(i => i !== item); refreshCapytoolImport(); },
+    }, capyIcon(CAPY_ICON_X, 10)));
+  } else if (item.status === 'reading') {
+    tile.appendChild(el('div', { class: 'capy-badge reading' }, capyIcon(CAPY_ICON_SPIN, 12)));
+  } else if (item.status === 'done') {
+    tile.appendChild(el('div', { class: 'capy-badge done' }, capyIcon(CAPY_ICON_CHECK, 12)));
+  }
+  return el('div', { class: 'capy-thumb' }, [
+    tile,
+    el('div', { class: 'capy-readonly capy-thumb-name' }, item.name),
+    removable ? null : el('div', { class: `capy-thumb-status ${item.status}` }, statusText),
+    removable ? el('div', { class: 'capy-thumb-status queued' }, item.base64 ? 'Queued' : 'Preparing…') : null,
+  ]);
+}
+
+function renderCapytoolImportCard() {
+  const imp = capyImport;
+  const card = el('div', { class: 'item-card capy-import', id: 'capytool-import-card' });
+
+  if (imp.phase === 'success') {
+    const result = imp.result || {};
+    const keys = Object.keys(result);
+    card.appendChild(el('div', { class: 'capy-import-head' }, [
+      el('div', { class: 'equip-section-title' }, keys.length ? 'Scan complete' : 'Nothing to apply'),
+      el('div', { class: 'capy-readonly' }, keys.length
+        ? `Values were read from your ${imp.items.length} screenshot${imp.items.length === 1 ? '' : 's'}. You can edit any field after applying.`
+        : imp.message),
+    ]));
+    if (keys.length) {
+      card.appendChild(el('div', { class: 'capy-chips' }, [
+        el('span', { class: 'capy-chip ok' }, `${keys.length} value${keys.length === 1 ? '' : 's'} read`),
+        el('span', { class: 'capy-chip' }, `${imp.items.length} screenshot${imp.items.length === 1 ? '' : 's'}`),
+      ]));
+      const grid = el('div', { class: 'capy-result-grid' });
+      CAPYTOOL_GROUPS.forEach(group => {
+        const rows = group.items.filter(it => result[it.k]);
+        if (!rows.length) return;
+        const box = el('div', { class: 'capy-result-group' }, [
+          el('div', { class: 'capy-result-group-title' }, group.title),
+        ]);
+        rows.forEach(it => {
+          const r = result[it.k];
+          box.appendChild(el('div', { class: 'capy-row' }, [
+            el('div', { class: 'capy-row-label' }, [
+              el('div', {}, it.n),
+              r.alias ? el('div', { class: 'capy-readonly' }, `Read as “${r.name}”`) : null,
+            ]),
+            el('span', { class: 'capy-source capy-readonly', title: `Screenshot ${r.shot}` }, String(r.shot)),
+            el('div', { class: 'equip-pct-input-group' }, [
+              el('div', { class: 'capy-value' }, r.value.toFixed(2)),
+              el('span', {}, '%'),
+            ]),
+          ]));
+        });
+        grid.appendChild(box);
+      });
+      card.appendChild(grid);
+    }
+    card.appendChild(el('div', { class: 'capy-actions' }, [
+      el('button', { class: 'bulk-action-btn secondary', onclick: () => { imp.phase = 'idle'; imp.result = null; imp.items.forEach(i => { i.status = 'queued'; }); refreshCapytoolImport(); } }, 'Back'),
+      keys.length ? el('button', { class: 'bulk-action-btn primary', onclick: applyCapytoolImport }, `Apply ${keys.length} value${keys.length === 1 ? '' : 's'}`) : null,
+    ]));
+    return card;
+  }
+
+  if (imp.phase === 'processing') {
+    const items = imp.items.filter(i => i.base64);
+    const doneCount = items.filter(i => i.status === 'done').length;
+    card.appendChild(el('div', { class: 'capy-import-head capy-import-head-row' }, [
+      el('div', { class: 'equip-section-title' }, 'Reading screenshots…'),
+      el('div', { class: 'capy-readonly capy-count' }, `${doneCount} of ${items.length}`),
+    ]));
+    card.appendChild(el('div', { class: 'capy-progress' }, el('div', {
+      class: 'capy-progress-fill', style: `width:${items.length ? Math.round((doneCount / items.length) * 100) : 0}%`,
+    })));
+    card.appendChild(el('div', { class: 'capy-thumbs' }, items.map(i => renderCapytoolThumb(i, false))));
+    card.appendChild(el('div', { class: 'capy-readonly capy-hint' },
+      'Cropping to the Total Bonus panel and skipping rows that are cut off. Keep this page open.'));
+    card.appendChild(el('div', { class: 'capy-actions' }, [
+      el('button', { class: 'bulk-action-btn secondary', onclick: cancelCapytoolScan }, 'Cancel'),
+      el('button', { class: 'bulk-action-btn primary', disabled: 'true' }, `Scanning… ${doneCount}/${items.length}`),
+    ]));
+    return card;
+  }
+
+  // idle
+  const fileInput = el('input', { type: 'file', accept: 'image/*', multiple: 'true', style: 'display:none;' });
+  fileInput.addEventListener('change', (e) => { addCapytoolFiles(e.target.files); });
+  const dropZone = el('div', {
+    class: 'psi-dropzone',
+    onclick: () => fileInput.click(),
+    ondragover: (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); },
+    ondragleave: () => dropZone.classList.remove('drag-over'),
+    ondrop: (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      addCapytoolFiles(e.dataTransfer.files);
+    },
+  }, [
+    el('div', { class: 'psi-dropzone-icon' }, '◈'),
+    el('div', { class: 'psi-dropzone-text' }, 'Drop screenshots here or click to browse'),
+    el('div', { class: 'psi-dropzone-subtext' }, `Select all of them at once · up to ${CAPYTOOL_MAX_IMAGES} images`),
+  ]);
+
+  const left = el('div', { class: 'capy-import-left' }, [
+    el('div', { class: 'equip-section-title' }, 'Import from screenshots'),
+    dropZone,
+    fileInput,
+    el('div', { class: 'capy-readonly capy-hint' },
+      'Open the Total Bonus panel on the Work screen and scroll it between shots, so each screenshot overlaps the last by a row or two.'),
+  ]);
+
+  const right = el('div', { class: 'capy-import-right' });
+  const count = imp.items.length;
+  if (count) {
+    right.appendChild(el('div', { class: 'capy-list-head' }, [
+      el('span', { class: 'capy-readonly' }, `${count} screenshot${count === 1 ? '' : 's'} · ${CAPYTOOL_MAX_IMAGES} max`),
+      el('button', { class: 'capy-link', onclick: () => { resetCapytoolImport(); refreshCapytoolImport(); } }, 'Clear all'),
+    ]));
+    right.appendChild(el('div', { class: 'capy-thumbs' }, imp.items.map(i => renderCapytoolThumb(i, true))));
+    const ready = imp.items.some(i => i.base64);
+    right.appendChild(el('div', { class: 'capy-actions' }, [
+      el('button', { class: 'bulk-action-btn primary', disabled: ready ? null : 'true', onclick: runCapytoolScan },
+        `Scan ${count} screenshot${count === 1 ? '' : 's'}`),
+    ]));
+  }
+  card.appendChild(el('div', { class: 'capy-import-body' + (count ? ' has-items' : '') }, [left, right]));
+  return card;
+}
+
+/* ---------- Capytool form ---------- */
+function renderCapytoolGroupCard(group) {
+  const card = el('div', { class: 'item-card' });
+  card.appendChild(el('div', { class: 'equip-section-title' }, group.title));
+  const list = el('div', { class: 'capy-rows' });
+  group.items.forEach(it => {
+    const tracked = !!it.calc;
+    const cur = Number(state.capytool && state.capytool[it.k]) || 0;
+    const input = el('input', {
+      type: 'number', class: 'equip-num-input', min: '0', step: 'any', placeholder: '0',
+      value: cur ? String(cur) : '',
+      disabled: tracked ? null : 'true',
+      'data-focus-id': `capytool-${it.k}`,
+      oninput: (e) => {
+        const n = parseFloat(e.target.value);
+        if (n < 0) { e.target.classList.add('input-error'); return; }
+        e.target.classList.remove('input-error');
+        if (!state.capytool) state.capytool = {};
+        if (Number.isNaN(n) || n === 0) delete state.capytool[it.k];
+        else state.capytool[it.k] = n;
+        saveState();
+      },
+      onblur: (e) => { e.target.classList.remove('input-error'); render(); },
+    });
+    list.appendChild(el('div', { class: 'capy-row' + (tracked ? '' : ' untracked') }, [
+      el('div', { class: 'capy-row-label' }, [
+        el('div', {}, it.n),
+        tracked ? null : el('div', { class: 'capy-readonly' }, 'Not tracked in the Calculator'),
+      ]),
+      el('div', { class: 'equip-pct-input-group' }, [input, el('span', {}, '%')]),
+    ]));
+  });
+  card.appendChild(list);
+  return card;
+}
+
+function buildCapytoolSectionContent() {
+  const wrap = el('div', {});
+  wrap.appendChild(el('p', { class: 'section-desc' },
+    'Sum your tools’ sub-stats per line and enter the totals — e.g. 2.4 for +2.4%. Or import the totals straight from your Total Bonus screenshots.'));
+  wrap.appendChild(renderCapytoolImportCard());
+  const grid = el('div', { class: 'equip-grid' });
+  CAPYTOOL_GROUPS.forEach(g => grid.appendChild(renderCapytoolGroupCard(g)));
+  wrap.appendChild(grid);
+  return wrap;
+}
+
+
 const EQUIPMENT_SECTIONS = [
   { id: 'equip-equipment', label: 'Equipment', build: buildEquipmentSectionContent, clearAll: () => { state.equipment = {}; saveState(); render(); } },
   { id: 'equip-pet', label: 'Pet', build: buildPetSectionContent, clearAll: () => {
@@ -1926,6 +2411,7 @@ const EQUIPMENT_SECTIONS = [
     state.brandSlots = state.brandSlots.map(() => ({ name: '', quality: '', polarization: 0 }));
     saveState(); render();
   } },
+  { id: 'equip-capytool', label: 'Capytool', build: buildCapytoolSectionContent, clearAll: () => { state.capytool = {}; saveState(); render(); } },
 ];
 
 const RELIC_DEPLOY_SLOTS = [
@@ -2001,7 +2487,7 @@ function renderRelicDeployCard(slotDef) {
 
   const star = state.relicStars[relic.n] || 0;
   card.appendChild(equipFieldLabel('Stars'));
-  card.appendChild(el('div', { class: 'equip-writeup' }, `${star}★`));
+  card.appendChild(el('div', { class: 'equip-prominent-value' }, `${star}★`));
 
   // Same tiered-effect logic as the Collection relic card — the same
   // 0★/5★/10★ breakpoints, since deployed relics don't get finer granularity.
@@ -2013,16 +2499,15 @@ function renderRelicDeployCard(slotDef) {
     else { effectText = relic.effect; effectLabel = '10★'; }
   }
   if (effectText) {
-    card.appendChild(equipFieldLabel(`${effectLabel} Skill`));
-    card.appendChild(el('div', { class: 'equip-writeup' }, renderTextWithSkillTags(effectText)));
+    card.appendChild(renderCardInfoBlock(`${effectLabel} Skill`,
+      renderTextWithSkillTags(effectText)));
   }
 
   if (relic.star_stats) {
     const nodes = formatStatBlockNodes(
       Object.fromEntries(Object.entries(relic.star_stats).map(([stat, vals]) => [stat, vals[star]]))
     );
-    card.appendChild(equipFieldLabel('Stats'));
-    card.appendChild(el('div', { class: 'equip-writeup' }, nodes));
+    card.appendChild(renderCardInfoBlock('Current Stats', nodes));
   }
 
   return card;
@@ -2034,6 +2519,7 @@ function renderEquipmentShell() {
 
 function clearAllEquipment() {
   state.equipment = {};
+  state.capytool = {};
   state.petSlots = state.petSlots.map(() => ({
     itemName: '', arcana: -1, level: 0, armament: '', armamentLevel: 1,
     skills: [{ stat: '', val: 0 }, { stat: '', val: 0 }, { stat: '', val: 0 }, { stat: '', val: 0 }, { stat: '', val: 0 }],
@@ -2639,8 +3125,7 @@ function renderDeployCard(kind, mode, slotIndex) {
     }
     if (item.star_up) {
       const resolved = resolveAwakenEffect(item, showAwaken ? itemState.awaken : 0);
-      card.appendChild(equipFieldLabel('Awaken Skill'));
-      card.appendChild(el('div', { class: 'equip-writeup' }, [
+      card.appendChild(renderCardInfoBlock('Awakening Skill', [
         resolved ? renderKeyAwakenBadge(resolved.level) : null,
         resolved ? renderTextWithSkillTags(resolved.text) : '—',
       ]));
@@ -2653,8 +3138,8 @@ function renderDeployCard(kind, mode, slotIndex) {
     }
     if (item.star_effects) {
       const starEff = showStars ? item.star_effects[String(itemState.stars)] : item.star_effects['0'];
-      card.appendChild(equipFieldLabel('Skill'));
-      card.appendChild(el('div', { class: 'equip-writeup' }, starEff ? renderTextWithSkillTags(starEff) : '—'));
+      card.appendChild(renderCardInfoBlock('Skill',
+        starEff ? renderTextWithSkillTags(starEff) : '—'));
     }
   }
 
@@ -2662,8 +3147,8 @@ function renderDeployCard(kind, mode, slotIndex) {
     const starDelta = itemState.stars > 0 ? item.star_up.deltas[String(itemState.stars)] : null;
     const awakenDelta = itemState.awaken > 0 ? item.awaken.deltas[`A${itemState.awaken}`] : null;
     const total = sumStatBlocks(item.awaken.base_stats, starDelta, awakenDelta);
-    card.appendChild(equipFieldLabel('Current Stats'));
-    card.appendChild(el('div', { class: 'equip-writeup' }, formatStatBlockNodes(total, true)));
+    card.appendChild(renderCardInfoBlock('Current Stats',
+      formatStatBlockNodes(total, true)));
   }
 
   return card;
@@ -3890,7 +4375,6 @@ function renderRelicCard(relic) {
     renderStepper(`relic-${relic.n}`, star, 0, 10, (next) => setRelicStar(relic.n, next)),
   ]));
 
-  const infoLines = [];
   if (owned) {
     // Relics with base/5★/10★ effect text (35 of them, from the "Relic
     // Equip effect" sheet) should show whichever tier actually matches the
@@ -3906,18 +4390,17 @@ function renderRelicCard(relic) {
       else { effectText = relic.effect; effectLabel = '10★'; }
     }
     if (effectText) {
-      infoLines.push(el('div', { class: 'item-effect' },
-        el('span', {}, [`${effectLabel}: `, renderTextWithSkillTags(effectText)])));
+      card.appendChild(renderCardInfoBlock(`${effectLabel} Skill`,
+        renderTextWithSkillTags(effectText)));
     }
 
     if (relic.star_stats) {
       const nodes = formatStatBlockNodes(
         Object.fromEntries(Object.entries(relic.star_stats).map(([stat, vals]) => [stat, vals[star]]))
       );
-      infoLines.push(el('div', { class: 'item-effect' }, nodes));
+      card.appendChild(renderCardInfoBlock('Current Stats', nodes));
     }
   }
-  if (infoLines.length) card.appendChild(el('div', { class: 'card-info' }, infoLines));
 
   return card;
 }
@@ -4359,24 +4842,19 @@ function renderMountArtifactCard(item, bucket, isMount) {
   const starDelta = showStars && s.stars > 0 ? item.star_up.deltas[String(s.stars)] : null;
   const awakenDelta = s.awaken > 0 ? item.awaken.deltas[`A${s.awaken}`] : null;
   const total = sumStatBlocks(item.awaken.base_stats, starDelta, awakenDelta);
-  const labelParts = [];
-  if (showStars) labelParts.push(`${s.stars}★`);
-  if (showAwaken) labelParts.push(`A${s.awaken}`);
-
-  const infoLines = [
-    el('div', { class: 'item-effect' },
-      [labelParts.length ? `At ${labelParts.join(' / ')}: ` : '', formatStatBlockNodes(total, true)]),
-  ];
+  // Stars/awaken are already shown by the steppers above, so the stats
+  // accordion no longer needs an "At 4★ / A5:" prefix.
+  const accKey = `${bucket}-${item.idx}`;
+  card.appendChild(renderCardInfoBlock('Current Stats', formatStatBlockNodes(total, true)));
 
   const starEff = showStars && item.star_effects && item.star_effects[String(s.stars)];
-  if (starEff) infoLines.push(el('div', { class: 'item-effect', style: 'font-style:italic;' }, [`★${s.stars}: `, renderTextWithSkillTags(starEff)]));
+  if (starEff) card.appendChild(renderCardInfoBlock(`${s.stars}★ Skill`, renderTextWithSkillTags(starEff)));
 
   const resolved = resolveAwakenEffect(item, s.awaken);
   if (resolved) {
-    infoLines.push(el('div', { class: 'item-effect', style: 'font-style:italic;' },
-      [renderKeyAwakenBadge(resolved.level), `A${s.awaken}: `, renderTextWithSkillTags(resolved.text)]));
+    card.appendChild(renderCardInfoBlock('Awakening Skill',
+      [renderKeyAwakenBadge(resolved.level), renderTextWithSkillTags(resolved.text)]));
   }
-  card.appendChild(el('div', { class: 'card-info' }, infoLines));
 
   return card;
 }
@@ -4813,6 +5291,14 @@ function aggregateFullStatsWithSources(round = null) {
 
   add('Crit DMG', 200, 'Base');
   add('Speed', 5, 'Base');
+
+  // Capytool — summed sub-stat totals typed in (or screenshot-imported) on
+  // the Equipment tab. Values are already whole-number percentages, same
+  // unit every other source here adds in.
+  CAPYTOOL_GROUPS.forEach(group => group.items.forEach(it => {
+    const v = Number(state.capytool && state.capytool[it.k]);
+    if (it.calc && v > 0) add(it.calc, v, 'Capytool');
+  }));
 
 // Relics — passive star_stats (Tenacity, Armor Break, ATK, etc.) apply
 // just from being owned, matching every other Collection-tab item.
@@ -5824,7 +6310,7 @@ const CALC_TABLE_CATEGORIES = [
   // side), which obscured that they're the same stage. Combo Rate and
   // Counter Rate stay in Proc Rates below — those gate a different trigger
   // mechanic (whether a combo/counter attack happens at all), not a crit.
-  { title: 'Crit', labels: ['Crit Rate (Generic)', 'Skill Crit Rate', 'Basic ATK Crit Rate', 'Weapon Crit Rate', 'Lightning Crit Rate', 'DoT Crit Rates', 'Dagger Crit Rate', 'Sword Qi Crit Rate', 'Light Spear Crit Rate', 'Crit DMG', 'Skill Crit DMG', 'Dagger Crit DMG', 'Crit DMG Reduction', 'Skill Crit DMG Red', 'Basic ATK Crit DMG Red', 'DoT Crit DMG Red'] },
+  { title: 'Crit', labels: ['Crit Rate (Generic)', 'Skill Crit Rate', 'Basic ATK Crit Rate', 'Weapon Crit Rate', 'Lightning Crit Rate', 'DoT Crit Rates', 'Dagger Crit Rate', 'Sword Qi Crit Rate', 'Light Spear Crit Rate', 'Crit DMG', 'Skill Crit DMG', 'Basic ATK Crit DMG', 'DoT Crit DMG', 'Dagger Crit DMG', 'Crit DMG Reduction', 'Skill Crit DMG Red', 'Basic ATK Crit DMG Red', 'DoT Crit DMG Red'] },
   // PVP Damage Reduction and Mounted DMG Reduction are both defensive
   // reduction stats, so they live in DMG Reduction rather than their own
   // category.
@@ -5835,6 +6321,9 @@ const CALC_TABLE_CATEGORIES = [
   { title: 'Speed', labels: ['Speed'] },
   { title: 'DMG Reduction', labels: ['Generic DMG Reduction', 'Skill DMG Reduction', 'Basic ATK DMG Reduction', 'Combo DMG Reduction', 'Counter DMG Reduction', 'Lightning DMG Reduction', 'Dagger DMG Reduction', 'Sword Qi DMG Reduction', 'Light Spear DMG Red', 'Fire DMG Reduction', 'DoT DMG Reduction', 'PVP Damage Reduction', 'Mounted DMG Reduction', 'Conditional Damage Reduction'] },
   { title: 'Final Damage Reduction', labels: ['General Final Damage Reduction', 'Skill Damage Final Damage Reduction', 'Basic Attack Final Damage Reduction', 'Adventurer Final Damage Reduction', 'Artifact Final Damage Reduction', 'Mount Final Damage Reduction', 'Pet Final Damage Reduction'] },
+  // Lineup bonuses from Capytool tools: shown and totalled like every other
+  // source, but not (yet) part of any attack type's damage pipeline below.
+  { title: 'Lineup', labels: ['Lineup DMG Boost', 'Lineup DMG RES'] },
   { title: 'Tenacity & Armor Break', labels: ['Tenacity', 'Tenacity Resistance', 'Armor Break', 'Armor Break Resistance', 'Control Immunity Rate', 'Ignore Control Immunity Rate', 'Suppression'] },
   { title: 'Ignore Proc Rates', labels: ['Ignore Combo', 'Ignore Crit', 'Ignore Weapon Crit', 'Ignore Skill Crit', 'Ignore Normal ATK Crit', 'Ignore Lightning Crit', 'Ignore DoT Crit', 'Ignore Dagger Crit', 'Ignore Sword Qi Crit', 'Ignore Light Spear Crit', 'Ignore Counter', 'Ignore Suppression'] },
 ];
